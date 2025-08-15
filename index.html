@@ -1,13 +1,45 @@
-<!-- index.html -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Your Name</title>
+  <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body>
-  <h1>Hello, I’m Luke 👋</h1>
-  <p>Welcome to my personal website.</p>
+<body class="bg-white text-gray-800 antialiased font-sans">
+  <div class="max-w-3xl mx-auto mt-12 mb-12 p-6 space-y-12">
+    <!-- Header -->
+    <header class="space-y-2">
+      <h1 class="text-3xl font-normal">Your Name</h1>
+    </header>
+
+    <!-- About -->
+    <section class="space-y-8">
+      <div class="grid grid-cols-3 gap-x-8 items-start">
+        <div><p class="text-sm font-light uppercase text-gray-700">About</p></div>
+        <div class="col-span-2">
+          <p class="text-sm font-light leading-relaxed mb-4">
+            A short intro about you. Keep it minimal and professional.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Contact -->
+    <section class="space-y-8">
+      <div class="grid grid-cols-3 gap-x-8 items-start">
+        <div><p class="text-sm font-light uppercase text-gray-700">Contact</p></div>
+        <div>
+          <p class="text-sm font-light">
+            Email: <a href="mailto:you@example.com" class="text-blue-600 hover:underline">you@example.com</a>
+          </p>
+          <p class="text-sm font-light space-x-4">
+            <a href="https://linkedin.com" class="text-blue-600 hover:underline">LinkedIn</a>
+            <a href="https://github.com" class="text-blue-600 hover:underline">GitHub</a>
+          </p>
+        </div>
+      </div>
+    </section>
+  </div>
 </body>
 </html>
