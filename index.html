@@ -3,296 +3,710 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Luke Leh</title>
-  <script src="https://cdn.tailwindcss.com"></script>
+  <title>Luke Leh Wei Nunn</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;600&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+  
   <style>
-    /* Custom styles for enhanced typography and interactions */
-    .section-fade {
-      opacity: 0;
-      transform: translateY(20px);
-      transition: all 0.6s ease;
-    }
-    
-    .section-fade.visible {
-      opacity: 1;
-      transform: translateY(0);
-    }
-    
-    .project-link:hover {
-      transform: translateX(4px);
-      transition: transform 0.2s ease;
-    }
-    
-    /* Custom scrollbar for webkit browsers */
-    ::-webkit-scrollbar {
-      width: 4px;
-    }
-    
-    ::-webkit-scrollbar-track {
-      background: #f1f1f1;
-    }
-    
-    ::-webkit-scrollbar-thumb {
-      background: #c1c1c1;
-      border-radius: 2px;
-    }
-    
-    ::-webkit-scrollbar-thumb:hover {
-      background: #a8a8a8;
+    :root {
+      --bg-color: #ffffff;
+      --text-color: #2d3748;
+      --text-secondary: #4a5568;
+      --accent-color: #dc2626;
+      --accent-secondary: #7c3aed;
+      --border-color: #e2e8f0;
+      --shadow-color: rgba(0,0,0,.05);
+      --transition-time: .3s;
     }
 
-    /* Smooth scroll behavior */
-    html {
-      scroll-behavior: smooth;
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
     }
 
-    /* Responsive image container */
-    .project-image {
-      aspect-ratio: 16 / 10;
-      background-color: #f8f9fa;
-      border-radius: 4px;
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+      font-size: 1rem;
+      background: var(--bg-color);
+      color: var(--text-color);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 2rem 1.5rem;
+      line-height: 1.6;
+    }
+
+    /* Hero Section */
+    .hero-card {
+      width: 100%;
+      max-width: 900px;
+      border-bottom: 1px solid var(--border-color);
+      padding-bottom: 2rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 40px;
+    }
+
+    .hero-info h1 {
+      font-size: 2.8rem;
+      font-weight: 600;
+      margin-bottom: .4rem;
+      background: linear-gradient(135deg, #1f2937 0%, #374151 50%, #4b5563 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .hero-info .subtitle {
+      font-size: 1.2rem;
+      color: var(--text-secondary);
+      margin-bottom: 1.3rem;
+      font-family: 'JetBrains Mono', monospace;
+      font-weight: 400;
+    }
+
+    .hero-links {
+      display: flex;
+      gap: 1.4rem;
+      flex-wrap: wrap;
+    }
+
+    .hero-links a {
+      color: var(--text-secondary);
+      text-decoration: none;
+      font-size: 0.95rem;
+      transition: all var(--transition-time) ease;
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      padding: .4rem .8rem;
+      border-radius: 6px;
+      border: 1px solid var(--border-color);
+      background: transparent;
+    }
+
+    .hero-links a:hover {
+      background: var(--accent-color);
+      color: white;
+      border-color: var(--accent-color);
+      transform: translateY(-1px);
+    }
+
+    .hero-photo img {
+      width: 180px;
+      height: 180px;
+      object-fit: cover;
+      border-radius: 12px;
+      border: 2px solid var(--border-color);
+      box-shadow: 0 4px 20px rgba(0,0,0,.08);
+    }
+
+    .hero-photo .placeholder {
+      width: 180px;
+      height: 180px;
+      border-radius: 12px;
+      border: 2px solid var(--border-color);
+      background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 2.5rem;
+      font-weight: 600;
+      color: var(--text-secondary);
+      font-family: 'JetBrains Mono', monospace;
+    }
+
+    /* About Section */
+    .about {
+      max-width: 900px;
+      width: 100%;
+      padding: 1.8rem 0;
+      font-size: 1.15rem;
+      color: var(--text-secondary);
+      line-height: 1.7;
+    }
+
+    .about a {
+      color: var(--accent-color);
+      text-decoration: none;
+      font-weight: 500;
+      transition: color var(--transition-time) ease;
+    }
+
+    .about a:hover {
+      color: var(--accent-secondary);
+      text-decoration: underline;
+    }
+
+    /* Section Headers */
+    .section-header {
+      max-width: 900px;
+      width: 100%;
+      margin-top: 2.5rem;
+      margin-bottom: 1rem;
+    }
+
+    .section-header h2 {
+      font-size: 1.5rem;
+      font-weight: 600;
+      border-bottom: 1px solid var(--border-color);
+      padding-bottom: 0.6rem;
+      font-family: 'JetBrains Mono', monospace;
+      position: relative;
+    }
+
+    .section-header h2::before {
+      content: '//';
+      color: var(--text-secondary);
+      margin-right: 12px;
+      font-weight: 400;
+      opacity: 0.7;
+    }
+
+    /* Tabs */
+    .tabs {
+      max-width: 900px;
+      width: 100%;
+      margin-top: 1.5rem;
+      display: flex;
+      justify-content: flex-start;
+      gap: 2rem;
+      border-bottom: 1px solid var(--border-color);
+    }
+
+    .tabs button {
+      background: none;
+      border: none;
+      font-size: 1.1rem;
+      padding: .8rem 0;
+      cursor: pointer;
+      color: var(--text-secondary);
+      border-bottom: 3px solid transparent;
+      transition: all var(--transition-time) ease;
+      font-weight: 500;
+      min-width: fit-content;
+      font-family: 'JetBrains Mono', monospace;
+    }
+
+    .tabs button.active {
+      color: var(--accent-color);
+      border-bottom: 3px solid var(--accent-color);
+      font-weight: 600;
+    }
+
+    .tabs button:hover {
+      color: var(--accent-color);
+    }
+
+    /* Entries */
+    .entries {
+      max-width: 900px;
+      width: 100%;
+      margin-top: 2rem;
+      display: flex;
+      flex-direction: column;
+      gap: 2.5rem;
+    }
+
+    .entry {
+      display: flex;
+      gap: 1.8rem;
+      align-items: flex-start;
+      padding-bottom: 2rem;
+      border-bottom: 1px dashed var(--border-color);
+    }
+
+    .entry:last-child {
+      border-bottom: none;
+      padding-bottom: 0;
+    }
+
+    .entry-image-container {
+      width: 220px;
+      flex-shrink: 0;
+    }
+
+    .entry img,
+    .entry video {
+      width: 220px !important;
+      height: 130px !important;
+      object-fit: cover;
+      border-radius: 8px;
+      border: 1px solid var(--border-color);
+      flex-shrink: 0;
+      background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+    }
+
+    .entry-placeholder {
+      width: 220px;
+      height: 130px;
+      border-radius: 8px;
+      border: 1px solid var(--border-color);
+      background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      position: relative;
       overflow: hidden;
     }
+
+    .entry-placeholder::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: linear-gradient(45deg, transparent 48%, rgba(255,255,255,0.1) 49%, rgba(255,255,255,0.1) 51%, transparent 52%);
+    }
+
+    .entry-placeholder .icon {
+      font-size: 2rem;
+      margin-bottom: 0.5rem;
+      color: var(--text-secondary);
+    }
+
+    .entry-placeholder .text {
+      font-size: 0.8rem;
+      color: var(--text-secondary);
+      font-family: 'JetBrains Mono', monospace;
+    }
+
+    .entry-info h3 {
+      font-size: 1.3rem;
+      font-weight: 600;
+      margin-bottom: .5rem;
+      color: var(--text-color);
+    }
+
+    .entry-info .tech-tags {
+      margin-bottom: .8rem;
+    }
+
+    .tech-tag {
+      background: linear-gradient(135deg, #f3f4f6 0%, #e5e7eb 100%);
+      border: 1px solid #d1d5db;
+      border-radius: 4px;
+      padding: 3px 10px;
+      font-size: 11px;
+      font-family: 'JetBrains Mono', monospace;
+      color: #4b5563;
+      display: inline-block;
+      margin-right: 8px;
+      margin-bottom: 4px;
+      font-weight: 500;
+    }
+
+    .entry-info .description {
+      font-size: 1rem;
+      color: var(--text-secondary);
+      margin-bottom: .8rem;
+      line-height: 1.6;
+    }
+
+    .entry-info .venue {
+      font-size: 0.9rem;
+      color: var(--text-secondary);
+      margin-bottom: .8rem;
+      font-family: 'JetBrains Mono', monospace;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .entry-info .links a {
+      margin-right: 1rem;
+      color: var(--text-secondary);
+      text-decoration: none;
+      font-size: 0.9rem;
+      padding: 0.4rem 0.8rem;
+      border: 1px solid var(--border-color);
+      border-radius: 6px;
+      background: transparent;
+      transition: all var(--transition-time) ease;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .entry-info .links a:hover {
+      background: var(--accent-color);
+      color: white;
+      border-color: var(--accent-color);
+      transform: translateY(-1px);
+    }
+
+    /* Experience specific styling */
+    .entry.experience .entry-info h3 {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+
+    .entry.experience .date {
+      font-size: 0.9rem;
+      color: var(--text-secondary);
+      font-weight: 400;
+      font-family: 'JetBrains Mono', monospace;
+    }
+
+    /* Responsive Design */
+    @media (max-width: 700px) {
+      .hero-card {
+        flex-direction: column-reverse;
+        text-align: center;
+        gap: 24px;
+      }
+
+      .hero-info h1 {
+        font-size: 2.2rem;
+      }
+
+      .entry {
+        flex-direction: column;
+        gap: 1rem;
+      }
+
+      .entry-image-container {
+        width: 100%;
+        align-self: center;
+      }
+
+      .entry img,
+      .entry video,
+      .entry-placeholder {
+        width: 100% !important;
+        max-width: 300px;
+        margin: 0 auto;
+      }
+
+      .tabs {
+        gap: 1rem;
+        flex-wrap: wrap;
+      }
+
+      .tabs button {
+        font-size: 1rem;
+      }
+    }
+
+    /* Custom scrollbar */
+    ::-webkit-scrollbar {
+      width: 6px;
+    }
+
+    ::-webkit-scrollbar-track {
+      background: #f9fafb;
+    }
+
+    ::-webkit-scrollbar-thumb {
+      background: linear-gradient(180deg, var(--accent-color), var(--accent-secondary));
+      border-radius: 3px;
+    }
+
+    ::-webkit-scrollbar-thumb:hover {
+      background: linear-gradient(180deg, #b91c1c, #6d28d9);
+    }
   </style>
-</head>
-<body class="bg-white text-gray-800 antialiased font-sans">
-  <div class="max-w-3xl mx-auto mt-12 mb-16 p-6 space-y-16">
-    
-    <!-- Header -->
-    <header class="space-y-2 section-fade">
-      <h1 class="text-3xl font-normal tracking-tight">Luke Leh</h1>
-      <p class="text-sm font-light text-gray-600">Game Developer & Software Engineer</p>
-    </header>
-
-    <!-- About -->
-    <section class="space-y-8 section-fade">
-      <div class="grid grid-cols-1 md:grid-cols-3 gap-x-8 gap-y-4 items-start">
-        <div><p class="text-sm font-light uppercase text-gray-700 tracking-wide">About</p></div>
-        <div class="md:col-span-2">
-          <p class="text-sm font-light leading-relaxed mb-4">
-            I'm a Cornell University graduate with a B.S. in Computer Science and minors in Game Design and Performing & Media Arts.
-            In the past, I have worked on AI Products at PETRONAS Digital, engineered data pipelines and dashboards for the Environmental
-            Data Governence Initiative, developed networking & rendering frameworks for the Cornell Game Design Initiative, and taught
-            Computer Networking at Cornell University as an undergraduate teaching assistant.
-          </p>
-          <p class="text-sm font-light leading-relaxed">
-            I like building products that involve real time, interactive systems with compelling user experiences. Which underscore my Game
-            development journey in Cornell, as well as multiple game jams outside of school. In my free time, I enjoy riding bicycle, tinkering with old
-            tech, acting in theater and cooking for friends that've became family over my four years in Ithaca.
-          </p>
-        </div>
-      </div>
-    </section>
-
-    <!-- Experience -->
-    <section class="space-y-8 section-fade">
-      <div class="grid grid-cols-1 md:grid-cols-3 gap-x-8 gap-y-6 items-start">
-        <div><p class="text-sm font-light uppercase text-gray-700 tracking-wide">Experience</p></div>
-        <div class="md:col-span-2 space-y-6">
-          
-          <div class="space-y-2">
-            <div class="flex flex-col sm:flex-row sm:justify-between sm:items-baseline">
-              <h3 class="text-sm font-medium">AI Products Intern</h3>
-              <p class="text-xs font-light text-gray-600">2024</p>
-            </div>
-            <p class="text-xs font-light text-gray-600 uppercase tracking-wide">PETRONAS Digital</p>
-            <p class="text-sm font-light leading-relaxed">
-              Developed machine learning models and AI-driven product features for Malaysia's national oil company.
-            </p>
-          </div>
-
-          <div class="space-y-2">
-            <div class="flex flex-col sm:flex-row sm:justify-between sm:items-baseline">
-              <h3 class="text-sm font-medium">Software Engineering Intern</h3>
-              <p class="text-xs font-light text-gray-600">2023</p>
-            </div>
-            <p class="text-xs font-light text-gray-600 uppercase tracking-wide">Environmental Data Governance Initiative</p>
-            <p class="text-sm font-light leading-relaxed">
-              Built data pipelines and visualization dashboards for environmental research data management.
-            </p>
-          </div>
-
-          <div class="space-y-2">
-            <div class="flex flex-col sm:flex-row sm:justify-between sm:items-baseline">
-              <h3 class="text-sm font-medium">Undergraduate Teaching Assistant</h3>
-              <p class="text-xs font-light text-gray-600">2022-2024</p>
-            </div>
-            <p class="text-xs font-light text-gray-600 uppercase tracking-wide">Cornell University</p>
-            <p class="text-sm font-light leading-relaxed">
-              Taught Computer Networking concepts to undergraduate students and developed course materials.
-            </p>
-          </div>
-
-        </div>
-      </div>
-    </section>
-
-    <!-- Projects -->
-    <section class="space-y-8 section-fade">
-      <div class="grid grid-cols-1 md:grid-cols-3 gap-x-8 gap-y-8 items-start">
-        <div><p class="text-sm font-light uppercase text-gray-700 tracking-wide">Selected Projects</p></div>
-        <div class="md:col-span-2 space-y-12">
-          
-          <!-- Project 1 -->
-          <div class="space-y-3">
-            <div class="project-image bg-gradient-to-br from-blue-50 to-indigo-100 flex items-center justify-center">
-              <div class="text-center">
-                <div class="text-2xl mb-2">🎮</div>
-                <p class="text-xs text-gray-500 font-light">Game Screenshot</p>
-              </div>
-            </div>
-            <div class="space-y-2">
-              <h3 class="text-sm font-medium">Project Title</h3>
-              <p class="text-xs font-light text-gray-600 uppercase tracking-wide">Unity • C# • Multiplayer Networking</p>
-              <p class="text-sm font-light leading-relaxed">
-                Brief description of your game project. Highlight the technical challenges you solved, the gameplay mechanics you implemented, 
-                and what makes this project unique or interesting from both a technical and design perspective.
-              </p>
-              <div class="flex space-x-4 text-xs font-light pt-1">
-                <a href="#" class="text-blue-600 hover:underline project-link">Play Demo →</a>
-                <a href="#" class="text-blue-600 hover:underline project-link">View Code →</a>
-              </div>
-            </div>
-          </div>
-
-          <!-- Project 2 -->
-          <div class="space-y-3">
-            <div class="project-image bg-gradient-to-br from-green-50 to-emerald-100 flex items-center justify-center">
-              <div class="text-center">
-                <div class="text-2xl mb-2">🕹️</div>
-                <p class="text-xs text-gray-500 font-light">Game Screenshot</p>
-              </div>
-            </div>
-            <div class="space-y-2">
-              <h3 class="text-sm font-medium">Another Project</h3>
-              <p class="text-xs font-light text-gray-600 uppercase tracking-wide">JavaScript • WebGL • Physics Simulation</p>
-              <p class="text-sm font-light leading-relaxed">
-                Description of another project showcasing different technical skills. Maybe this one demonstrates your web development 
-                capabilities or shows how you've experimented with different game engines and technologies.
-              </p>
-              <div class="flex space-x-4 text-xs font-light pt-1">
-                <a href="#" class="text-blue-600 hover:underline project-link">Live Demo →</a>
-                <a href="#" class="text-blue-600 hover:underline project-link">Source →</a>
-              </div>
-            </div>
-          </div>
-
-          <!-- Project 3 -->
-          <div class="space-y-3">
-            <div class="project-image bg-gradient-to-br from-purple-50 to-violet-100 flex items-center justify-center">
-              <div class="text-center">
-                <div class="text-2xl mb-2">🎯</div>
-                <p class="text-xs text-gray-500 font-light">Game Screenshot</p>
-              </div>
-            </div>
-            <div class="space-y-2">
-              <h3 class="text-sm font-medium">Game Jam Entry</h3>
-              <p class="text-xs font-light text-gray-600 uppercase tracking-wide">Unreal Engine • Blueprint • 48-Hour Development</p>
-              <p class="text-sm font-light leading-relaxed">
-                A game jam project that demonstrates your ability to work under tight deadlines and collaborate with others. 
-                Highlight any awards, recognition, or unique constraints that made this project challenging or interesting.
-              </p>
-              <div class="flex space-x-4 text-xs font-light pt-1">
-                <a href="#" class="text-blue-600 hover:underline project-link">Play Game →</a>
-                <a href="#" class="text-blue-600 hover:underline project-link">Jam Page →</a>
-              </div>
-            </div>
-          </div>
-
-          <!-- Cornell Game Design Initiative Project -->
-          <div class="space-y-3">
-            <div class="project-image bg-gradient-to-br from-red-50 to-rose-100 flex items-center justify-center">
-              <div class="text-center">
-                <div class="text-2xl mb-2">🔧</div>
-                <p class="text-xs text-gray-500 font-light">Framework Architecture</p>
-              </div>
-            </div>
-            <div class="space-y-2">
-              <h3 class="text-sm font-medium">Networking & Rendering Framework</h3>
-              <p class="text-xs font-light text-gray-600 uppercase tracking-wide">Cornell Game Design Initiative • C++ • Engine Development</p>
-              <p class="text-sm font-light leading-relaxed">
-                Custom networking and rendering frameworks developed for Cornell's game development projects. 
-                Focus on the technical architecture, performance optimizations, and how other developers used your framework.
-              </p>
-              <div class="flex space-x-4 text-xs font-light pt-1">
-                <a href="#" class="text-blue-600 hover:underline project-link">Documentation →</a>
-                <a href="#" class="text-blue-600 hover:underline project-link">GitHub →</a>
-              </div>
-            </div>
-          </div>
-
-        </div>
-      </div>
-    </section>
-
-    <!-- Skills -->
-    <section class="space-y-8 section-fade">
-      <div class="grid grid-cols-1 md:grid-cols-3 gap-x-8 gap-y-4 items-start">
-        <div><p class="text-sm font-light uppercase text-gray-700 tracking-wide">Skills</p></div>
-        <div class="md:col-span-2">
-          <div class="space-y-4">
-            <div>
-              <p class="text-xs font-light text-gray-600 uppercase tracking-wide mb-2">Game Development</p>
-              <p class="text-sm font-light">Unity, Unreal Engine, C#, C++, Game Design, Physics Simulation</p>
-            </div>
-            <div>
-              <p class="text-xs font-light text-gray-600 uppercase tracking-wide mb-2">Programming</p>
-              <p class="text-sm font-light">Python, JavaScript, Java, SQL, Machine Learning, Data Visualization</p>
-            </div>
-            <div>
-              <p class="text-xs font-light text-gray-600 uppercase tracking-wide mb-2">Tools & Technologies</p>
-              <p class="text-sm font-light">Git, Docker, AWS, React, Node.js, WebGL, Networking Protocols</p>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- Contact -->
-    <section class="space-y-8 section-fade">
-      <div class="grid grid-cols-1 md:grid-cols-3 gap-x-8 gap-y-4 items-start">
-        <div><p class="text-sm font-light uppercase text-gray-700 tracking-wide">Contact</p></div>
-        <div class="md:col-span-2">
-          <div class="space-y-2">
-            <p class="text-sm font-light">
-              Email: <a href="mailto:luke@example.com" class="text-blue-600 hover:underline">luke@example.com</a>
-            </p>
-            <div class="flex flex-wrap gap-x-6 gap-y-1 text-sm font-light">
-              <a href="https://linkedin.com" class="text-blue-600 hover:underline">LinkedIn →</a>
-              <a href="https://github.com" class="text-blue-600 hover:underline">GitHub →</a>
-              <a href="#" class="text-blue-600 hover:underline">Resume →</a>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-
-  </div>
 
   <script>
-    // Intersection Observer for fade-in animations
-    const observerOptions = {
-      threshold: 0.1,
-      rootMargin: '0px 0px -50px 0px'
-    };
+    function showSection(section, event) {
+      const tabs = document.querySelectorAll('.tabs button');
+      const entries = document.getElementById('all-content');
+      
+      // Update active tab
+      tabs.forEach(tab => tab.classList.remove('active'));
+      event.target.classList.add('active');
+      
+      // Show/hide content based on selection
+      if (section === 'all') {
+        entries.style.display = 'flex';
+        document.querySelectorAll('.entry').forEach(e => e.style.display = 'flex');
+        document.querySelectorAll('.section-header').forEach(h => h.style.display = 'block');
+      } else if (section === 'experience') {
+        entries.style.display = 'flex';
+        document.querySelectorAll('.entry').forEach(e => e.style.display = 'none');
+        document.querySelectorAll('.entry.experience').forEach(e => e.style.display = 'flex');
+        document.querySelectorAll('.section-header').forEach(h => h.style.display = 'none');
+      } else if (section === 'projects') {
+        entries.style.display = 'flex';
+        document.querySelectorAll('.entry').forEach(e => e.style.display = 'none');
+        document.querySelectorAll('.entry.project').forEach(e => e.style.display = 'flex');
+        document.querySelectorAll('.section-header').forEach(h => h.style.display = 'none');
+      }
+    }
 
-    const observer = new IntersectionObserver((entries) => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting) {
-          entry.target.classList.add('visible');
-        }
-      });
-    }, observerOptions);
-
-    // Observe all sections for fade-in effect
+    // Handle headshot loading
     document.addEventListener('DOMContentLoaded', () => {
-      document.querySelectorAll('.section-fade').forEach(section => {
-        observer.observe(section);
-      });
-
-      // Add initial visible class to header for immediate display
-      document.querySelector('header').classList.add('visible');
+      const img = document.getElementById('headshot-img');
+      const placeholder = document.getElementById('headshot-placeholder');
+      
+      if (img && placeholder) {
+        img.onload = function() {
+          img.style.display = 'block';
+          placeholder.style.display = 'none';
+        };
+        
+        img.onerror = function() {
+          img.style.display = 'none';
+          placeholder.style.display = 'flex';
+        };
+      }
     });
   </script>
+</head>
+
+<body>
+  <!-- Hero -->
+  <div class="hero-card">
+    <div class="hero-info">
+      <h1>Luke Leh Wei Nunn</h1>
+      <p class="subtitle">programming, game tech & performing & media arts</p>
+      <div class="hero-links">
+        <a href="https://linkedin.com" target="_blank">
+          <i class="fab fa-linkedin"></i> LinkedIn
+        </a>
+        <a href="https://github.com" target="_blank">
+          <i class="fab fa-github"></i> GitHub
+        </a>
+        <a href="mailto:luke@example.com">
+          <i class="fas fa-envelope"></i> Email
+        </a>
+        <a href="#" target="_blank">
+          <i class="fas fa-file-alt"></i> Resume
+        </a>
+      </div>
+    </div>
+    <div class="hero-photo">
+      <img src="your-headshot.jpg" alt="Luke Leh Wei Nunn" style="display: none;" id="headshot-img">
+      <div class="placeholder" id="headshot-placeholder">LN</div>
+    </div>
+  </div>
+
+  <!-- About -->
+  <div class="about">
+    <p>
+      Hi! I'm a Cornell University graduate with a B.S. in Computer Science and minors in Game Design and Performing & Media Arts. 
+      I've worked on AI Products at <a href="#" target="_blank">PETRONAS Digital</a>, engineered data pipelines and dashboards for the 
+      <a href="#" target="_blank">Environmental Data Governance Initiative</a>, developed networking & rendering frameworks for the 
+      <a href="#" target="_blank">Cornell Game Design Initiative</a>, and taught Computer Networking at Cornell University as an undergraduate teaching assistant.
+    </p>
+    <br>
+    <p>
+      I like building products that involve real time, interactive systems with compelling user experiences. This passion aligns with my game 
+      development journey at Cornell, as well as multiple game jams outside of school. In my free time, I enjoy riding my bicycle, tinkering with old 
+      tech, acting in theater, as well as playing Dungeons and Dragons with friends I've come to call family over my past 4 years in the USA.
+    </p>
+  </div>
+
+  <!-- Tabs -->
+  <div class="tabs">
+    <button class="active" onclick="showSection('all', event)">All</button>
+    <button onclick="showSection('experience', event)">Experience</button>
+    <button onclick="showSection('projects', event)">Projects</button>
+  </div>
+
+  <!-- Entries -->
+  <div class="entries" id="all-content">
+    
+    <!-- Section: Experience -->
+    <div class="section-header">
+      <h2>Experience</h2>
+    </div>
+
+    <!-- Experience 1 -->
+    <div class="entry experience">
+      <div class="entry-info">
+        <h3>
+          Software Engineering Intern
+          <span class="date">2024</span>
+        </h3>
+        <div class="venue">PETRONAS Digital</div>
+        <div class="description">
+          Developed machine learning models and AI-driven product features for Malaysia's national oil company. 
+          Worked on scalable AI solutions for energy optimization and predictive maintenance systems.
+        </div>
+      </div>
+    </div>
+
+    <!-- Experience 2 -->
+    <div class="entry experience">
+      <div class="entry-info">
+        <h3>
+          Fullstack Developer
+          <span class="date">2023</span>
+        </h3>
+        <div class="venue">Environmental Data Governance Initiative</div>
+        <div class="description">
+          Built data pipelines and visualization dashboards for environmental research data management. 
+          Created tools to help researchers analyze climate data and track environmental changes.
+        </div>
+      </div>
+    </div>
+
+    <!-- Experience 3 -->
+    <div class="entry experience">
+      <div class="entry-info">
+        <h3>
+          Project Lead/Gameplay Engineer
+          <span class="date">2022-2024</span>
+        </h3>
+        <div class="venue">Cornell Development in Games Association</div>
+        <div class="description">
+          Worked cross-functionally to build games with 20+ people. Led gameplay programming initiatives and 
+          coordinated between design, art, and engineering teams to ship complete game projects.
+        </div>
+      </div>
+    </div>
+
+    <!-- Experience 4 -->
+    <div class="entry experience">
+      <div class="entry-info">
+        <h3>
+          Undergraduate Teaching Assistant
+          <span class="date">2022-2024</span>
+        </h3>
+        <div class="venue">Cornell University</div>
+        <div class="description">
+          Taught Computer Networking concepts to undergraduate students and developed course materials. 
+          Held office hours, graded assignments, and helped students understand complex networking protocols.
+        </div>
+      </div>
+    </div>
+
+    <!-- Section: Projects -->
+    <div class="section-header">
+      <h2>Selected Projects</h2>
+    </div>
+
+    <!-- Project 1 -->
+    <div class="entry project">
+      <div class="entry-image-container">
+        <div class="entry-placeholder">
+          <div class="icon">🔧</div>
+          <div class="text">Framework Architecture</div>
+        </div>
+      </div>
+      <div class="entry-info">
+        <h3>Networking & Rendering Framework</h3>
+        <div class="tech-tags">
+          <span class="tech-tag">C++</span>
+          <span class="tech-tag">Engine Dev</span>
+          <span class="tech-tag">Cornell GDIAC</span>
+        </div>
+        <div class="description">
+          Custom networking and rendering frameworks developed for Cornell's game development projects. 
+          Focused on technical architecture, performance optimizations, and creating tools that other developers could easily use.
+        </div>
+        <div class="links">
+          <a href="#" target="_blank">
+            <i class="fas fa-book"></i> Documentation
+          </a>
+          <a href="#" target="_blank">
+            <i class="fab fa-github"></i> GitHub
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Project 2 -->
+    <div class="entry project">
+      <div class="entry-image-container">
+        <div class="entry-placeholder">
+          <div class="icon">🎮</div>
+          <div class="text">Game Screenshot</div>
+        </div>
+      </div>
+      <div class="entry-info">
+        <h3>Multiplayer Game Project</h3>
+        <div class="tech-tags">
+          <span class="tech-tag">Unity</span>
+          <span class="tech-tag">C#</span>
+          <span class="tech-tag">Multiplayer</span>
+        </div>
+        <div class="description">
+          A complex multiplayer game featuring real-time networking, physics simulation, and cross-platform compatibility. 
+          Implemented custom networking solutions and optimized for low-latency gameplay.
+        </div>
+        <div class="links">
+          <a href="#" target="_blank">
+            <i class="fas fa-play"></i> Play Demo
+          </a>
+          <a href="#" target="_blank">
+            <i class="fab fa-github"></i> View Code
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Project 3 -->
+    <div class="entry project">
+      <div class="entry-image-container">
+        <div class="entry-placeholder">
+          <div class="icon">🕹️</div>
+          <div class="text">Web Game</div>
+        </div>
+      </div>
+      <div class="entry-info">
+        <h3>WebGL Physics Simulation</h3>
+        <div class="tech-tags">
+          <span class="tech-tag">JavaScript</span>
+          <span class="tech-tag">WebGL</span>
+          <span class="tech-tag">Physics</span>
+        </div>
+        <div class="description">
+          Browser-based physics simulation demonstrating advanced WebGL techniques and real-time particle systems. 
+          Features interactive controls and responsive performance across different devices.
+        </div>
+        <div class="links">
+          <a href="#" target="_blank">
+            <i class="fas fa-external-link-alt"></i> Live Demo
+          </a>
+          <a href="#" target="_blank">
+            <i class="fab fa-github"></i> Source
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Project 4 -->
+    <div class="entry project">
+      <div class="entry-image-container">
+        <div class="entry-placeholder">
+          <div class="icon">🎯</div>
+          <div class="text">Game Jam Entry</div>
+        </div>
+      </div>
+      <div class="entry-info">
+        <h3>48-Hour Game Jam Winner</h3>
+        <div class="tech-tags">
+          <span class="tech-tag">Unreal</span>
+          <span class="tech-tag">Blueprint</span>
+          <span class="tech-tag">48hr</span>
+        </div>
+        <div class="description">
+          Award-winning game jam entry developed in 48 hours with a team of 4. Focused on innovative gameplay mechanics 
+          and polished user experience under tight time constraints.
+        </div>
+        <div class="links">
+          <a href="#" target="_blank">
+            <i class="fas fa-gamepad"></i> Play Game
+          </a>
+          <a href="#" target="_blank">
+            <i class="fas fa-trophy"></i> Jam Page
+          </a>
+        </div>
+      </div>
+    </div>
+
+  </div>
 </body>
 </html>
