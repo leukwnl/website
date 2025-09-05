@@ -3,43 +3,296 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Your Name</title>
+  <title>Luke Leh</title>
   <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    /* Custom styles for enhanced typography and interactions */
+    .section-fade {
+      opacity: 0;
+      transform: translateY(20px);
+      transition: all 0.6s ease;
+    }
+    
+    .section-fade.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    
+    .project-link:hover {
+      transform: translateX(4px);
+      transition: transform 0.2s ease;
+    }
+    
+    /* Custom scrollbar for webkit browsers */
+    ::-webkit-scrollbar {
+      width: 4px;
+    }
+    
+    ::-webkit-scrollbar-track {
+      background: #f1f1f1;
+    }
+    
+    ::-webkit-scrollbar-thumb {
+      background: #c1c1c1;
+      border-radius: 2px;
+    }
+    
+    ::-webkit-scrollbar-thumb:hover {
+      background: #a8a8a8;
+    }
+
+    /* Smooth scroll behavior */
+    html {
+      scroll-behavior: smooth;
+    }
+
+    /* Responsive image container */
+    .project-image {
+      aspect-ratio: 16 / 10;
+      background-color: #f8f9fa;
+      border-radius: 4px;
+      overflow: hidden;
+    }
+  </style>
 </head>
 <body class="bg-white text-gray-800 antialiased font-sans">
-  <div class="max-w-3xl mx-auto mt-12 mb-12 p-6 space-y-12">
+  <div class="max-w-3xl mx-auto mt-12 mb-16 p-6 space-y-16">
+    
     <!-- Header -->
-    <header class="space-y-2">
-      <h1 class="text-3xl font-normal">Your Name</h1>
+    <header class="space-y-2 section-fade">
+      <h1 class="text-3xl font-normal tracking-tight">Luke Leh</h1>
+      <p class="text-sm font-light text-gray-600">Game Developer & Software Engineer</p>
     </header>
 
     <!-- About -->
-    <section class="space-y-8">
-      <div class="grid grid-cols-3 gap-x-8 items-start">
-        <div><p class="text-sm font-light uppercase text-gray-700">About</p></div>
-        <div class="col-span-2">
+    <section class="space-y-8 section-fade">
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-x-8 gap-y-4 items-start">
+        <div><p class="text-sm font-light uppercase text-gray-700 tracking-wide">About</p></div>
+        <div class="md:col-span-2">
           <p class="text-sm font-light leading-relaxed mb-4">
-            A short intro about you. Keep it minimal and professional.
+            I'm a Cornell University graduate with a B.S. in Computer Science and minors in Game Design and Performing & Media Arts.
+            In the past, I have worked on AI Products at PETRONAS Digital, engineered data pipelines and dashboards for the Environmental
+            Data Governence Initiative, developed networking & rendering frameworks for the Cornell Game Design Initiative, and taught
+            Computer Networking at Cornell University as an undergraduate teaching assistant.
           </p>
+          <p class="text-sm font-light leading-relaxed">
+            I like building products that involve real time, interactive systems with compelling user experiences. Which underscore my Game
+            development journey in Cornell, as well as multiple game jams outside of school. In my free time, I enjoy riding bicycle, tinkering with old
+            tech, acting in theater and cooking for friends that've became family over my four years in Ithaca.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Experience -->
+    <section class="space-y-8 section-fade">
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-x-8 gap-y-6 items-start">
+        <div><p class="text-sm font-light uppercase text-gray-700 tracking-wide">Experience</p></div>
+        <div class="md:col-span-2 space-y-6">
+          
+          <div class="space-y-2">
+            <div class="flex flex-col sm:flex-row sm:justify-between sm:items-baseline">
+              <h3 class="text-sm font-medium">AI Products Intern</h3>
+              <p class="text-xs font-light text-gray-600">2024</p>
+            </div>
+            <p class="text-xs font-light text-gray-600 uppercase tracking-wide">PETRONAS Digital</p>
+            <p class="text-sm font-light leading-relaxed">
+              Developed machine learning models and AI-driven product features for Malaysia's national oil company.
+            </p>
+          </div>
+
+          <div class="space-y-2">
+            <div class="flex flex-col sm:flex-row sm:justify-between sm:items-baseline">
+              <h3 class="text-sm font-medium">Software Engineering Intern</h3>
+              <p class="text-xs font-light text-gray-600">2023</p>
+            </div>
+            <p class="text-xs font-light text-gray-600 uppercase tracking-wide">Environmental Data Governance Initiative</p>
+            <p class="text-sm font-light leading-relaxed">
+              Built data pipelines and visualization dashboards for environmental research data management.
+            </p>
+          </div>
+
+          <div class="space-y-2">
+            <div class="flex flex-col sm:flex-row sm:justify-between sm:items-baseline">
+              <h3 class="text-sm font-medium">Undergraduate Teaching Assistant</h3>
+              <p class="text-xs font-light text-gray-600">2022-2024</p>
+            </div>
+            <p class="text-xs font-light text-gray-600 uppercase tracking-wide">Cornell University</p>
+            <p class="text-sm font-light leading-relaxed">
+              Taught Computer Networking concepts to undergraduate students and developed course materials.
+            </p>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- Projects -->
+    <section class="space-y-8 section-fade">
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-x-8 gap-y-8 items-start">
+        <div><p class="text-sm font-light uppercase text-gray-700 tracking-wide">Selected Projects</p></div>
+        <div class="md:col-span-2 space-y-12">
+          
+          <!-- Project 1 -->
+          <div class="space-y-3">
+            <div class="project-image bg-gradient-to-br from-blue-50 to-indigo-100 flex items-center justify-center">
+              <div class="text-center">
+                <div class="text-2xl mb-2">🎮</div>
+                <p class="text-xs text-gray-500 font-light">Game Screenshot</p>
+              </div>
+            </div>
+            <div class="space-y-2">
+              <h3 class="text-sm font-medium">Project Title</h3>
+              <p class="text-xs font-light text-gray-600 uppercase tracking-wide">Unity • C# • Multiplayer Networking</p>
+              <p class="text-sm font-light leading-relaxed">
+                Brief description of your game project. Highlight the technical challenges you solved, the gameplay mechanics you implemented, 
+                and what makes this project unique or interesting from both a technical and design perspective.
+              </p>
+              <div class="flex space-x-4 text-xs font-light pt-1">
+                <a href="#" class="text-blue-600 hover:underline project-link">Play Demo →</a>
+                <a href="#" class="text-blue-600 hover:underline project-link">View Code →</a>
+              </div>
+            </div>
+          </div>
+
+          <!-- Project 2 -->
+          <div class="space-y-3">
+            <div class="project-image bg-gradient-to-br from-green-50 to-emerald-100 flex items-center justify-center">
+              <div class="text-center">
+                <div class="text-2xl mb-2">🕹️</div>
+                <p class="text-xs text-gray-500 font-light">Game Screenshot</p>
+              </div>
+            </div>
+            <div class="space-y-2">
+              <h3 class="text-sm font-medium">Another Project</h3>
+              <p class="text-xs font-light text-gray-600 uppercase tracking-wide">JavaScript • WebGL • Physics Simulation</p>
+              <p class="text-sm font-light leading-relaxed">
+                Description of another project showcasing different technical skills. Maybe this one demonstrates your web development 
+                capabilities or shows how you've experimented with different game engines and technologies.
+              </p>
+              <div class="flex space-x-4 text-xs font-light pt-1">
+                <a href="#" class="text-blue-600 hover:underline project-link">Live Demo →</a>
+                <a href="#" class="text-blue-600 hover:underline project-link">Source →</a>
+              </div>
+            </div>
+          </div>
+
+          <!-- Project 3 -->
+          <div class="space-y-3">
+            <div class="project-image bg-gradient-to-br from-purple-50 to-violet-100 flex items-center justify-center">
+              <div class="text-center">
+                <div class="text-2xl mb-2">🎯</div>
+                <p class="text-xs text-gray-500 font-light">Game Screenshot</p>
+              </div>
+            </div>
+            <div class="space-y-2">
+              <h3 class="text-sm font-medium">Game Jam Entry</h3>
+              <p class="text-xs font-light text-gray-600 uppercase tracking-wide">Unreal Engine • Blueprint • 48-Hour Development</p>
+              <p class="text-sm font-light leading-relaxed">
+                A game jam project that demonstrates your ability to work under tight deadlines and collaborate with others. 
+                Highlight any awards, recognition, or unique constraints that made this project challenging or interesting.
+              </p>
+              <div class="flex space-x-4 text-xs font-light pt-1">
+                <a href="#" class="text-blue-600 hover:underline project-link">Play Game →</a>
+                <a href="#" class="text-blue-600 hover:underline project-link">Jam Page →</a>
+              </div>
+            </div>
+          </div>
+
+          <!-- Cornell Game Design Initiative Project -->
+          <div class="space-y-3">
+            <div class="project-image bg-gradient-to-br from-red-50 to-rose-100 flex items-center justify-center">
+              <div class="text-center">
+                <div class="text-2xl mb-2">🔧</div>
+                <p class="text-xs text-gray-500 font-light">Framework Architecture</p>
+              </div>
+            </div>
+            <div class="space-y-2">
+              <h3 class="text-sm font-medium">Networking & Rendering Framework</h3>
+              <p class="text-xs font-light text-gray-600 uppercase tracking-wide">Cornell Game Design Initiative • C++ • Engine Development</p>
+              <p class="text-sm font-light leading-relaxed">
+                Custom networking and rendering frameworks developed for Cornell's game development projects. 
+                Focus on the technical architecture, performance optimizations, and how other developers used your framework.
+              </p>
+              <div class="flex space-x-4 text-xs font-light pt-1">
+                <a href="#" class="text-blue-600 hover:underline project-link">Documentation →</a>
+                <a href="#" class="text-blue-600 hover:underline project-link">GitHub →</a>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- Skills -->
+    <section class="space-y-8 section-fade">
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-x-8 gap-y-4 items-start">
+        <div><p class="text-sm font-light uppercase text-gray-700 tracking-wide">Skills</p></div>
+        <div class="md:col-span-2">
+          <div class="space-y-4">
+            <div>
+              <p class="text-xs font-light text-gray-600 uppercase tracking-wide mb-2">Game Development</p>
+              <p class="text-sm font-light">Unity, Unreal Engine, C#, C++, Game Design, Physics Simulation</p>
+            </div>
+            <div>
+              <p class="text-xs font-light text-gray-600 uppercase tracking-wide mb-2">Programming</p>
+              <p class="text-sm font-light">Python, JavaScript, Java, SQL, Machine Learning, Data Visualization</p>
+            </div>
+            <div>
+              <p class="text-xs font-light text-gray-600 uppercase tracking-wide mb-2">Tools & Technologies</p>
+              <p class="text-sm font-light">Git, Docker, AWS, React, Node.js, WebGL, Networking Protocols</p>
+            </div>
+          </div>
         </div>
       </div>
     </section>
 
     <!-- Contact -->
-    <section class="space-y-8">
-      <div class="grid grid-cols-3 gap-x-8 items-start">
-        <div><p class="text-sm font-light uppercase text-gray-700">Contact</p></div>
-        <div>
-          <p class="text-sm font-light">
-            Email: <a href="mailto:you@example.com" class="text-blue-600 hover:underline">you@example.com</a>
-          </p>
-          <p class="text-sm font-light space-x-4">
-            <a href="https://linkedin.com" class="text-blue-600 hover:underline">LinkedIn</a>
-            <a href="https://github.com" class="text-blue-600 hover:underline">GitHub</a>
-          </p>
+    <section class="space-y-8 section-fade">
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-x-8 gap-y-4 items-start">
+        <div><p class="text-sm font-light uppercase text-gray-700 tracking-wide">Contact</p></div>
+        <div class="md:col-span-2">
+          <div class="space-y-2">
+            <p class="text-sm font-light">
+              Email: <a href="mailto:luke@example.com" class="text-blue-600 hover:underline">luke@example.com</a>
+            </p>
+            <div class="flex flex-wrap gap-x-6 gap-y-1 text-sm font-light">
+              <a href="https://linkedin.com" class="text-blue-600 hover:underline">LinkedIn →</a>
+              <a href="https://github.com" class="text-blue-600 hover:underline">GitHub →</a>
+              <a href="#" class="text-blue-600 hover:underline">Resume →</a>
+            </div>
+          </div>
         </div>
       </div>
     </section>
+
   </div>
+
+  <script>
+    // Intersection Observer for fade-in animations
+    const observerOptions = {
+      threshold: 0.1,
+      rootMargin: '0px 0px -50px 0px'
+    };
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+        }
+      });
+    }, observerOptions);
+
+    // Observe all sections for fade-in effect
+    document.addEventListener('DOMContentLoaded', () => {
+      document.querySelectorAll('.section-fade').forEach(section => {
+        observer.observe(section);
+      });
+
+      // Add initial visible class to header for immediate display
+      document.querySelector('header').classList.add('visible');
+    });
+  </script>
 </body>
 </html>
