@@ -456,6 +456,11 @@
         document.querySelectorAll('.entry').forEach(e => e.style.display = 'none');
         document.querySelectorAll('.entry.project').forEach(e => e.style.display = 'flex');
         document.querySelectorAll('.section-header').forEach(h => h.style.display = 'none');
+      } else if (section === 'games') {
+        entries.style.display = 'flex';
+        document.querySelectorAll('.entry').forEach(e => e.style.display = 'none');
+        document.querySelectorAll('.entry.game').forEach(e => e.style.display = 'flex');
+        document.querySelectorAll('.section-header').forEach(h => h.style.display = 'none');
       }
     }
 
@@ -486,44 +491,43 @@
       <h1>Luke Leh Wei Nunn</h1>
       <p class="subtitle">software engineering, game design, performing & media arts</p>
       <div class="hero-links">
-        <a href="https://linkedin.com" target="_blank">
+        <a href="https://www.linkedin.com/in/lukeleh/">
           <i class="fab fa-linkedin"></i> LinkedIn
         </a>
-        <a href="https://github.com" target="_blank">
+        <a href="https://github.com/leukwnl">
           <i class="fab fa-github"></i> GitHub
         </a>
-        <a href="mailto:luke@example.com">
+        <a href="mailto:ll594@cornell.edu">
           <i class="fas fa-envelope"></i> Email
         </a>
-        <a href="#" target="_blank">
+        <a href="resume.pdf">
           <i class="fas fa-file-alt"></i> Resume
         </a>
       </div>
     </div>
     <div class="hero-photo">
-      <img src="your-headshot.jpg" alt="Luke Leh Wei Nunn" style="display: none;" id="headshot-img">
-      <div class="placeholder" id="headshot-placeholder">LN</div>
+      <img src="headshot.png" alt="Luke Leh Wei Nunn" style="display: true;" id="headshot-img">
     </div>
   </div>
 
   <!-- About -->
   <div class="about">
     <p>
-      Hi! I'm a Cornell University graduate with a B.S. in Computer Science and minors in Game Design and Performing &
+      Hello! I'm a Cornell University graduate with a B.A. in Computer Science and minors in Game Design and Performing &
       Media Arts.
       I've worked on AI Products at <a href="#" target="_blank">PETRONAS Digital</a>, engineered data pipelines and
       dashboards for the
-      <a href="#" target="_blank">Environmental Data Governance Initiative</a>, developed networking & rendering
-      frameworks for the
-      <a href="#" target="_blank">Cornell Game Design Initiative</a>, and taught Computer Networking at Cornell
+      <a href="#" target="_blank">Environmental Data Governance Initiative</a>, led cross-functional teams at
+      <a href="#" target="_blank">Cornell Design in Games Association</a>, and taught Computer Networking at Cornell
       University as an undergraduate teaching assistant.
     </p>
     <br>
     <p>
       I like building products that involve real time, interactive systems with compelling user experiences. This
       passion aligns with my game
-      development journey at Cornell, as well as multiple game jams outside of school. In my free time, I enjoy riding
-      my bicycle, tinkering with old
+      development journey at Cornell.
+      Outside of school, I participate in game jams with a team of 20 artists and programmers that I've organized and put together.
+      In my free time, I enjoy riding my bicycle, tinkering with old
       tech, acting in theater, as well as playing Dungeons and Dragons with friends I've come to call family over my
       past 4 years in the USA.
     </p>
@@ -534,6 +538,7 @@
     <button class="active" onclick="showSection('all', event)">All</button>
     <button onclick="showSection('experience', event)">Experience</button>
     <button onclick="showSection('projects', event)">Projects</button>
+    <button onclick="showSection('games', event)">Games</button>
   </div>
 
   <!-- Entries -->
@@ -549,12 +554,12 @@
       <div class="entry-info">
         <h3>
           Software Engineering Intern
-          <span class="date">2024</span>
+          <span class="date">2024-2025</span>
         </h3>
         <div class="venue">PETRONAS Digital</div>
         <div class="description">
-          Developed machine learning models and AI-driven product features for Malaysia's national oil company.
-          Worked on scalable AI solutions for energy optimization and predictive maintenance systems.
+          Developed AI-driven product features for Malaysia's national oil company.
+          Worked on RAG models for customer service.
         </div>
       </div>
     </div>
@@ -604,21 +609,21 @@
       </div>
     </div>
 
-    <!-- Section: Projects -->
+    <!-- Section: Games -->
     <div class="section-header">
-      <h2>Projects</h2>
+      <h2>Games</h2>
     </div>
 
     <!-- Project 1 -->
-    <div class="entry project">
+    <div class="entry game">
       <div class="entry-image-container">
         <div class="entry-placeholder">
           <div class="icon">🔧</div>
-          <div class="text">Framework Architecture</div>
+          <div class="text">Trigger Happy</div>
         </div>
       </div>
       <div class="entry-info">
-        <h3>Networking & Rendering Framework</h3>
+        <h3>Trigger Happy - Card Game on iOS and Android</h3>
         <div class="tech-tags">
           <span class="tech-tag">C++</span>
           <span class="tech-tag">Engine Dev</span>
@@ -641,7 +646,7 @@
     </div>
 
     <!-- Project 2 -->
-    <div class="entry project">
+    <div class="entry game">
       <div class="entry-image-container">
         <div class="entry-placeholder">
           <div class="icon">🎮</div>
@@ -649,7 +654,7 @@
         </div>
       </div>
       <div class="entry-info">
-        <h3>Multiplayer Game Project</h3>
+        <h3>GMTK Game Jam 2025 - Loop De Coop</h3>
         <div class="tech-tags">
           <span class="tech-tag">Unity</span>
           <span class="tech-tag">C#</span>
@@ -672,7 +677,7 @@
     </div>
 
     <!-- Project 3 -->
-    <div class="entry project">
+    <div class="entry game">
       <div class="entry-image-container">
         <div class="entry-placeholder">
           <div class="icon">🕹️</div>
@@ -680,7 +685,7 @@
         </div>
       </div>
       <div class="entry-info">
-        <h3>WebGL Physics Simulation</h3>
+        <h3>Godot Wild Jam - AMBROSIA</h3>
         <div class="tech-tags">
           <span class="tech-tag">JavaScript</span>
           <span class="tech-tag">WebGL</span>
@@ -702,15 +707,15 @@
     </div>
 
     <!-- Project 4 -->
-    <div class="entry project">
+    <div class="entry game">
       <div class="entry-image-container">
         <div class="entry-placeholder">
           <div class="icon">🎯</div>
-          <div class="text">Game Jam Entry</div>
+          <div class="text">Grub Bug</div>
         </div>
       </div>
       <div class="entry-info">
-        <h3>48-Hour Game Jam Winner</h3>
+        <h3>Grub Bug</h3>
         <div class="tech-tags">
           <span class="tech-tag">Unreal</span>
           <span class="tech-tag">Blueprint</span>
@@ -730,6 +735,67 @@
         </div>
       </div>
     </div>
+
+        <!-- Project 5 -->
+        <div class="entry game">
+          <div class="entry-image-container">
+            <div class="entry-placeholder">
+              <div class="icon">🎯</div>
+              <div class="text">Grub Bug</div>
+            </div>
+          </div>
+          <div class="entry-info">
+            <h3>Tilly's Critter Command</h3>
+            <div class="tech-tags">
+              <span class="tech-tag">Unreal</span>
+              <span class="tech-tag">Blueprint</span>
+              <span class="tech-tag">48hr</span>
+            </div>
+            <div class="description">
+              Award-winning game jam entry developed in 48 hours with a team of 4. Focused on innovative gameplay mechanics
+              and polished user experience under tight time constraints.
+            </div>
+            <div class="links">
+              <a href="#" target="_blank">
+                <i class="fas fa-gamepad"></i> Play Game
+              </a>
+              <a href="#" target="_blank">
+                <i class="fas fa-trophy"></i> Jam Page
+              </a>
+            </div>
+          </div>
+        </div>
+
+        <!-- Project 5 -->
+        <div class="entry game">
+          <div class="entry-image-container">
+            <div class="entry-placeholder">
+              <div class="icon">🎯</div>
+              <div class="text">Grub Bug</div>
+            </div>
+          </div>
+          <div class="entry-info">
+            <h3>Knead for Speed</h3>
+            <div class="tech-tags">
+              <span class="tech-tag">Unreal</span>
+              <span class="tech-tag">Blueprint</span>
+              <span class="tech-tag">48hr</span>
+            </div>
+            <div class="description">
+              Award-winning game jam entry developed in 48 hours with a team of 4. Focused on innovative gameplay mechanics
+              and polished user experience under tight time constraints.
+            </div>
+            <div class="links">
+              <a href="#" target="_blank">
+                <i class="fas fa-gamepad"></i> Play Game
+              </a>
+              <a href="#" target="_blank">
+                <i class="fas fa-trophy"></i> Jam Page
+              </a>
+            </div>
+          </div>
+        </div>
+
 
   </div>
 </body>
