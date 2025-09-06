@@ -241,7 +241,13 @@ function highlightActiveThumb(_id: string | null) {
   // no-op by design
 }
 
-/** ===== Dock renderers ===== */
+/** ===== Dock renderers ===== 
+ *     ${list("Stats", p.stats)}
+    ${list("Abilities", p.abilities)}
+ * to list more details in dock
+ * 
+*/
+
 function showWelcomeInDock() {
   if (!dockEl || !dockBodyEl || !dockTitleEl) return;
   dockTitleEl.textContent = "Welcome";
@@ -289,8 +295,6 @@ export function showProjectInDock(p: Project) {
     <p class="subtitle">${p.desc ?? ""}</p>
     ${p.role ? `<p><strong>Role:</strong> ${p.role}</p>` : ""}
     ${chips(p.tags)}
-    ${list("Stats", p.stats)}
-    ${list("Abilities", p.abilities)}
     <div class="section-title">Case Study</div>
     <p>This area holds your long-form write-up, diagrams, etc.</p>
     ${

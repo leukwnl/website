@@ -18,8 +18,6 @@ export interface Project {
   y: number;
   role?: string; // e.g., "Toolsmith", "Netcode"
   tags?: string[]; // e.g., ["RAG","Azure","Kafka"]
-  stats?: Stat[]; // quantified outcomes
-  abilities?: Ability[]; // notable techniques
   company?: string;
   location?: string;
   date?: string;
