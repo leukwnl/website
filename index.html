@@ -2,476 +2,78 @@
 <html lang="en">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Isometric TRPG Skeleton — Static</title>
-    <style>
-      /* --- Minimal blueprint-y vibe (tweak later) --- */
-      :root {
-        --bg: #0b2545;
-        --grid: #1d3a66;
-        --accent: #6ea8fe;
-        --player: #ffd166;
-        --enemy: #ef476f;
-        --tileW: 64px; /* logical iso tile width  */
-        --tileH: 32px; /* logical iso tile height */
-      }
-      html,
-      body {
-        height: 100%;
-        margin: 0;
-        background: radial-gradient(
-          1000px 1000px at 30% 20%,
-          #0e2e59,
-          var(--bg)
-        );
-        color: #e6edf7;
-        font-family: system-ui, -apple-system, Segoe UI, Roboto, Helvetica,
-          Arial, sans-serif;
-        overflow: hidden;
-      }
-
-      .wrap {
-        position: relative;
-        width: 100vw;
-        height: 100vh;
-        display: grid;
-        grid-template-columns: 1fr 320px; /* canvas + side panel */
-        gap: 0;
-      }
-
-      #game {
-        position: relative;
-        background: repeating-linear-gradient(
-            0deg,
-            transparent 0 12px,
-            rgba(255, 255, 255, 0.02) 12px 13px
-          ),
-          linear-gradient(180deg, rgba(255, 255, 255, 0.03), transparent 30%);
-        cursor: crosshair;
-      }
-
-      #ui {
-        background: #0a1e3a;
-        border-left: 1px solid rgba(255, 255, 255, 0.06);
-        padding: 16px;
-      }
-
-      .panel {
-        background: #0e2a4e;
-        border: 1px solid rgba(255, 255, 255, 0.08);
-        border-radius: 10px;
-        padding: 12px 14px;
-        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.25);
-      }
-
-      .panel h2 {
-        margin: 0 0 8px;
-        font-size: 16px;
-        letter-spacing: 0.3px;
-      }
-      .panel p {
-        margin: 6px 0;
-        color: #c7d5ef;
-        font-size: 14px;
-      }
-      .panel a {
-        color: var(--accent);
-        text-decoration: none;
-      }
-
-      .hint {
-        opacity: 0.7;
-        font-size: 12px;
-        margin-top: 10px;
-      }
-
-      /* Optional: display tile coordinates under cursor */
-      .coords {
-        position: absolute;
-        left: 10px;
-        bottom: 10px;
-        background: rgba(0, 0, 0, 0.4);
-        padding: 6px 8px;
-        border-radius: 8px;
-        font-size: 12px;
-      }
-    </style>
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, viewport-fit=cover"
+    />
+    <title>Isometric TRPG — Portfolio</title>
+    <link rel="icon" href="/favicon.svg" />
+    <link rel="stylesheet" href="/src/styles.css" />
   </head>
   <body>
     <div class="wrap">
-      <canvas id="game"></canvas>
-      <aside id="ui">
-        <div class="panel" id="info">
-          <h2>Projects</h2>
-          <p>
-            Click an enemy icon on the grid. Your character will pathfind to an
-            adjacent tile and a detail card will appear here.
-          </p>
-          <p class="hint">
-            This is a minimal, static skeleton. No frameworks. One file. Tweak
-            values in <code>CONFIG</code> below.
-          </p>
+      <!-- Full-viewport canvas -->
+      <canvas id="game" aria-label="Isometric tactical board"></canvas>
+
+      <!-- Floating UI/HUD layer -->
+      <div id="hud" class="hud" aria-live="polite">
+        <!-- Left Project Dock (singleton, collapsible) -->
+        <div
+          id="dock"
+          class="dock"
+          role="complementary"
+          aria-label="Project details"
+          aria-expanded="true"
+        >
+          <div class="dock-head">
+            <div class="dock-title" id="dock-title">Details</div>
+            <button
+              id="dock-toggle"
+              class="dock-toggle"
+              type="button"
+              aria-label="Collapse panel"
+              aria-expanded="true"
+            >
+              ▸
+            </button>
+          </div>
+          <div id="dock-body" class="dock-body"><!-- injected by ui.ts --></div>
         </div>
-      </aside>
+
+        <!-- Bottom Project Dock Bar -->
+        <div id="bbar" class="bbar" aria-label="Project selector">
+          <div class="lead">
+            <div class="bimg">
+              <img
+                id="bbar-img"
+                src="https://picsum.photos/seed/placeholder/220/132"
+                alt=""
+              />
+            </div>
+
+            <!-- Simplified info slab (no scrollbar) -->
+            <div id="bbar-info" class="binfo">
+              <div id="bbar-title" class="btitle">—</div>
+              <div id="bbar-company" class="bmeta">Company —</div>
+              <div id="bbar-location" class="bmeta">Location —</div>
+              <div id="bbar-date" class="bmeta">Date —</div>
+            </div>
+          </div>
+
+          <!-- Gallery of OTHER spawned projects (current is excluded in ui.ts) -->
+          <div
+            id="bbar-gallery"
+            class="gallery"
+            role="listbox"
+            aria-label="Spawned projects"
+          ></div>
+        </div>
+      </div>
     </div>
-    <div class="coords" id="coords">x:– y:–</div>
 
-    <script>
-      // ===============================
-      // Minimal Isometric TRPG Skeleton
-      // - Canvas rendering of iso grid
-      // - Enemies represent projects
-      // - Click enemy => pathfind (BFS) to adjacent tile
-      // - When arrived => show UI panel with project details
-      // ===============================
+    <!-- Status chip -->
+    <div class="coords" id="coords" role="status">x:– y:–</div>
 
-      const CONFIG = {
-        cols: 12,
-        rows: 12,
-        tileW: 64,
-        tileH: 32,
-        camOffsetX: 0, // fine-tune camera centering
-        camOffsetY: -80,
-        stepSpeed: 6, // pixels per frame for animation
-      };
-
-      // --- Canvas setup ---
-      const canvas = document.getElementById("game");
-      const ctx = canvas.getContext("2d");
-      function resize() {
-        canvas.width = window.innerWidth - 320; // leave room for side panel
-        canvas.height = window.innerHeight;
-        draw();
-      }
-      window.addEventListener("resize", resize);
-
-      // --- World state ---
-      const grid = makeGrid(CONFIG.cols, CONFIG.rows); // 0 walkable, 1 blocked
-
-      // Example: some blocking tiles to show pathing around
-      const obstacles = [
-        [5, 5],
-        [5, 6],
-        [5, 7],
-        [6, 7],
-        [7, 7],
-      ];
-      obstacles.forEach(([x, y]) => (grid[y][x] = 1));
-
-      const player = { x: 2, y: 2, screenX: 0, screenY: 0, path: [] };
-
-      // Example "projects" as enemies on the map
-      const projects = [
-        {
-          id: "proj1",
-          name: "RAG Platform",
-          desc: "Serverless ingestion + retrieval augmented generation.",
-          url: "#",
-          x: 8,
-          y: 3,
-        },
-        {
-          id: "proj2",
-          name: "Multiplayer Shooter",
-          desc: "Predictive aiming, rollback-ish movement.",
-          url: "#",
-          x: 3,
-          y: 9,
-        },
-        {
-          id: "proj3",
-          name: "Transit Dashboard",
-          desc: "Geospatial filtering + schedule analytics.",
-          url: "#",
-          x: 10,
-          y: 8,
-        },
-      ];
-
-      // Treat enemy tiles as blocked (can't stand on), but you can stand adjacent
-      projects.forEach((p) => (grid[p.y][p.x] = 1));
-
-      // --- Helpers: grid creation, BFS pathfinding ---
-      function makeGrid(w, h) {
-        const g = new Array(h);
-        for (let y = 0; y < h; y++) {
-          g[y] = new Array(w).fill(0);
-        }
-        return g;
-      }
-
-      function neighbors(x, y) {
-        const n = [];
-        if (y > 0) n.push([x, y - 1]);
-        if (y < CONFIG.rows - 1) n.push([x, y + 1]);
-        if (x > 0) n.push([x - 1, y]);
-        if (x < CONFIG.cols - 1) n.push([x + 1, y]);
-        return n;
-      }
-
-      function inBounds(x, y) {
-        return x >= 0 && y >= 0 && x < CONFIG.cols && y < CONFIG.rows;
-      }
-
-      function bfs(start, goal) {
-        // Simple BFS on 4-neighborhood grid (0 = walkable, 1 = blocked)
-        const q = [start];
-        const came = new Map();
-        const key = (x, y) => `${x},${y}`;
-        came.set(key(start[0], start[1]), null);
-
-        while (q.length) {
-          const [cx, cy] = q.shift();
-          if (cx === goal[0] && cy === goal[1]) {
-            // reconstruct
-            const path = [];
-            let cur = [cx, cy];
-            while (cur) {
-              path.push(cur);
-              cur = came.get(key(cur[0], cur[1]));
-            }
-            return path.reverse();
-          }
-          for (const [nx, ny] of neighbors(cx, cy)) {
-            if (!inBounds(nx, ny)) continue;
-            if (grid[ny][nx] === 1) continue; // blocked
-            const k = key(nx, ny);
-            if (!came.has(k)) {
-              came.set(k, [cx, cy]);
-              q.push([nx, ny]);
-            }
-          }
-        }
-        return null; // no path
-      }
-
-      // --- Iso math ---
-      function toScreen(x, y) {
-        const sx = (x - y) * (CONFIG.tileW / 2);
-        const sy = (x + y) * (CONFIG.tileH / 2);
-        // center map roughly in viewport
-        const centerX = canvas.width / 2;
-        const originX = centerX + CONFIG.camOffsetX;
-        const originY = 120 + CONFIG.camOffsetY;
-        return [sx + originX, sy + originY];
-      }
-
-      function toGrid(px, py) {
-        // inverse of the iso transform
-        const centerX = canvas.width / 2;
-        const originX = centerX + CONFIG.camOffsetX;
-        const originY = 120 + CONFIG.camOffsetY;
-        const x = px - originX;
-        const y = py - originY;
-        const gx = (y / (CONFIG.tileH / 2) + x / (CONFIG.tileW / 2)) / 2;
-        const gy = (y / (CONFIG.tileH / 2) - x / (CONFIG.tileW / 2)) / 2;
-        return [Math.floor(gx), Math.floor(gy)];
-      }
-
-      // --- Rendering ---
-      function drawTile(x, y, color, lineAlpha = 0.18) {
-        const [sx, sy] = toScreen(x, y);
-        ctx.save();
-        ctx.translate(sx, sy);
-        // diamond
-        ctx.beginPath();
-        ctx.moveTo(0, 0);
-        ctx.lineTo(CONFIG.tileW / 2, CONFIG.tileH / 2);
-        ctx.lineTo(0, CONFIG.tileH);
-        ctx.lineTo(-CONFIG.tileW / 2, CONFIG.tileH / 2);
-        ctx.closePath();
-        // fill
-        ctx.fillStyle = color;
-        ctx.fill();
-        // outline
-        ctx.globalAlpha = lineAlpha;
-        ctx.strokeStyle = "#ffffff";
-        ctx.stroke();
-        ctx.globalAlpha = 1;
-        ctx.restore();
-      }
-
-      function draw() {
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-        // grid base
-        for (let y = 0; y < CONFIG.rows; y++) {
-          for (let x = 0; x < CONFIG.cols; x++) {
-            const walkable = grid[y][x] === 0;
-            const c = walkable ? "#0f315d" : "#0a2547";
-            drawTile(x, y, c);
-          }
-        }
-
-        // highlight potential adjacent tiles of hovered enemy
-        if (hoverEnemy) {
-          for (const [ax, ay] of adjacentWalkable(hoverEnemy.x, hoverEnemy.y)) {
-            drawTile(ax, ay, "rgba(110,168,254,0.3)", 0.8);
-          }
-        }
-
-        // draw enemies (projects)
-        for (const e of projects) {
-          const [sx, sy] = toScreen(e.x, e.y);
-          ctx.save();
-          ctx.translate(sx, sy);
-          ctx.beginPath();
-          ctx.moveTo(0, 0);
-          ctx.lineTo(CONFIG.tileW / 2, CONFIG.tileH / 2);
-          ctx.lineTo(0, CONFIG.tileH);
-          ctx.lineTo(-CONFIG.tileW / 2, CONFIG.tileH / 2);
-          ctx.closePath();
-          ctx.fillStyle = "#1a2f55";
-          ctx.fill();
-          // enemy marker (circle)
-          ctx.beginPath();
-          ctx.arc(0, CONFIG.tileH / 2, 10, 0, Math.PI * 2);
-          ctx.fillStyle = getEnemyColor(e);
-          ctx.fill();
-          // label
-          ctx.font = "12px system-ui, sans-serif";
-          ctx.fillStyle = "rgba(255,255,255,0.9)";
-          ctx.textAlign = "center";
-          ctx.fillText(e.name, 0, -8);
-          ctx.restore();
-        }
-
-        // draw player
-        const [psx, psy] = toScreen(player.x, player.y);
-        ctx.save();
-        ctx.translate(psx, psy);
-        // base diamond highlight for player tile
-        ctx.beginPath();
-        ctx.moveTo(0, 0);
-        ctx.lineTo(CONFIG.tileW / 2, CONFIG.tileH / 2);
-        ctx.lineTo(0, CONFIG.tileH);
-        ctx.lineTo(-CONFIG.tileW / 2, CONFIG.tileH / 2);
-        ctx.closePath();
-        ctx.strokeStyle = "rgba(255,255,255,0.5)";
-        ctx.stroke();
-        // player marker
-        ctx.beginPath();
-        ctx.arc(0, CONFIG.tileH / 2 - 6, 9, 0, Math.PI * 2);
-        ctx.fillStyle = "var(--player)";
-        ctx.fill();
-        ctx.restore();
-      }
-
-      function getEnemyColor(e) {
-        return (
-          getComputedStyle(document.documentElement).getPropertyValue(
-            "--enemy"
-          ) || "#ef476f"
-        );
-      }
-
-      // --- Interaction ---
-      const infoEl = document.getElementById("info");
-      const coordsEl = document.getElementById("coords");
-      let hoverEnemy = null;
-
-      canvas.addEventListener("mousemove", (e) => {
-        const r = canvas.getBoundingClientRect();
-        const mx = e.clientX - r.left;
-        const my = e.clientY - r.top;
-        const [gx, gy] = toGrid(mx, my);
-        coordsEl.textContent = `x:${gx} y:${gy}`;
-        hoverEnemy = enemyAtGrid(gx, gy);
-        draw();
-      });
-
-      canvas.addEventListener("mouseleave", () => {
-        coordsEl.textContent = "x:– y:–";
-        hoverEnemy = null;
-        draw();
-      });
-
-      canvas.addEventListener("click", (e) => {
-        const r = canvas.getBoundingClientRect();
-        const mx = e.clientX - r.left;
-        const my = e.clientY - r.top;
-        const [gx, gy] = toGrid(mx, my);
-        const enemy = enemyAtGrid(gx, gy);
-        if (!enemy) return; // only respond to enemy clicks per spec
-
-        // Find shortest path to any adjacent walkable tile around the enemy
-        const adj = adjacentWalkable(enemy.x, enemy.y);
-        let bestPath = null;
-        for (const goal of adj) {
-          const p = bfs([player.x, player.y], goal);
-          if (p && (!bestPath || p.length < bestPath.length)) bestPath = p;
-        }
-        if (bestPath) {
-          // remove first node if it equals current position to avoid pause
-          if (
-            bestPath.length &&
-            bestPath[0][0] === player.x &&
-            bestPath[0][1] === player.y
-          )
-            bestPath.shift();
-          player.path = bestPath;
-          animateToEnemy(enemy);
-        }
-      });
-
-      function enemyAtGrid(x, y) {
-        return projects.find((p) => p.x === x && p.y === y) || null;
-      }
-
-      function adjacentWalkable(x, y) {
-        return neighbors(x, y).filter(
-          ([ax, ay]) => inBounds(ax, ay) && grid[ay][ax] === 0
-        );
-      }
-
-      // --- Animation loop for movement ---
-      let animId = 0;
-      function animateToEnemy(enemy) {
-        cancelAnimationFrame(animId);
-
-        function step() {
-          if (!player.path || player.path.length === 0) {
-            // arrived (already adjacent). show UI
-            showProject(enemy);
-            draw();
-            return;
-          }
-          const [tx, ty] = player.path[0];
-          if (player.x === tx && player.y === ty) {
-            player.path.shift();
-            requestAnimationFrame(step);
-            return;
-          }
-          // smooth step tile by tile (snap — minimal skeleton)
-          player.x = tx;
-          player.y = ty;
-          draw();
-
-          // If next step makes us adjacent to enemy and this is last step, show UI
-          if (player.path.length === 0) {
-            const adj =
-              Math.abs(player.x - enemy.x) + Math.abs(player.y - enemy.y) === 1;
-            if (adj) showProject(enemy);
-          }
-          animId = requestAnimationFrame(step);
-        }
-        step();
-      }
-
-      // --- UI panel update ---
-      function showProject(p) {
-        infoEl.innerHTML = `
-      <h2>${p.name}</h2>
-      <p>${p.desc}</p>
-      <p><a href="${p.url}">Open project →</a></p>
-      <hr style="border-color: rgba(255,255,255,.08); margin: 10px 0;"/>
-      <p class="hint">Tip: Add/edit projects in the <code>projects</code> array in the script. Enemy tiles are non-walkable; player moves to an adjacent tile.</p>
-    `;
-      }
-
-      // --- Init ---
-      resize();
-      draw();
-    </script>
+    <script type="module" src="/src/main.ts"></script>
   </body>
 </html>

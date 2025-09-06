@@ -1,0 +1,469 @@
+:root {
+  /* Theme tokens */
+  --bg: #0b2545;
+  --grid: #1d3a66;
+  --ink: #e6edf7;
+  --ink-dim: #c7d5ef;
+  --accent: #6ea8fe;
+  --player: #ffd166;
+  --enemy: #ef476f;
+
+  /* Glass panel */
+  --glass-bg: rgba(14, 42, 78, 0.82);
+  --glass-brd: rgba(255, 255, 255, 0.1);
+  --glass-brd-strong: rgba(255, 255, 255, 0.18);
+  --glass-shadow: 0 18px 60px rgba(0, 0, 0, 0.35);
+
+  /* Layout */
+  --pad: 12px;
+  --radius: 12px;
+  --z-canvas: 0;
+  --z-hud: 10;
+  --z-panels: 20;
+  --z-chips: 30;
+}
+
+* {
+  box-sizing: border-box;
+}
+html,
+body {
+  height: 100%;
+  margin: 0;
+}
+body {
+  background: radial-gradient(1000px 1000px at 30% 20%, #0e2e59, var(--bg));
+  color: var(--ink);
+  font-family: system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial,
+    sans-serif;
+  overflow: hidden;
+}
+
+.wrap {
+  position: relative;
+  width: 100vw;
+  height: 100vh;
+  display: block;
+}
+
+/* ===== Canvas fills the window ===== */
+#game {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  display: block;
+  z-index: var(--z-canvas);
+  background: repeating-linear-gradient(
+      0deg,
+      transparent 0 12px,
+      rgba(255, 255, 255, 0.02) 12px 13px
+    ),
+    linear-gradient(180deg, rgba(255, 255, 255, 0.03), transparent 30%);
+  cursor: crosshair;
+}
+
+/* ===== Floating HUD overlay ===== */
+.hud {
+  position: absolute;
+  inset: 0;
+  z-index: var(--z-hud);
+  pointer-events: none; /* panels re-enable */
+}
+
+/* ===== Generic floating panel (if you still use tile-anchored popups) ===== */
+.panel {
+  position: absolute;
+  max-width: 420px;
+  max-height: min(70vh, 560px);
+  overflow: auto;
+  background: var(--glass-bg);
+  border: 1px solid var(--glass-brd);
+  border-radius: var(--radius);
+  padding: 12px 14px;
+  box-shadow: var(--glass-shadow);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  pointer-events: auto;
+  transform-origin: 20% 20%;
+  animation: pop 160ms ease-out;
+}
+.panel::after {
+  content: "";
+  position: absolute;
+  top: 8px;
+  left: 14px;
+  width: 10px;
+  height: 10px;
+  transform: rotate(45deg);
+  background: var(--glass-bg);
+  border-left: 1px solid var(--glass-brd);
+  border-top: 1px solid var(--glass-brd);
+}
+.panel--anchored-right::after {
+  left: auto;
+  right: 14px;
+}
+.panel h2 {
+  margin: 0 0 8px;
+  font-size: 16px;
+  letter-spacing: 0.3px;
+}
+.panel p {
+  margin: 6px 0;
+  color: var(--ink-dim);
+  font-size: 14px;
+}
+.panel a {
+  color: var(--accent);
+  text-decoration: none;
+}
+.panel a:hover,
+.panel a:focus-visible {
+  text-decoration: underline;
+}
+.hint {
+  opacity: 0.75;
+  font-size: 12px;
+  margin-top: 10px;
+}
+
+.panel .x {
+  position: absolute;
+  top: 8px;
+  right: 10px;
+  width: 28px;
+  height: 28px;
+  line-height: 28px;
+  text-align: center;
+  border-radius: 8px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  background: rgba(255, 255, 255, 0.04);
+  color: var(--ink);
+  font-size: 14px;
+  cursor: pointer;
+}
+.panel .x:hover {
+  background: rgba(255, 255, 255, 0.07);
+}
+.panel .x:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+.chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin: 8px 0;
+}
+.chip {
+  font-size: 12px;
+  padding: 2px 8px;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 9999px;
+  color: var(--ink);
+  background: rgba(255, 255, 255, 0.03);
+  z-index: var(--z-chips);
+}
+
+@keyframes pop {
+  from {
+    opacity: 0;
+    transform: scale(0.96) translateY(4px);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .panel {
+    animation: none;
+  }
+}
+
+.panel ::selection {
+  background: rgba(110, 168, 254, 0.35);
+}
+.panel::-webkit-scrollbar {
+  width: 10px;
+}
+.panel::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.12);
+  border-radius: 8px;
+}
+.panel::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+@media (max-width: 560px) {
+  .panel {
+    max-width: calc(100vw - 24px);
+    left: 12px !important;
+    right: 12px !important;
+  }
+  .panel::after {
+    left: 18px;
+    right: auto;
+  }
+}
+
+.hidden {
+  display: none !important;
+}
+
+/* ===== Coords/status chip ===== */
+.coords {
+  position: absolute;
+  left: 10px;
+  bottom: 10px;
+  z-index: calc(var(--z-panels) + 1);
+  background: rgba(0, 0, 0, 0.45);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 8px;
+  padding: 6px 8px;
+  font-size: 12px;
+  color: var(--ink);
+}
+
+/* ===== Dock (left details panel) ===== */
+.dock {
+  position: absolute;
+  top: 6vh;
+  left: 12px;
+  width: min(520px, 38vw);
+  height: clamp(320px, 66vh, 720px);
+  background: rgba(14, 42, 78, 0.82);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  box-shadow: 0 18px 60px rgba(0, 0, 0, 0.35);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  pointer-events: auto;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  z-index: var(--z-panels);
+}
+.dock-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 10px 12px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.04), transparent);
+}
+.dock-title {
+  font-weight: 600;
+  font-size: 14px;
+}
+.dock-toggle {
+  width: 28px;
+  height: 28px;
+  border-radius: 8px;
+  cursor: pointer;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  background: rgba(255, 255, 255, 0.05);
+  color: var(--ink, #e6edf7);
+  line-height: 26px;
+  text-align: center;
+  transform: rotate(90deg); /* left-pointing when expanded */
+  transition: transform 0.16s ease-out, background 0.16s ease-out;
+}
+.dock-toggle:hover {
+  background: rgba(255, 255, 255, 0.08);
+}
+.dock-toggle:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+.dock-body {
+  overflow: auto;
+  padding: 12px 14px;
+  -webkit-overflow-scrolling: touch; /* smoother on iOS */
+}
+
+/* collapsed state */
+.dock--collapsed {
+  width: 44px;
+  height: 44px;
+  padding: 0;
+  overflow: visible;
+}
+.dock--collapsed .dock-head {
+  border-bottom: none;
+  background: transparent;
+  padding: 8px;
+}
+.dock--collapsed .dock-title {
+  display: none;
+}
+.dock--collapsed .dock-body {
+  display: none;
+}
+.dock--collapsed .dock-toggle {
+  transform: rotate(270deg);
+} /* right-pointing */
+
+/* hover label (optional) */
+.dock--collapsed:hover::after {
+  content: "Details";
+  position: absolute;
+  left: 50px;
+  top: 8px;
+  font-size: 12px;
+  opacity: 0.85;
+  background: rgba(14, 42, 78, 0.9);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  padding: 4px 8px;
+  border-radius: 8px;
+}
+
+@media (max-width: 720px) {
+  .dock {
+    left: 8px;
+    right: 8px;
+    width: auto;
+    top: 6vh;
+    height: 85vh;
+  }
+  .dock--collapsed {
+    left: 8px;
+    top: 8px;
+    height: 44px;
+  }
+}
+
+/* ===== Bottom Project Bar (portrait + info slab + gallery) ===== */
+.bbar {
+  position: absolute;
+  left: 12px;
+  right: 12px;
+  bottom: calc(12px + env(safe-area-inset-bottom, 0px)); /* safe area on iOS */
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px;
+  background: rgba(14, 42, 78, 0.8);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  box-shadow: 0 18px 60px rgba(0, 0, 0, 0.35);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  pointer-events: auto;
+  z-index: var(--z-panels);
+}
+
+.bbar .lead {
+  display: flex;
+  align-items: stretch;
+  gap: 12px;
+}
+.bbar .bimg img {
+  width: 220px;
+  height: 132px;
+  object-fit: cover;
+  border-radius: 10px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.35);
+}
+
+/* simplified info slab */
+.bbar .binfo {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 4px;
+  min-width: 240px;
+  height: 132px;
+  padding: 10px 12px;
+  background: rgba(11, 30, 58, 0.88);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 10px;
+}
+.bbar .btitle {
+  font-weight: 600;
+  font-size: 14px;
+}
+.bbar .bmeta {
+  font-size: 13px;
+  opacity: 0.9;
+}
+
+/* gallery shows OTHER projects (current excluded in ui.ts) */
+.bbar .gallery {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex: 1 1 auto;
+  padding: 2px;
+  min-height: 132px;
+}
+.bbar .gitem {
+  position: relative;
+  flex: 0 0 auto;
+  width: 110px;
+  height: 70px;
+  border-radius: 8px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 4px 18px rgba(0, 0, 0, 0.35);
+  overflow: hidden;
+  cursor: pointer;
+  opacity: 0.95;
+  transform: translateZ(0);
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  background: rgba(0, 0, 0, 0.15);
+}
+.bbar .gitem img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+.bbar .gitem .label {
+  position: absolute;
+  left: 6px;
+  right: 6px;
+  bottom: 4px;
+  font-size: 12px;
+  line-height: 1.2;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.6);
+}
+.bbar .gitem:hover {
+  outline: 1px solid var(--accent);
+  outline-offset: 2px;
+  opacity: 1;
+}
+.bbar .gitem:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+.bbar .gitem--active {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 2px var(--accent) inset, 0 6px 22px rgba(0, 0, 0, 0.45);
+  opacity: 1;
+}
+
+@media (max-width: 720px) {
+  .bbar {
+    left: 8px;
+    right: 8px;
+    gap: 8px;
+  }
+  .bbar .bimg img {
+    width: 180px;
+    height: 108px;
+  }
+  .bbar .binfo {
+    height: 108px;
+  }
+  .bbar .gallery .gitem {
+    width: 84px;
+    height: 52px;
+  }
+}
