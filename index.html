@@ -1,803 +1,477 @@
 <!DOCTYPE html>
 <html lang="en">
-
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Luke Leh Wei Nunn</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link
-    href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;600&family=Inter:wght@300;400;500;600&display=swap"
-    rel="stylesheet">
-  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
-
-  <style>
-    :root {
-      --bg-color: #FAF4E6;
-      --text-color: #23343B;
-      --text-secondary: #55646A;
-
-      --accent-color: #1FA2A1;
-      --accent-secondary: #E56B6F;
-
-      /* Lines, shadows */
-      --border-color: #E6DED1;
-      /* parchment line */
-      --shadow-color: rgba(35, 52, 59, .06);
-      --transition-time: .3s;
-    }
-
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
-
-    body {
-      font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
-      font-size: 1rem;
-      color: var(--text-color);
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      padding: 2rem 1.5rem;
-      line-height: 1.6;
-
-      background-color: var(--bg-color);
-      background-image:
-        radial-gradient(1200px 800px at 10% 10%, rgba(255, 255, 255, .35) 0%, rgba(255, 255, 255, 0) 70%),
-        radial-gradient(900px 600px at 90% 15%, rgba(255, 255, 255, .25) 0%, rgba(255, 255, 255, 0) 60%),
-        repeating-linear-gradient(0deg, rgba(0, 0, 0, .012) 0 2px, rgba(0, 0, 0, 0) 2px 4px),
-        linear-gradient(180deg, rgba(0, 0, 0, .03), rgba(255, 255, 255, .03));
-    }
-
-    /* Hero Section */
-    .hero-card {
-      width: 100%;
-      max-width: 900px;
-      border-bottom: 1px solid var(--border-color);
-      padding-bottom: 2rem;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 40px;
-    }
-
-    .hero-info h1 {
-      font-size: 2.8rem;
-      font-weight: 600;
-      margin-bottom: .4rem;
-      background: linear-gradient(135deg, #0f6e6c 0%, #1FA2A1 55%, #2D6A9A 100%);
-      -webkit-background-clip: text;
-      background-clip: text;
-      -webkit-text-fill-color: transparent;
-    }
-
-    .hero-info .subtitle {
-      font-size: 1.2rem;
-      color: var(--text-secondary);
-      margin-bottom: 1.3rem;
-      font-family: 'JetBrains Mono', monospace;
-      font-weight: 400;
-    }
-
-    .hero-links {
-      display: flex;
-      gap: 1.4rem;
-      flex-wrap: wrap;
-    }
-
-    .hero-links a {
-      color: var(--text-secondary);
-      text-decoration: none;
-      font-size: 0.95rem;
-      transition: all var(--transition-time) ease;
-      display: flex;
-      align-items: center;
-      gap: .5rem;
-      padding: .4rem .8rem;
-      border-radius: 8px;
-      border: 1px solid var(--border-color);
-      background: rgba(255, 255, 255, .35);
-      backdrop-filter: saturate(110%);
-    }
-
-    .hero-links a:hover {
-      background: var(--accent-color);
-      color: #fff;
-      border-color: var(--accent-color);
-      transform: translateY(-1px);
-    }
-
-    .hero-photo img {
-      width: 180px;
-      height: 180px;
-      object-fit: cover;
-      border-radius: 12px;
-      border: 2px solid var(--border-color);
-      box-shadow: 0 4px 20px rgba(0, 0, 0, .08);
-    }
-
-    .hero-photo .placeholder {
-      width: 180px;
-      height: 180px;
-      border-radius: 12px;
-      border: 2px solid var(--border-color);
-      background: linear-gradient(135deg, #fbf8f0 0%, #efe6d6 100%);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 2.5rem;
-      font-weight: 600;
-      color: var(--text-secondary);
-      font-family: 'JetBrains Mono', monospace;
-    }
-
-    /* About Section */
-    .about {
-      max-width: 900px;
-      width: 100%;
-      padding: 1.8rem 0;
-      font-size: 1.15rem;
-      color: var(--text-secondary);
-      line-height: 1.7;
-    }
-
-    .about a {
-      color: var(--accent-color);
-      text-decoration: none;
-      font-weight: 500;
-      transition: color var(--transition-time) ease;
-    }
-
-    .about a:hover {
-      color: var(--accent-secondary);
-      text-decoration: underline;
-    }
-
-    /* Section Headers */
-    .section-header {
-      max-width: 900px;
-      width: 100%;
-      margin-top: 2.5rem;
-      margin-bottom: 1rem;
-    }
-
-    .section-header h2 {
-      font-size: 1.5rem;
-      font-weight: 600;
-      padding-bottom: 0.6rem;
-      position: relative;
-      font-family: 'JetBrains Mono', monospace;
-      color: var(--text-color);
-      border-bottom: 1px solid var(--border-color);
-    }
-
-    .section-header h2::before {
-      content: '//';
-      color: var(--accent-color);
-      margin-right: 12px;
-      font-weight: 600;
-      opacity: .9;
-    }
-
-    /* Tabs */
-    .tabs {
-      max-width: 900px;
-      width: 100%;
-      margin-top: 1.5rem;
-      display: flex;
-      justify-content: flex-start;
-      gap: 2rem;
-      border-bottom: 1px solid var(--border-color);
-    }
-
-    .tabs button {
-      background: none;
-      border: none;
-      font-size: 1.1rem;
-      padding: .8rem 0;
-      cursor: pointer;
-      color: var(--text-secondary);
-      border-bottom: 3px solid transparent;
-      transition: all var(--transition-time) ease;
-      font-weight: 500;
-      min-width: fit-content;
-      font-family: 'JetBrains Mono', monospace;
-    }
-
-    .tabs button.active {
-      color: var(--accent-color);
-      border-bottom: 3px solid var(--accent-color);
-      font-weight: 600;
-    }
-
-    .tabs button:hover {
-      color: var(--accent-color);
-    }
-
-    /* Entries */
-    .entries {
-      max-width: 900px;
-      width: 100%;
-      margin-top: 2rem;
-      display: flex;
-      flex-direction: column;
-      gap: 2.5rem;
-    }
-
-    .entry {
-      display: flex;
-      gap: 1.8rem;
-      align-items: flex-start;
-      padding-bottom: 2rem;
-      border-bottom: 1px dashed var(--border-color);
-    }
-
-    .entry:last-child {
-      border-bottom: none;
-      padding-bottom: 0;
-    }
-
-    .entry-image-container {
-      width: 220px;
-      flex-shrink: 0;
-    }
-
-    .entry img,
-    .entry video {
-      width: 220px !important;
-      height: 130px !important;
-      object-fit: cover;
-      border-radius: 8px;
-      border: 1px solid var(--border-color);
-      flex-shrink: 0;
-      background: linear-gradient(135deg, #fbf8f0 0%, #efe6d6 100%);
-    }
-
-    .entry-placeholder {
-      width: 220px;
-      height: 130px;
-      border-radius: 8px;
-      border: 1px solid var(--border-color);
-      background:
-        radial-gradient(600px 400px at 20% 20%, rgba(255, 255, 255, .35), transparent 70%),
-        linear-gradient(135deg, #fbf8f0 0%, #efe6d6 100%);
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      text-align: center;
-      position: relative;
-      overflow: hidden;
-    }
-
-    .entry-placeholder::before {
-      content: '';
-      position: absolute;
-      inset: 0;
-      background: linear-gradient(45deg, transparent 48%, rgba(255, 255, 255, 0.12) 49%, rgba(255, 255, 255, 0.12) 51%, transparent 52%);
-    }
-
-    .entry-placeholder .icon {
-      font-size: 2rem;
-      margin-bottom: 0.5rem;
-      color: var(--text-secondary);
-    }
-
-    .entry-placeholder .text {
-      font-size: 0.8rem;
-      color: var(--text-secondary);
-      font-family: 'JetBrains Mono', monospace;
-    }
-
-    .entry-info h3 {
-      font-size: 1.3rem;
-      font-weight: 600;
-      margin-bottom: .5rem;
-      color: var(--text-color);
-    }
-
-    .entry-info .tech-tags {
-      margin-bottom: .8rem;
-    }
-
-    .tech-tag {
-      background: linear-gradient(135deg, #eaf6f5 0%, #d8f0ef 100%);
-      border: 1px solid #bfe5e3;
-      color: #2a6d6b;
-      border-radius: 6px;
-      padding: 3px 10px;
-      font-size: 11px;
-      font-family: 'JetBrains Mono', monospace;
-      display: inline-block;
-      margin-right: 8px;
-      margin-bottom: 6px;
-      font-weight: 600;
-    }
-
-    .entry-info .description {
-      font-size: 1rem;
-      color: var(--text-secondary);
-      margin-bottom: .8rem;
-      line-height: 1.6;
-    }
-
-    .entry-info .venue {
-      font-size: 0.9rem;
-      color: var(--text-secondary);
-      margin-bottom: .8rem;
-      font-family: 'JetBrains Mono', monospace;
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
-    }
-
-    .entry-info .links a {
-      margin-right: 1rem;
-      color: var(--text-secondary);
-      text-decoration: none;
-      font-size: 0.9rem;
-      padding: 0.4rem 0.8rem;
-      border: 1px solid var(--border-color);
-      border-radius: 8px;
-      background: rgba(255, 255, 255, .35);
-      transition: all var(--transition-time) ease;
-      display: inline-flex;
-      align-items: center;
-      gap: 0.4rem;
-      margin-bottom: 0.5rem;
-    }
-
-    .entry-info .links a:hover {
-      background: linear-gradient(135deg, var(--accent-color), var(--accent-secondary));
-      color: #fff;
-      border-color: var(--accent-color);
-      transform: translateY(-1px);
-    }
-
-    /* Experience specific styling */
-    .entry.experience .entry-info h3 {
-      display: flex;
-      justify-content: space-between;
-      align-items: baseline;
-      flex-wrap: wrap;
-      gap: 1rem;
-    }
-
-    .entry.experience .date {
-      font-size: 0.9rem;
-      color: var(--text-secondary);
-      font-weight: 400;
-      font-family: 'JetBrains Mono', monospace;
-    }
-
-    /* Responsive Design */
-    @media (max-width: 700px) {
-      .hero-card {
-        flex-direction: column-reverse;
-        text-align: center;
-        gap: 24px;
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Isometric TRPG Skeleton — Static</title>
+    <style>
+      /* --- Minimal blueprint-y vibe (tweak later) --- */
+      :root {
+        --bg: #0b2545;
+        --grid: #1d3a66;
+        --accent: #6ea8fe;
+        --player: #ffd166;
+        --enemy: #ef476f;
+        --tileW: 64px; /* logical iso tile width  */
+        --tileH: 32px; /* logical iso tile height */
+      }
+      html,
+      body {
+        height: 100%;
+        margin: 0;
+        background: radial-gradient(
+          1000px 1000px at 30% 20%,
+          #0e2e59,
+          var(--bg)
+        );
+        color: #e6edf7;
+        font-family: system-ui, -apple-system, Segoe UI, Roboto, Helvetica,
+          Arial, sans-serif;
+        overflow: hidden;
       }
 
-      .hero-info h1 {
-        font-size: 2.2rem;
+      .wrap {
+        position: relative;
+        width: 100vw;
+        height: 100vh;
+        display: grid;
+        grid-template-columns: 1fr 320px; /* canvas + side panel */
+        gap: 0;
       }
 
-      .entry {
-        flex-direction: column;
-        gap: 1rem;
+      #game {
+        position: relative;
+        background: repeating-linear-gradient(
+            0deg,
+            transparent 0 12px,
+            rgba(255, 255, 255, 0.02) 12px 13px
+          ),
+          linear-gradient(180deg, rgba(255, 255, 255, 0.03), transparent 30%);
+        cursor: crosshair;
       }
 
-      .entry-image-container {
-        width: 100%;
-        align-self: center;
+      #ui {
+        background: #0a1e3a;
+        border-left: 1px solid rgba(255, 255, 255, 0.06);
+        padding: 16px;
       }
 
-      .entry img,
-      .entry video,
-      .entry-placeholder {
-        width: 100% !important;
-        max-width: 300px;
-        margin: 0 auto;
+      .panel {
+        background: #0e2a4e;
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        border-radius: 10px;
+        padding: 12px 14px;
+        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.25);
       }
 
-      .tabs {
-        gap: 1rem;
-        flex-wrap: wrap;
+      .panel h2 {
+        margin: 0 0 8px;
+        font-size: 16px;
+        letter-spacing: 0.3px;
+      }
+      .panel p {
+        margin: 6px 0;
+        color: #c7d5ef;
+        font-size: 14px;
+      }
+      .panel a {
+        color: var(--accent);
+        text-decoration: none;
       }
 
-      .tabs button {
-        font-size: 1rem;
+      .hint {
+        opacity: 0.7;
+        font-size: 12px;
+        margin-top: 10px;
       }
-    }
 
-    /* Custom scrollbar with Nyonya gradient */
-    ::-webkit-scrollbar {
-      width: 6px;
-    }
-
-    ::-webkit-scrollbar-track {
-      background: #f6efe0;
-    }
-
-    ::-webkit-scrollbar-thumb {
-      background: linear-gradient(180deg, var(--accent-color), var(--accent-secondary));
-      border-radius: 3px;
-    }
-
-    ::-webkit-scrollbar-thumb:hover {
-      background: linear-gradient(180deg, #178786, #d85a60);
-    }
-  </style>
-
-
-  <script>
-    function showSection(section, event) {
-      const tabs = document.querySelectorAll('.tabs button');
-      const entries = document.getElementById('all-content');
-
-      // Update active tab
-      tabs.forEach(tab => tab.classList.remove('active'));
-      event.target.classList.add('active');
-
-      // Show/hide content based on selection
-      if (section === 'all') {
-        entries.style.display = 'flex';
-        document.querySelectorAll('.entry').forEach(e => e.style.display = 'flex');
-        document.querySelectorAll('.section-header').forEach(h => h.style.display = 'block');
-      } else if (section === 'experience') {
-        entries.style.display = 'flex';
-        document.querySelectorAll('.entry').forEach(e => e.style.display = 'none');
-        document.querySelectorAll('.entry.experience').forEach(e => e.style.display = 'flex');
-        document.querySelectorAll('.section-header').forEach(h => h.style.display = 'none');
-      } else if (section === 'projects') {
-        entries.style.display = 'flex';
-        document.querySelectorAll('.entry').forEach(e => e.style.display = 'none');
-        document.querySelectorAll('.entry.project').forEach(e => e.style.display = 'flex');
-        document.querySelectorAll('.section-header').forEach(h => h.style.display = 'none');
-      } else if (section === 'games') {
-        entries.style.display = 'flex';
-        document.querySelectorAll('.entry').forEach(e => e.style.display = 'none');
-        document.querySelectorAll('.entry.game').forEach(e => e.style.display = 'flex');
-        document.querySelectorAll('.section-header').forEach(h => h.style.display = 'none');
+      /* Optional: display tile coordinates under cursor */
+      .coords {
+        position: absolute;
+        left: 10px;
+        bottom: 10px;
+        background: rgba(0, 0, 0, 0.4);
+        padding: 6px 8px;
+        border-radius: 8px;
+        font-size: 12px;
       }
-    }
+    </style>
+  </head>
+  <body>
+    <div class="wrap">
+      <canvas id="game"></canvas>
+      <aside id="ui">
+        <div class="panel" id="info">
+          <h2>Projects</h2>
+          <p>
+            Click an enemy icon on the grid. Your character will pathfind to an
+            adjacent tile and a detail card will appear here.
+          </p>
+          <p class="hint">
+            This is a minimal, static skeleton. No frameworks. One file. Tweak
+            values in <code>CONFIG</code> below.
+          </p>
+        </div>
+      </aside>
+    </div>
+    <div class="coords" id="coords">x:– y:–</div>
 
-    // Handle headshot loading
-    document.addEventListener('DOMContentLoaded', () => {
-      const img = document.getElementById('headshot-img');
-      const placeholder = document.getElementById('headshot-placeholder');
+    <script>
+      // ===============================
+      // Minimal Isometric TRPG Skeleton
+      // - Canvas rendering of iso grid
+      // - Enemies represent projects
+      // - Click enemy => pathfind (BFS) to adjacent tile
+      // - When arrived => show UI panel with project details
+      // ===============================
 
-      if (img && placeholder) {
-        img.onload = function () {
-          img.style.display = 'block';
-          placeholder.style.display = 'none';
-        };
+      const CONFIG = {
+        cols: 12,
+        rows: 12,
+        tileW: 64,
+        tileH: 32,
+        camOffsetX: 0, // fine-tune camera centering
+        camOffsetY: -80,
+        stepSpeed: 6, // pixels per frame for animation
+      };
 
-        img.onerror = function () {
-          img.style.display = 'none';
-          placeholder.style.display = 'flex';
-        };
+      // --- Canvas setup ---
+      const canvas = document.getElementById("game");
+      const ctx = canvas.getContext("2d");
+      function resize() {
+        canvas.width = window.innerWidth - 320; // leave room for side panel
+        canvas.height = window.innerHeight;
+        draw();
       }
-    });
-  </script>
-</head>
+      window.addEventListener("resize", resize);
 
-<body>
-  <!-- Hero -->
-  <div class="hero-card">
-    <div class="hero-info">
-      <h1>Luke Leh Wei Nunn</h1>
-      <p class="subtitle">software engineering, game design, performing & media arts</p>
-      <div class="hero-links">
-        <a href="https://www.linkedin.com/in/lukeleh/">
-          <i class="fab fa-linkedin"></i> LinkedIn
-        </a>
-        <a href="https://github.com/leukwnl">
-          <i class="fab fa-github"></i> GitHub
-        </a>
-        <a href="mailto:ll594@cornell.edu">
-          <i class="fas fa-envelope"></i> Email
-        </a>
-        <a href="resume.pdf">
-          <i class="fas fa-file-alt"></i> Resume
-        </a>
-      </div>
-    </div>
-    <div class="hero-photo">
-      <img src="headshot.png" alt="Luke Leh Wei Nunn" style="display: true;" id="headshot-img">
-    </div>
-  </div>
+      // --- World state ---
+      const grid = makeGrid(CONFIG.cols, CONFIG.rows); // 0 walkable, 1 blocked
 
-  <!-- About -->
-  <div class="about">
-    <p>
-      Hello! I'm a Cornell University graduate with a B.A. in Computer Science and minors in Game Design and Performing &
-      Media Arts.
-      I've worked on AI Products at <a href="#" target="_blank">PETRONAS Digital</a>, engineered data pipelines and
-      dashboards for the
-      <a href="#" target="_blank">Environmental Data Governance Initiative</a>, led cross-functional teams at
-      <a href="#" target="_blank">Cornell Design in Games Association</a>, and taught Computer Networking at Cornell
-      University as an undergraduate teaching assistant.
-    </p>
-    <br>
-    <p>
-      I like building products that involve real time, interactive systems with compelling user experiences. This
-      passion aligns with my game
-      development journey at Cornell.
-      Outside of school, I participate in game jams with a team of 20 artists and programmers that I've organized and put together.
-      In my free time, I enjoy riding my bicycle, tinkering with old
-      tech, acting in theater, as well as playing Dungeons and Dragons with friends I've come to call family over my
-      past 4 years in the USA.
-    </p>
-  </div>
+      // Example: some blocking tiles to show pathing around
+      const obstacles = [
+        [5, 5],
+        [5, 6],
+        [5, 7],
+        [6, 7],
+        [7, 7],
+      ];
+      obstacles.forEach(([x, y]) => (grid[y][x] = 1));
 
-  <!-- Tabs -->
-  <div class="tabs">
-    <button class="active" onclick="showSection('all', event)">All</button>
-    <button onclick="showSection('experience', event)">Experience</button>
-    <button onclick="showSection('projects', event)">Projects</button>
-    <button onclick="showSection('games', event)">Games</button>
-  </div>
+      const player = { x: 2, y: 2, screenX: 0, screenY: 0, path: [] };
 
-  <!-- Entries -->
-  <div class="entries" id="all-content">
+      // Example "projects" as enemies on the map
+      const projects = [
+        {
+          id: "proj1",
+          name: "RAG Platform",
+          desc: "Serverless ingestion + retrieval augmented generation.",
+          url: "#",
+          x: 8,
+          y: 3,
+        },
+        {
+          id: "proj2",
+          name: "Multiplayer Shooter",
+          desc: "Predictive aiming, rollback-ish movement.",
+          url: "#",
+          x: 3,
+          y: 9,
+        },
+        {
+          id: "proj3",
+          name: "Transit Dashboard",
+          desc: "Geospatial filtering + schedule analytics.",
+          url: "#",
+          x: 10,
+          y: 8,
+        },
+      ];
 
-    <!-- Section: Experience -->
-    <div class="section-header">
-      <h2>Experience</h2>
-    </div>
+      // Treat enemy tiles as blocked (can't stand on), but you can stand adjacent
+      projects.forEach((p) => (grid[p.y][p.x] = 1));
 
-    <!-- Experience 1 -->
-    <div class="entry experience">
-      <div class="entry-info">
-        <h3>
-          Software Engineering Intern
-          <span class="date">2024-2025</span>
-        </h3>
-        <div class="venue">PETRONAS Digital</div>
-        <div class="description">
-          Developed AI-driven product features for Malaysia's national oil company.
-          Worked on RAG models for customer service.
-        </div>
-      </div>
-    </div>
+      // --- Helpers: grid creation, BFS pathfinding ---
+      function makeGrid(w, h) {
+        const g = new Array(h);
+        for (let y = 0; y < h; y++) {
+          g[y] = new Array(w).fill(0);
+        }
+        return g;
+      }
 
-    <!-- Experience 2 -->
-    <div class="entry experience">
-      <div class="entry-info">
-        <h3>
-          Fullstack Developer
-          <span class="date">2023</span>
-        </h3>
-        <div class="venue">Environmental Data Governance Initiative</div>
-        <div class="description">
-          Built data pipelines and visualization dashboards for environmental research data management.
-          Created tools to help researchers analyze climate data and track environmental changes.
-        </div>
-      </div>
-    </div>
+      function neighbors(x, y) {
+        const n = [];
+        if (y > 0) n.push([x, y - 1]);
+        if (y < CONFIG.rows - 1) n.push([x, y + 1]);
+        if (x > 0) n.push([x - 1, y]);
+        if (x < CONFIG.cols - 1) n.push([x + 1, y]);
+        return n;
+      }
 
-    <!-- Experience 3 -->
-    <div class="entry experience">
-      <div class="entry-info">
-        <h3>
-          Project Lead/Gameplay Engineer
-          <span class="date">2022-2024</span>
-        </h3>
-        <div class="venue">Cornell Development in Games Association</div>
-        <div class="description">
-          Worked cross-functionally to build games with 20+ people. Led gameplay programming initiatives and
-          coordinated between design, art, and engineering teams to ship complete game projects.
-        </div>
-      </div>
-    </div>
+      function inBounds(x, y) {
+        return x >= 0 && y >= 0 && x < CONFIG.cols && y < CONFIG.rows;
+      }
 
-    <!-- Experience 4 -->
-    <div class="entry experience">
-      <div class="entry-info">
-        <h3>
-          Undergraduate Teaching Assistant
-          <span class="date">2022-2024</span>
-        </h3>
-        <div class="venue">Cornell University</div>
-        <div class="description">
-          Taught Computer Networking concepts to undergraduate students and developed course materials.
-          Held office hours, graded assignments, and helped students understand complex networking protocols.
-        </div>
-      </div>
-    </div>
+      function bfs(start, goal) {
+        // Simple BFS on 4-neighborhood grid (0 = walkable, 1 = blocked)
+        const q = [start];
+        const came = new Map();
+        const key = (x, y) => `${x},${y}`;
+        came.set(key(start[0], start[1]), null);
 
-    <!-- Section: Games -->
-    <div class="section-header">
-      <h2>Games</h2>
-    </div>
+        while (q.length) {
+          const [cx, cy] = q.shift();
+          if (cx === goal[0] && cy === goal[1]) {
+            // reconstruct
+            const path = [];
+            let cur = [cx, cy];
+            while (cur) {
+              path.push(cur);
+              cur = came.get(key(cur[0], cur[1]));
+            }
+            return path.reverse();
+          }
+          for (const [nx, ny] of neighbors(cx, cy)) {
+            if (!inBounds(nx, ny)) continue;
+            if (grid[ny][nx] === 1) continue; // blocked
+            const k = key(nx, ny);
+            if (!came.has(k)) {
+              came.set(k, [cx, cy]);
+              q.push([nx, ny]);
+            }
+          }
+        }
+        return null; // no path
+      }
 
-    <!-- Project 1 -->
-    <div class="entry game">
-      <div class="entry-image-container">
-        <div class="entry-placeholder">
-          <div class="icon">🔧</div>
-          <div class="text">Trigger Happy</div>
-        </div>
-      </div>
-      <div class="entry-info">
-        <h3>Trigger Happy - Card Game on iOS and Android</h3>
-        <div class="tech-tags">
-          <span class="tech-tag">C++</span>
-          <span class="tech-tag">Engine Dev</span>
-          <span class="tech-tag">Cornell GDIAC</span>
-        </div>
-        <div class="description">
-          Custom networking and rendering frameworks developed for Cornell's game development projects.
-          Focused on technical architecture, performance optimizations, and creating tools that other developers could
-          easily use.
-        </div>
-        <div class="links">
-          <a href="#" target="_blank">
-            <i class="fas fa-book"></i> Documentation
-          </a>
-          <a href="#" target="_blank">
-            <i class="fab fa-github"></i> GitHub
-          </a>
-        </div>
-      </div>
-    </div>
+      // --- Iso math ---
+      function toScreen(x, y) {
+        const sx = (x - y) * (CONFIG.tileW / 2);
+        const sy = (x + y) * (CONFIG.tileH / 2);
+        // center map roughly in viewport
+        const centerX = canvas.width / 2;
+        const originX = centerX + CONFIG.camOffsetX;
+        const originY = 120 + CONFIG.camOffsetY;
+        return [sx + originX, sy + originY];
+      }
 
-    <!-- Project 2 -->
-    <div class="entry game">
-      <div class="entry-image-container">
-        <div class="entry-placeholder">
-          <div class="icon">🎮</div>
-          <div class="text">Game Screenshot</div>
-        </div>
-      </div>
-      <div class="entry-info">
-        <h3>GMTK Game Jam 2025 - Loop De Coop</h3>
-        <div class="tech-tags">
-          <span class="tech-tag">Unity</span>
-          <span class="tech-tag">C#</span>
-          <span class="tech-tag">Multiplayer</span>
-        </div>
-        <div class="description">
-          A complex multiplayer game featuring real-time networking, physics simulation, and cross-platform
-          compatibility.
-          Implemented custom networking solutions and optimized for low-latency gameplay.
-        </div>
-        <div class="links">
-          <a href="#" target="_blank">
-            <i class="fas fa-play"></i> Play Demo
-          </a>
-          <a href="#" target="_blank">
-            <i class="fab fa-github"></i> View Code
-          </a>
-        </div>
-      </div>
-    </div>
+      function toGrid(px, py) {
+        // inverse of the iso transform
+        const centerX = canvas.width / 2;
+        const originX = centerX + CONFIG.camOffsetX;
+        const originY = 120 + CONFIG.camOffsetY;
+        const x = px - originX;
+        const y = py - originY;
+        const gx = (y / (CONFIG.tileH / 2) + x / (CONFIG.tileW / 2)) / 2;
+        const gy = (y / (CONFIG.tileH / 2) - x / (CONFIG.tileW / 2)) / 2;
+        return [Math.floor(gx), Math.floor(gy)];
+      }
 
-    <!-- Project 3 -->
-    <div class="entry game">
-      <div class="entry-image-container">
-        <div class="entry-placeholder">
-          <div class="icon">🕹️</div>
-          <div class="text">Web Game</div>
-        </div>
-      </div>
-      <div class="entry-info">
-        <h3>Godot Wild Jam - AMBROSIA</h3>
-        <div class="tech-tags">
-          <span class="tech-tag">JavaScript</span>
-          <span class="tech-tag">WebGL</span>
-          <span class="tech-tag">Physics</span>
-        </div>
-        <div class="description">
-          Browser-based physics simulation demonstrating advanced WebGL techniques and real-time particle systems.
-          Features interactive controls and responsive performance across different devices.
-        </div>
-        <div class="links">
-          <a href="#" target="_blank">
-            <i class="fas fa-external-link-alt"></i> Live Demo
-          </a>
-          <a href="#" target="_blank">
-            <i class="fab fa-github"></i> Source
-          </a>
-        </div>
-      </div>
-    </div>
+      // --- Rendering ---
+      function drawTile(x, y, color, lineAlpha = 0.18) {
+        const [sx, sy] = toScreen(x, y);
+        ctx.save();
+        ctx.translate(sx, sy);
+        // diamond
+        ctx.beginPath();
+        ctx.moveTo(0, 0);
+        ctx.lineTo(CONFIG.tileW / 2, CONFIG.tileH / 2);
+        ctx.lineTo(0, CONFIG.tileH);
+        ctx.lineTo(-CONFIG.tileW / 2, CONFIG.tileH / 2);
+        ctx.closePath();
+        // fill
+        ctx.fillStyle = color;
+        ctx.fill();
+        // outline
+        ctx.globalAlpha = lineAlpha;
+        ctx.strokeStyle = "#ffffff";
+        ctx.stroke();
+        ctx.globalAlpha = 1;
+        ctx.restore();
+      }
 
-    <!-- Project 4 -->
-    <div class="entry game">
-      <div class="entry-image-container">
-        <div class="entry-placeholder">
-          <div class="icon">🎯</div>
-          <div class="text">Grub Bug</div>
-        </div>
-      </div>
-      <div class="entry-info">
-        <h3>Grub Bug</h3>
-        <div class="tech-tags">
-          <span class="tech-tag">Unreal</span>
-          <span class="tech-tag">Blueprint</span>
-          <span class="tech-tag">48hr</span>
-        </div>
-        <div class="description">
-          Award-winning game jam entry developed in 48 hours with a team of 4. Focused on innovative gameplay mechanics
-          and polished user experience under tight time constraints.
-        </div>
-        <div class="links">
-          <a href="#" target="_blank">
-            <i class="fas fa-gamepad"></i> Play Game
-          </a>
-          <a href="#" target="_blank">
-            <i class="fas fa-trophy"></i> Jam Page
-          </a>
-        </div>
-      </div>
-    </div>
+      function draw() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-        <!-- Project 5 -->
-        <div class="entry game">
-          <div class="entry-image-container">
-            <div class="entry-placeholder">
-              <div class="icon">🎯</div>
-              <div class="text">Grub Bug</div>
-            </div>
-          </div>
-          <div class="entry-info">
-            <h3>Tilly's Critter Command</h3>
-            <div class="tech-tags">
-              <span class="tech-tag">Unreal</span>
-              <span class="tech-tag">Blueprint</span>
-              <span class="tech-tag">48hr</span>
-            </div>
-            <div class="description">
-              Award-winning game jam entry developed in 48 hours with a team of 4. Focused on innovative gameplay mechanics
-              and polished user experience under tight time constraints.
-            </div>
-            <div class="links">
-              <a href="#" target="_blank">
-                <i class="fas fa-gamepad"></i> Play Game
-              </a>
-              <a href="#" target="_blank">
-                <i class="fas fa-trophy"></i> Jam Page
-              </a>
-            </div>
-          </div>
-        </div>
+        // grid base
+        for (let y = 0; y < CONFIG.rows; y++) {
+          for (let x = 0; x < CONFIG.cols; x++) {
+            const walkable = grid[y][x] === 0;
+            const c = walkable ? "#0f315d" : "#0a2547";
+            drawTile(x, y, c);
+          }
+        }
 
-        <!-- Project 5 -->
-        <div class="entry game">
-          <div class="entry-image-container">
-            <div class="entry-placeholder">
-              <div class="icon">🎯</div>
-              <div class="text">Grub Bug</div>
-            </div>
-          </div>
-          <div class="entry-info">
-            <h3>Knead for Speed</h3>
-            <div class="tech-tags">
-              <span class="tech-tag">Unreal</span>
-              <span class="tech-tag">Blueprint</span>
-              <span class="tech-tag">48hr</span>
-            </div>
-            <div class="description">
-              Award-winning game jam entry developed in 48 hours with a team of 4. Focused on innovative gameplay mechanics
-              and polished user experience under tight time constraints.
-            </div>
-            <div class="links">
-              <a href="#" target="_blank">
-                <i class="fas fa-gamepad"></i> Play Game
-              </a>
-              <a href="#" target="_blank">
-                <i class="fas fa-trophy"></i> Jam Page
-              </a>
-            </div>
-          </div>
-        </div>
+        // highlight potential adjacent tiles of hovered enemy
+        if (hoverEnemy) {
+          for (const [ax, ay] of adjacentWalkable(hoverEnemy.x, hoverEnemy.y)) {
+            drawTile(ax, ay, "rgba(110,168,254,0.3)", 0.8);
+          }
+        }
 
+        // draw enemies (projects)
+        for (const e of projects) {
+          const [sx, sy] = toScreen(e.x, e.y);
+          ctx.save();
+          ctx.translate(sx, sy);
+          ctx.beginPath();
+          ctx.moveTo(0, 0);
+          ctx.lineTo(CONFIG.tileW / 2, CONFIG.tileH / 2);
+          ctx.lineTo(0, CONFIG.tileH);
+          ctx.lineTo(-CONFIG.tileW / 2, CONFIG.tileH / 2);
+          ctx.closePath();
+          ctx.fillStyle = "#1a2f55";
+          ctx.fill();
+          // enemy marker (circle)
+          ctx.beginPath();
+          ctx.arc(0, CONFIG.tileH / 2, 10, 0, Math.PI * 2);
+          ctx.fillStyle = getEnemyColor(e);
+          ctx.fill();
+          // label
+          ctx.font = "12px system-ui, sans-serif";
+          ctx.fillStyle = "rgba(255,255,255,0.9)";
+          ctx.textAlign = "center";
+          ctx.fillText(e.name, 0, -8);
+          ctx.restore();
+        }
 
-  </div>
-</body>
+        // draw player
+        const [psx, psy] = toScreen(player.x, player.y);
+        ctx.save();
+        ctx.translate(psx, psy);
+        // base diamond highlight for player tile
+        ctx.beginPath();
+        ctx.moveTo(0, 0);
+        ctx.lineTo(CONFIG.tileW / 2, CONFIG.tileH / 2);
+        ctx.lineTo(0, CONFIG.tileH);
+        ctx.lineTo(-CONFIG.tileW / 2, CONFIG.tileH / 2);
+        ctx.closePath();
+        ctx.strokeStyle = "rgba(255,255,255,0.5)";
+        ctx.stroke();
+        // player marker
+        ctx.beginPath();
+        ctx.arc(0, CONFIG.tileH / 2 - 6, 9, 0, Math.PI * 2);
+        ctx.fillStyle = "var(--player)";
+        ctx.fill();
+        ctx.restore();
+      }
 
+      function getEnemyColor(e) {
+        return (
+          getComputedStyle(document.documentElement).getPropertyValue(
+            "--enemy"
+          ) || "#ef476f"
+        );
+      }
+
+      // --- Interaction ---
+      const infoEl = document.getElementById("info");
+      const coordsEl = document.getElementById("coords");
+      let hoverEnemy = null;
+
+      canvas.addEventListener("mousemove", (e) => {
+        const r = canvas.getBoundingClientRect();
+        const mx = e.clientX - r.left;
+        const my = e.clientY - r.top;
+        const [gx, gy] = toGrid(mx, my);
+        coordsEl.textContent = `x:${gx} y:${gy}`;
+        hoverEnemy = enemyAtGrid(gx, gy);
+        draw();
+      });
+
+      canvas.addEventListener("mouseleave", () => {
+        coordsEl.textContent = "x:– y:–";
+        hoverEnemy = null;
+        draw();
+      });
+
+      canvas.addEventListener("click", (e) => {
+        const r = canvas.getBoundingClientRect();
+        const mx = e.clientX - r.left;
+        const my = e.clientY - r.top;
+        const [gx, gy] = toGrid(mx, my);
+        const enemy = enemyAtGrid(gx, gy);
+        if (!enemy) return; // only respond to enemy clicks per spec
+
+        // Find shortest path to any adjacent walkable tile around the enemy
+        const adj = adjacentWalkable(enemy.x, enemy.y);
+        let bestPath = null;
+        for (const goal of adj) {
+          const p = bfs([player.x, player.y], goal);
+          if (p && (!bestPath || p.length < bestPath.length)) bestPath = p;
+        }
+        if (bestPath) {
+          // remove first node if it equals current position to avoid pause
+          if (
+            bestPath.length &&
+            bestPath[0][0] === player.x &&
+            bestPath[0][1] === player.y
+          )
+            bestPath.shift();
+          player.path = bestPath;
+          animateToEnemy(enemy);
+        }
+      });
+
+      function enemyAtGrid(x, y) {
+        return projects.find((p) => p.x === x && p.y === y) || null;
+      }
+
+      function adjacentWalkable(x, y) {
+        return neighbors(x, y).filter(
+          ([ax, ay]) => inBounds(ax, ay) && grid[ay][ax] === 0
+        );
+      }
+
+      // --- Animation loop for movement ---
+      let animId = 0;
+      function animateToEnemy(enemy) {
+        cancelAnimationFrame(animId);
+
+        function step() {
+          if (!player.path || player.path.length === 0) {
+            // arrived (already adjacent). show UI
+            showProject(enemy);
+            draw();
+            return;
+          }
+          const [tx, ty] = player.path[0];
+          if (player.x === tx && player.y === ty) {
+            player.path.shift();
+            requestAnimationFrame(step);
+            return;
+          }
+          // smooth step tile by tile (snap — minimal skeleton)
+          player.x = tx;
+          player.y = ty;
+          draw();
+
+          // If next step makes us adjacent to enemy and this is last step, show UI
+          if (player.path.length === 0) {
+            const adj =
+              Math.abs(player.x - enemy.x) + Math.abs(player.y - enemy.y) === 1;
+            if (adj) showProject(enemy);
+          }
+          animId = requestAnimationFrame(step);
+        }
+        step();
+      }
+
+      // --- UI panel update ---
+      function showProject(p) {
+        infoEl.innerHTML = `
+      <h2>${p.name}</h2>
+      <p>${p.desc}</p>
+      <p><a href="${p.url}">Open project →</a></p>
+      <hr style="border-color: rgba(255,255,255,.08); margin: 10px 0;"/>
+      <p class="hint">Tip: Add/edit projects in the <code>projects</code> array in the script. Enemy tiles are non-walkable; player moves to an adjacent tile.</p>
+    `;
+      }
+
+      // --- Init ---
+      resize();
+      draw();
+    </script>
+  </body>
 </html>
