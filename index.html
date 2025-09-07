@@ -485,61 +485,131 @@
       ::-webkit-scrollbar-thumb:hover {
         background: linear-gradient(180deg, #178786, #d85a60);
       }
+
+      /* Isometric Hub */
+      #iso-container {
+        position: relative;
+        width: 100%;
+        max-width: 900px;
+        margin: 24px 0 32px;
+        border: 1px solid var(--border-color);
+        border-radius: 12px;
+        background: rgba(255, 255, 255, 0.35);
+        box-shadow: 0 8px 30px var(--shadow-color);
+        overflow: hidden;
+      }
+
+      #iso-canvas {
+        display: block;
+        width: 100%;
+        height: 420px;
+        background: linear-gradient(
+          180deg,
+          rgba(255, 255, 255, 0.6),
+          rgba(255, 255, 255, 0.2)
+        );
+      }
+
+      #legend {
+        position: absolute;
+        top: 10px;
+        right: 10px;
+        font-size: 0.85rem;
+        color: var(--text-secondary);
+        background: rgba(255, 255, 255, 0.7);
+        border: 1px solid var(--border-color);
+        border-radius: 8px;
+        padding: 6px 10px;
+        backdrop-filter: saturate(110%);
+      }
+
+      #prompt {
+        position: absolute;
+        bottom: 10px;
+        left: 12px;
+        font-size: 0.95rem;
+        color: var(--text-secondary);
+        background: rgba(255, 255, 255, 0.7);
+        border: 1px solid var(--border-color);
+        border-radius: 8px;
+        padding: 8px 10px;
+      }
+
+      /* HUD Overlay */
+      #hud-overlay {
+        position: fixed;
+        inset: 0;
+        display: none;
+        align-items: center;
+        justify-content: center;
+        background: rgba(0, 0, 0, 0.35);
+        z-index: 50;
+        padding: 16px;
+      }
+
+      #hud-content {
+        width: 100%;
+        max-width: 820px;
+        background: var(--bg-color);
+        border: 1px solid var(--border-color);
+        border-radius: 12px;
+        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
+        padding: 16px;
+      }
+
+      #hud-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 12px;
+        margin-bottom: 8px;
+      }
+
+      #hud-title {
+        font-size: 1.2rem;
+        font-weight: 600;
+      }
+
+      #hud-close {
+        background: none;
+        border: 1px solid var(--border-color);
+        border-radius: 8px;
+        padding: 6px 10px;
+        cursor: pointer;
+        color: var(--text-secondary);
+      }
+
+      .hud-actions {
+        display: flex;
+        gap: 10px;
+        flex-wrap: wrap;
+        margin-top: 8px;
+      }
+
+      .hud-actions a,
+      .hud-actions button {
+        text-decoration: none;
+        font-size: 0.95rem;
+        padding: 0.5rem 0.8rem;
+        border-radius: 8px;
+        border: 1px solid var(--border-color);
+        background: rgba(255, 255, 255, 0.6);
+        color: var(--text-color);
+        transition: all var(--transition-time) ease;
+        cursor: pointer;
+      }
+
+      .hud-actions a:hover,
+      .hud-actions button:hover {
+        background: var(--accent-color);
+        color: #fff;
+        border-color: var(--accent-color);
+      }
     </style>
 
     <script>
-      function showSection(section, event) {
-        const tabs = document.querySelectorAll(".tabs button");
-        const entries = document.getElementById("all-content");
-
-        // Update active tab
-        tabs.forEach((tab) => tab.classList.remove("active"));
-        event.target.classList.add("active");
-
-        // Show/hide content based on selection
-        if (section === "all") {
-          entries.style.display = "flex";
-          document
-            .querySelectorAll(".entry")
-            .forEach((e) => (e.style.display = "flex"));
-          document
-            .querySelectorAll(".section-header")
-            .forEach((h) => (h.style.display = "block"));
-        } else if (section === "experience") {
-          entries.style.display = "flex";
-          document
-            .querySelectorAll(".entry")
-            .forEach((e) => (e.style.display = "none"));
-          document
-            .querySelectorAll(".entry.experience")
-            .forEach((e) => (e.style.display = "flex"));
-          document
-            .querySelectorAll(".section-header")
-            .forEach((h) => (h.style.display = "none"));
-        } else if (section === "projects") {
-          entries.style.display = "flex";
-          document
-            .querySelectorAll(".entry")
-            .forEach((e) => (e.style.display = "none"));
-          document
-            .querySelectorAll(".entry.project")
-            .forEach((e) => (e.style.display = "flex"));
-          document
-            .querySelectorAll(".section-header")
-            .forEach((h) => (h.style.display = "none"));
-        } else if (section === "games") {
-          entries.style.display = "flex";
-          document
-            .querySelectorAll(".entry")
-            .forEach((e) => (e.style.display = "none"));
-          document
-            .querySelectorAll(".entry.game")
-            .forEach((e) => (e.style.display = "flex"));
-          document
-            .querySelectorAll(".section-header")
-            .forEach((h) => (h.style.display = "none"));
-        }
-      }
+      // Disable legacy tabs on the hub landing page
+      function showSection() {}
 
       // Handle headshot loading
       document.addEventListener("DOMContentLoaded", () => {
@@ -558,11 +628,316 @@
           };
         }
       });
+      // Isometric Hub Engine (lite)
+      (function () {
+        const container = document.createElement("div");
+        container.id = "iso-container";
+        container.innerHTML = `
+          <canvas id="iso-canvas"></canvas>
+          <div id="legend">WASD/Arrows: move · E/Click: interact</div>
+          <div id="prompt" style="display:none"></div>
+        `;
+
+        const bodyEl = document.querySelector("body");
+        const hero = document.querySelector(".hero-card");
+        if (hero && bodyEl) {
+          hero.insertAdjacentElement("afterend", container);
+        } else if (bodyEl) {
+          bodyEl.insertAdjacentElement("afterbegin", container);
+        }
+
+        // HUD overlay root (once)
+        let hud = document.getElementById("hud-overlay");
+        if (!hud) {
+          hud = document.createElement("div");
+          hud.id = "hud-overlay";
+          hud.innerHTML = `
+            <div id="hud-content">
+              <div id="hud-header">
+                <div id="hud-title">Interaction</div>
+                <button id="hud-close">Close</button>
+              </div>
+              <div id="hud-body"></div>
+            </div>
+          `;
+          document.body.appendChild(hud);
+          hud.addEventListener("click", (e) => {
+            if (e.target === hud) hud.style.display = "none";
+          });
+          hud.querySelector("#hud-close")?.addEventListener("click", () => {
+            hud.style.display = "none";
+          });
+        }
+
+        const canvas = document.getElementById("iso-canvas");
+        const prompt = document.getElementById("prompt");
+        if (!(canvas instanceof HTMLCanvasElement) || !prompt) return;
+        const ctx = canvas.getContext("2d");
+        if (!ctx) return;
+
+        // Sizing / DPR
+        const DPR = Math.max(1, Math.min(2, window.devicePixelRatio || 1));
+        function resize() {
+          const rect = canvas.getBoundingClientRect();
+          canvas.width = Math.floor(rect.width * DPR);
+          canvas.height = Math.floor(rect.height * DPR);
+          ctx.setTransform(DPR, 0, 0, DPR, 0, 0);
+          origin.x = rect.width / 2;
+        }
+        resize();
+        window.addEventListener("resize", resize);
+
+        // Grid config
+        const tileWidth = 64;
+        const tileHeight = 32;
+        const gridWidth = 12;
+        const gridHeight = 10;
+        const origin = { x: 0, y: 40 };
+
+        function toScreen(x, y) {
+          return {
+            x: (x - y) * (tileWidth / 2) + origin.x,
+            y: (x + y) * (tileHeight / 2) + origin.y,
+          };
+        }
+
+        // World entities
+        const player = { x: 5.5, y: 2.5, speed: 3.2 };
+        const npcs = [
+          { x: 8.5, y: 5.0, name: "Mentor" },
+          { x: 2.5, y: 6.5, name: "Peer" },
+        ];
+        const interactables = [
+          { x: 3.5, y: 3.5, id: "experience", label: "Experience" },
+          { x: 6.0, y: 4.5, id: "projects", label: "Projects" },
+          { x: 8.5, y: 2.5, id: "games", label: "Games Portfolio" },
+          { x: 5.5, y: 6.5, id: "classic", label: "Classic Site" },
+        ];
+
+        // Input
+        const keys = new Set();
+        window.addEventListener("keydown", (e) => {
+          if (
+            ["ArrowUp", "ArrowDown", "ArrowLeft", "ArrowRight", " "].includes(
+              e.key
+            )
+          )
+            e.preventDefault();
+          keys.add(e.key.toLowerCase());
+        });
+        window.addEventListener("keyup", (e) => {
+          keys.delete(e.key.toLowerCase());
+        });
+
+        canvas.addEventListener("click", () => {
+          const target = getNearbyInteractable();
+          if (target) openHud(target);
+        });
+
+        window.addEventListener("keypress", (e) => {
+          if (e.key.toLowerCase() === "e") {
+            const target = getNearbyInteractable();
+            if (target) openHud(target);
+          }
+        });
+
+        function distance(a, b) {
+          const dx = a.x - b.x;
+          const dy = a.y - b.y;
+          return Math.hypot(dx, dy);
+        }
+
+        function getNearbyInteractable() {
+          for (const it of interactables) {
+            if (distance(player, it) < 1.0) return it;
+          }
+          for (const npc of npcs) {
+            if (distance(player, npc) < 1.0)
+              return { id: "npc", label: npc.name };
+          }
+          return null;
+        }
+
+        function openHud(target) {
+          const titleEl = hud.querySelector("#hud-title");
+          const bodyEl = hud.querySelector("#hud-body");
+          if (!titleEl || !bodyEl) return;
+          if (target.id === "experience") {
+            titleEl.textContent = "Experience";
+            bodyEl.innerHTML = `
+              <p class="description">View my industry and academic experience on the classic site.</p>
+              <div class="hud-actions">
+                <a href="classic.html#experience">Open Experience</a>
+                <a href="classic.html">Open Classic Site</a>
+              </div>
+            `;
+          } else if (target.id === "projects") {
+            titleEl.textContent = "Projects";
+            bodyEl.innerHTML = `
+              <p class="description">Projects live on the classic site. Games have a dedicated board.</p>
+              <div class="hud-actions">
+                <a href="classic.html">Open Classic Site</a>
+                <a href="games.html">Open Games Portfolio</a>
+              </div>
+            `;
+          } else if (target.id === "games") {
+            titleEl.textContent = "Games Portfolio";
+            bodyEl.innerHTML = `
+              <p class="description">Browse my games in a playful polaroid board.</p>
+              <div class="hud-actions">
+                <a href="games.html">Open Games Portfolio</a>
+              </div>
+            `;
+          } else if (target.id === "classic") {
+            titleEl.textContent = "Classic Site";
+            bodyEl.innerHTML = `
+              <p class="description">Open the non-interactive brochure version of this site.</p>
+              <div class="hud-actions">
+                <a href="classic.html">Open Classic Site</a>
+              </div>
+            `;
+          } else {
+            titleEl.textContent = target.label || "Chat";
+            bodyEl.innerHTML = `
+              <p class="description">${target.label} says hi! More dialogue soon.</p>
+              <div class="hud-actions">
+                <button onclick="document.getElementById('hud-overlay').style.display='none'">Close</button>
+              </div>
+            `;
+          }
+          hud.style.display = "flex";
+        }
+
+        // Loop
+        let last = performance.now();
+        function tick(now) {
+          const dt = Math.min(0.033, (now - last) / 1000); // clamp
+          last = now;
+
+          // Movement in isometric grid (convert WASD to x/y axes)
+          let vx = 0,
+            vy = 0;
+          if (keys.has("w") || keys.has("arrowup")) vy -= 1;
+          if (keys.has("s") || keys.has("arrowdown")) vy += 1;
+          if (keys.has("a") || keys.has("arrowleft")) vx -= 1;
+          if (keys.has("d") || keys.has("arrowright")) vx += 1;
+          if (vx !== 0 || vy !== 0) {
+            const len = Math.hypot(vx, vy) || 1;
+            vx /= len;
+            vy /= len;
+            player.x = Math.max(
+              0.2,
+              Math.min(gridWidth - 0.2, player.x + vx * player.speed * dt)
+            );
+            player.y = Math.max(
+              0.2,
+              Math.min(gridHeight - 0.2, player.y + vy * player.speed * dt)
+            );
+          }
+
+          draw();
+          requestAnimationFrame(tick);
+        }
+        requestAnimationFrame(tick);
+
+        function drawDiamond(x, y, w, h, fill, stroke) {
+          ctx.beginPath();
+          ctx.moveTo(x, y - h / 2);
+          ctx.lineTo(x + w / 2, y);
+          ctx.lineTo(x, y + h / 2);
+          ctx.lineTo(x - w / 2, y);
+          ctx.closePath();
+          if (fill) {
+            ctx.fillStyle = fill;
+            ctx.fill();
+          }
+          if (stroke) {
+            ctx.strokeStyle = stroke;
+            ctx.stroke();
+          }
+        }
+
+        function draw() {
+          ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+          // Base grid
+          for (let y = 0; y < gridHeight; y++) {
+            for (let x = 0; x < gridWidth; x++) {
+              const s = toScreen(x, y);
+              const tint =
+                (x + y) % 2 === 0
+                  ? "rgba(232,247,246,0.9)"
+                  : "rgba(223,240,239,0.9)";
+              drawDiamond(
+                s.x,
+                s.y,
+                tileWidth,
+                tileHeight,
+                tint,
+                "rgba(191,229,227,0.8)"
+              );
+            }
+          }
+
+          // Interactables (plinths)
+          interactables.forEach((o) => {
+            const s = toScreen(o.x, o.y);
+            drawDiamond(
+              s.x,
+              s.y,
+              tileWidth * 0.9,
+              tileHeight * 0.9,
+              "rgba(240,245,255,0.95)",
+              "#c9d8ef"
+            );
+            // Pillar
+            ctx.fillStyle = "#2a6d6b";
+            ctx.beginPath();
+            ctx.arc(s.x, s.y - 16, 8, 0, Math.PI * 2);
+            ctx.fill();
+            // Label
+            ctx.fillStyle = "#23343b";
+            ctx.font = "600 12px Inter, system-ui, sans-serif";
+            ctx.textAlign = "center";
+            ctx.fillText(o.label, s.x, s.y - 28);
+          });
+
+          // NPCs
+          npcs.forEach((n) => {
+            const s = toScreen(n.x, n.y);
+            ctx.fillStyle = "#e56b6f";
+            ctx.beginPath();
+            ctx.arc(s.x, s.y - 10, 7, 0, Math.PI * 2);
+            ctx.fill();
+          });
+
+          // Player
+          const ps = toScreen(player.x, player.y);
+          ctx.fillStyle = "#1fa2a1";
+          ctx.beginPath();
+          ctx.arc(ps.x, ps.y - 12, 9, 0, Math.PI * 2);
+          ctx.fill();
+          ctx.strokeStyle = "rgba(0,0,0,0.1)";
+          ctx.beginPath();
+          ctx.ellipse(ps.x, ps.y - 2, 12, 5, 0, 0, Math.PI * 2);
+          ctx.stroke();
+
+          const near = getNearbyInteractable();
+          if (near) {
+            prompt.style.display = "block";
+            prompt.textContent = `Press E or Click to open ${
+              near.label || "Chat"
+            }`;
+          } else {
+            prompt.style.display = "none";
+          }
+        }
+      })();
     </script>
   </head>
 
   <body>
-    <!-- Hero -->
+    <!-- Minimal header for identity; hub appears below -->
     <div class="hero-card">
       <div class="hero-info">
         <h1>Luke Leh Wei Nunn</h1>
@@ -594,300 +969,6 @@
       </div>
     </div>
 
-    <!-- About -->
-    <div class="about">
-      <p>
-        Hello! I'm a Cornell University graduate with a B.A. in Computer Science
-        and minors in Game Design and Performing & Media Arts. I've worked on AI
-        Products at <a href="#" target="_blank">PETRONAS Digital</a>, engineered
-        data pipelines and dashboards for the
-        <a href="#" target="_blank">Environmental Data Governance Initiative</a
-        >, led cross-functional teams at
-        <a href="#" target="_blank">Cornell Design in Games Association</a>, and
-        taught Computer Networking at Cornell University as an undergraduate
-        teaching assistant.
-      </p>
-      <br />
-      <p>
-        I like building products that involve real time, interactive systems
-        with compelling user experiences. This passion aligns with my game
-        development journey at Cornell. Outside of school, I participate in game
-        jams with a team of 20 artists and programmers that I've organized and
-        put together. In my free time, I enjoy riding my bicycle, tinkering with
-        old tech, acting in theater, as well as playing Dungeons and Dragons
-        with friends I've come to call family over my past 4 years in the USA.
-      </p>
-    </div>
-
-    <!-- Tabs -->
-    <div class="tabs">
-      <button class="active" onclick="showSection('all', event)">All</button>
-      <button onclick="showSection('experience', event)">Experience</button>
-      <button onclick="showSection('projects', event)">Projects</button>
-      <button onclick="showSection('games', event)">Games</button>
-    </div>
-
-    <!-- Entries -->
-    <div class="entries" id="all-content">
-      <!-- Section: Experience -->
-      <div class="section-header">
-        <h2>Experience</h2>
-      </div>
-
-      <!-- Experience 1 -->
-      <div class="entry experience">
-        <div class="entry-info">
-          <h3>
-            Software Engineering Intern
-            <span class="date">2024-2025</span>
-          </h3>
-          <div class="venue">PETRONAS Digital</div>
-          <div class="description">
-            Developed AI-driven product features for Malaysia's national oil
-            company. Worked on RAG models for customer service.
-          </div>
-        </div>
-      </div>
-
-      <!-- Experience 2 -->
-      <div class="entry experience">
-        <div class="entry-info">
-          <h3>
-            Fullstack Developer
-            <span class="date">2023</span>
-          </h3>
-          <div class="venue">Environmental Data Governance Initiative</div>
-          <div class="description">
-            Built data pipelines and visualization dashboards for environmental
-            research data management. Created tools to help researchers analyze
-            climate data and track environmental changes.
-          </div>
-        </div>
-      </div>
-
-      <!-- Experience 3 -->
-      <div class="entry experience">
-        <div class="entry-info">
-          <h3>
-            Project Lead/Gameplay Engineer
-            <span class="date">2022-2024</span>
-          </h3>
-          <div class="venue">Cornell Development in Games Association</div>
-          <div class="description">
-            Worked cross-functionally to build games with 20+ people. Led
-            gameplay programming initiatives and coordinated between design,
-            art, and engineering teams to ship complete game projects.
-          </div>
-        </div>
-      </div>
-
-      <!-- Experience 4 -->
-      <div class="entry experience">
-        <div class="entry-info">
-          <h3>
-            Undergraduate Teaching Assistant
-            <span class="date">2022-2024</span>
-          </h3>
-          <div class="venue">Cornell University</div>
-          <div class="description">
-            Taught Computer Networking concepts to undergraduate students and
-            developed course materials. Held office hours, graded assignments,
-            and helped students understand complex networking protocols.
-          </div>
-        </div>
-      </div>
-
-      <!-- Section: Games -->
-      <div class="section-header">
-        <h2>Games</h2>
-      </div>
-
-      <!-- Project 1 -->
-      <div class="entry game">
-        <div class="entry-image-container">
-          <div class="entry-placeholder">
-            <div class="icon">🔧</div>
-            <div class="text">Trigger Happy</div>
-          </div>
-        </div>
-        <div class="entry-info">
-          <h3>Trigger Happy - Card Game on iOS and Android</h3>
-          <div class="tech-tags">
-            <span class="tech-tag">C++</span>
-            <span class="tech-tag">Engine Dev</span>
-            <span class="tech-tag">Cornell GDIAC</span>
-          </div>
-          <div class="description">
-            Custom networking and rendering frameworks developed for Cornell's
-            game development projects. Focused on technical architecture,
-            performance optimizations, and creating tools that other developers
-            could easily use.
-          </div>
-          <div class="links">
-            <a href="#" target="_blank">
-              <i class="fas fa-book"></i> Documentation
-            </a>
-            <a href="#" target="_blank">
-              <i class="fab fa-github"></i> GitHub
-            </a>
-          </div>
-        </div>
-      </div>
-
-      <!-- Project 2 -->
-      <div class="entry game">
-        <div class="entry-image-container">
-          <div class="entry-placeholder">
-            <div class="icon">🎮</div>
-            <div class="text">Game Screenshot</div>
-          </div>
-        </div>
-        <div class="entry-info">
-          <h3>GMTK Game Jam 2025 - Loop De Coop</h3>
-          <div class="tech-tags">
-            <span class="tech-tag">Unity</span>
-            <span class="tech-tag">C#</span>
-            <span class="tech-tag">Multiplayer</span>
-          </div>
-          <div class="description">
-            A complex multiplayer game featuring real-time networking, physics
-            simulation, and cross-platform compatibility. Implemented custom
-            networking solutions and optimized for low-latency gameplay.
-          </div>
-          <div class="links">
-            <a href="#" target="_blank">
-              <i class="fas fa-play"></i> Play Demo
-            </a>
-            <a href="#" target="_blank">
-              <i class="fab fa-github"></i> View Code
-            </a>
-          </div>
-        </div>
-      </div>
-
-      <!-- Project 3 -->
-      <div class="entry game">
-        <div class="entry-image-container">
-          <div class="entry-placeholder">
-            <div class="icon">🕹️</div>
-            <div class="text">Web Game</div>
-          </div>
-        </div>
-        <div class="entry-info">
-          <h3>Godot Wild Jam - AMBROSIA</h3>
-          <div class="tech-tags">
-            <span class="tech-tag">JavaScript</span>
-            <span class="tech-tag">WebGL</span>
-            <span class="tech-tag">Physics</span>
-          </div>
-          <div class="description">
-            Browser-based physics simulation demonstrating advanced WebGL
-            techniques and real-time particle systems. Features interactive
-            controls and responsive performance across different devices.
-          </div>
-          <div class="links">
-            <a href="#" target="_blank">
-              <i class="fas fa-external-link-alt"></i> Live Demo
-            </a>
-            <a href="#" target="_blank">
-              <i class="fab fa-github"></i> Source
-            </a>
-          </div>
-        </div>
-      </div>
-
-      <!-- Project 4 -->
-      <div class="entry game">
-        <div class="entry-image-container">
-          <div class="entry-placeholder">
-            <div class="icon">🎯</div>
-            <div class="text">Grub Bug</div>
-          </div>
-        </div>
-        <div class="entry-info">
-          <h3>Grub Bug</h3>
-          <div class="tech-tags">
-            <span class="tech-tag">Unreal</span>
-            <span class="tech-tag">Blueprint</span>
-            <span class="tech-tag">48hr</span>
-          </div>
-          <div class="description">
-            Award-winning game jam entry developed in 48 hours with a team of 4.
-            Focused on innovative gameplay mechanics and polished user
-            experience under tight time constraints.
-          </div>
-          <div class="links">
-            <a href="#" target="_blank">
-              <i class="fas fa-gamepad"></i> Play Game
-            </a>
-            <a href="#" target="_blank">
-              <i class="fas fa-trophy"></i> Jam Page
-            </a>
-          </div>
-        </div>
-      </div>
-
-      <!-- Project 5 -->
-      <div class="entry game">
-        <div class="entry-image-container">
-          <div class="entry-placeholder">
-            <div class="icon">🎯</div>
-            <div class="text">Grub Bug</div>
-          </div>
-        </div>
-        <div class="entry-info">
-          <h3>Tilly's Critter Command</h3>
-          <div class="tech-tags">
-            <span class="tech-tag">Unreal</span>
-            <span class="tech-tag">Blueprint</span>
-            <span class="tech-tag">48hr</span>
-          </div>
-          <div class="description">
-            Award-winning game jam entry developed in 48 hours with a team of 4.
-            Focused on innovative gameplay mechanics and polished user
-            experience under tight time constraints.
-          </div>
-          <div class="links">
-            <a href="#" target="_blank">
-              <i class="fas fa-gamepad"></i> Play Game
-            </a>
-            <a href="#" target="_blank">
-              <i class="fas fa-trophy"></i> Jam Page
-            </a>
-          </div>
-        </div>
-      </div>
-
-      <!-- Project 5 -->
-      <div class="entry game">
-        <div class="entry-image-container">
-          <div class="entry-placeholder">
-            <div class="icon">🎯</div>
-            <div class="text">Grub Bug</div>
-          </div>
-        </div>
-        <div class="entry-info">
-          <h3>Knead for Speed</h3>
-          <div class="tech-tags">
-            <span class="tech-tag">Unreal</span>
-            <span class="tech-tag">Blueprint</span>
-            <span class="tech-tag">48hr</span>
-          </div>
-          <div class="description">
-            Award-winning game jam entry developed in 48 hours with a team of 4.
-            Focused on innovative gameplay mechanics and polished user
-            experience under tight time constraints.
-          </div>
-          <div class="links">
-            <a href="#" target="_blank">
-              <i class="fas fa-gamepad"></i> Play Game
-            </a>
-            <a href="#" target="_blank">
-              <i class="fas fa-trophy"></i> Jam Page
-            </a>
-          </div>
-        </div>
-      </div>
-    </div>
+    <!-- Legacy sections removed from landing; access via Classic Site in HUD -->
   </body>
 </html>

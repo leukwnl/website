@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>AMBROSIA · Case Study · Luke Nunn</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      :root {
+        --bg-color: #faf4e6;
+        --text-color: #23343b;
+        --text-secondary: #55646a;
+        --border: #e6ded1;
+        --accent: #1fa2a1;
+      }
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+      body {
+        font-family: "Inter", ui-sans-serif, -apple-system, BlinkMacSystemFont,
+          "Segoe UI", Roboto, Helvetica, Arial, "Apple Color Emoji",
+          "Segoe UI Emoji";
+        background: var(--bg-color);
+        color: var(--text-color);
+        padding: 24px;
+      }
+      .shell {
+        max-width: 960px;
+        margin: 0 auto;
+      }
+      .top {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: 16px;
+      }
+      .top a {
+        color: #55646a;
+        text-decoration: none;
+        border: 1px solid var(--border);
+        padding: 6px 10px;
+        border-radius: 8px;
+      }
+      .top a:hover {
+        background: var(--accent);
+        color: #fff;
+        border-color: var(--accent);
+      }
+      .hero {
+        display: flex;
+        gap: 18px;
+        align-items: flex-start;
+        margin-bottom: 16px;
+      }
+      .polaroid {
+        background: #fff;
+        border: 1px solid #ddd;
+        border-radius: 8px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.12);
+        padding: 10px 10px 14px;
+        width: 240px;
+        flex-shrink: 0;
+      }
+      .polaroid .thumb {
+        height: 160px;
+        border-radius: 6px;
+        background: #e9eef4;
+        margin-bottom: 8px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: 600;
+        color: #6b7a80;
+      }
+      .meta {
+        color: var(--text-secondary);
+        font-size: 0.9rem;
+      }
+      .content {
+        background: rgba(255, 255, 255, 0.6);
+        border: 1px solid var(--border);
+        border-radius: 12px;
+        padding: 16px;
+      }
+      h1 {
+        font-size: 1.6rem;
+        margin-bottom: 6px;
+      }
+      h2 {
+        font-size: 1.2rem;
+        margin: 14px 0 8px;
+      }
+      p {
+        line-height: 1.7;
+        margin: 8px 0;
+      }
+      ul {
+        margin-left: 18px;
+      }
+      li {
+        margin: 6px 0;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="shell">
+      <div class="top">
+        <a href="games.html">← Back to Games</a>
+        <a href="index.html">← Back to Hub</a>
+      </div>
+      <div class="hero">
+        <div class="polaroid">
+          <div class="thumb">AMBROSIA</div>
+          <div class="meta">Godot Wild Jam · Web · Physics</div>
+        </div>
+        <div>
+          <h1>AMBROSIA</h1>
+          <div class="meta">
+            Browser-based physics sandbox showcasing WebGL particles and
+            interaction.
+          </div>
+        </div>
+      </div>
+      <div class="content">
+        <h2>Overview</h2>
+        <p>
+          AMBROSIA explores performant WebGL rendering and interactive particle
+          simulations in the browser. The goal was to balance visual density
+          with responsive input across devices.
+        </p>
+        <h2>My Role</h2>
+        <ul>
+          <li>Built the particle system and GPU-driven update loop</li>
+          <li>Implemented interaction tools and responsive UI</li>
+          <li>Profiling and optimization for mobile</li>
+        </ul>
+        <h2>Highlights</h2>
+        <ul>
+          <li>Instanced rendering for thousands of particles at 60 FPS</li>
+          <li>Explorable parameter space with presets</li>
+          <li>Cross-platform input handling</li>
+        </ul>
+        <h2>Links</h2>
+        <p><a href="#">Live Demo</a> · <a href="#">Source Code</a></p>
+      </div>
+    </div>
+  </body>
+</html>
