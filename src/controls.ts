@@ -1,63 +1,35 @@
-import { toGrid, toScreen } from "./math";
+// src/controls.ts
+import { toGrid } from "./math";
 import { bfs } from "./pathfinding";
-import type { World } from "./world";
-import type { Project, Camera } from "./types";
-import {
-  showProjectInDock,
-  showHeroInDock,
-  updateSpawnedGallery,
-  selectProjectById,
-} from "./ui";
-import { PAN_BUTTON, SCALE_MAX, SCALE_MIN } from "./config";
-import {
-  buildTempGridWithSpawns,
-  spawnCategory,
-  despawnCategory,
-  isHeroTile,
-  isCategoryTile,
-} from "./world";
+import type { World, Camera } from "./types";
+import { buildTempGridWithSpawns, isHeroTile, isCategoryTile } from "./world";
+
+const PAN_BUTTON = 2;
+const SCALE_MIN = 0.3;
+const SCALE_MAX = 3.0;
 
 export function bindControls(
   canvas: HTMLCanvasElement,
   world: World,
   camera: Camera,
-  onHoverChange: (p: { id: string; x: number; y: number } | null) => void,
+  onHover: (
+    tile: [number, number] | null,
+    enemy: { id: string; x: number; y: number } | null
+  ) => void,
   onDraw: () => void
 ) {
-  const coordsEl = document.getElementById("coords")!;
   let animId = 0;
 
-  function enemyAtGrid(
-    x: number,
-    y: number
-  ): { id: string; x: number; y: number } | null {
-    for (const pid in world.spawned) {
-      const pos = world.spawned[pid];
-      if (pos.x === x && pos.y === y) return { id: pid, x: pos.x, y: pos.y };
-    }
+  function enemyAtGrid(_x: number, _y: number) {
     return null;
   }
 
-  function pathfindTo(target: [number, number], onArrive?: () => void) {
-    const [tx, ty] = target;
-
-    // If already there, arrive immediately
-    if (world.player.x === tx && world.player.y === ty) {
+  function moveAlong(path: [number, number][], onArrive?: () => void) {
+    if (!path || !path.length) {
       onArrive?.();
       onDraw();
       return;
     }
-
-    const temp = buildTempGridWithSpawns(world);
-    const path = bfs(temp, [world.player.x, world.player.y], target);
-
-    // If BFS fails (edge cases), still “arrive” so category/hero toggles work
-    if (!path || path.length === 0) {
-      onArrive?.();
-      onDraw();
-      return;
-    }
-
     if (
       path.length &&
       path[0][0] === world.player.x &&
@@ -65,20 +37,14 @@ export function bindControls(
     )
       path.shift();
     world.player.path = path;
-
     cancelAnimationFrame(animId);
     function step() {
-      if (!world.player.path || world.player.path.length === 0) {
+      if (!world.player.path || !world.player.path.length) {
         onArrive?.();
         onDraw();
         return;
       }
-      const [nx, ny] = world.player.path[0];
-      if (world.player.x === nx && world.player.y === ny) {
-        world.player.path.shift();
-        requestAnimationFrame(step);
-        return;
-      }
+      const [nx, ny] = world.player.path.shift()!;
       world.player.x = nx;
       world.player.y = ny;
       onDraw();
@@ -87,123 +53,89 @@ export function bindControls(
     step();
   }
 
-  // ----- Hover / highlight -----
+  // ===== Hover =====
   canvas.addEventListener("mousemove", (e) => {
     const r = canvas.getBoundingClientRect();
-    const [gx, gy] = toGrid(
+    const [col, row] = toGrid(
       e.clientX - r.left,
       e.clientY - r.top,
-      canvas.width,
+      r.width,
+      r.height,
       camera
     );
-    coordsEl.textContent = `x:${gx} y:${gy}`;
-    onHoverChange(enemyAtGrid(gx, gy));
+    onHover([col, row], enemyAtGrid(col, row));
     onDraw();
   });
-
   canvas.addEventListener("mouseleave", () => {
-    coordsEl.textContent = "x:– y:–";
-    onHoverChange(null);
+    onHover(null, null);
     onDraw();
   });
 
-  // ----- Click behavior -----
-  canvas.addEventListener("mousedown", (e) => {
-    if (e.button === PAN_BUTTON) return; // RMB reserved for pan
-
+  // ===== Click/tap =====
+  const clickAt = (clientX: number, clientY: number, button = 0) => {
+    if (button === PAN_BUTTON) return;
     const r = canvas.getBoundingClientRect();
-    const [gx, gy] = toGrid(
-      e.clientX - r.left,
-      e.clientY - r.top,
-      canvas.width,
+    const [col, row] = toGrid(
+      clientX - r.left,
+      clientY - r.top,
+      r.width,
+      r.height,
       camera
     );
 
-    const enemy = enemyAtGrid(gx, gy);
-    if (enemy) {
-      const enemyTarget = enemy; // capture non-null
-      const adj: [number, number][] = [];
-      if (gy > 0 && world.grid[gy - 1][gx] === 0) adj.push([gx, gy - 1]);
-      if (gy < world.grid.length - 1 && world.grid[gy + 1][gx] === 0)
-        adj.push([gx, gy + 1]);
-      if (gx > 0 && world.grid[gy][gx - 1] === 0) adj.push([gx - 1, gy]);
-      if (gx < world.grid[0].length - 1 && world.grid[gy][gx + 1] === 0)
-        adj.push([gx + 1, gy]);
+    const enemy = enemyAtGrid(col, row);
+    if (enemy) return;
 
-      let best: [number, number][] | null = null;
-      const temp = buildTempGridWithSpawns(world);
-      for (const goal of adj) {
-        const p = bfs(temp, [world.player.x, world.player.y], goal);
-        if (p && (!best || p.length < best.length)) best = p;
-      }
-      if (best) {
-        if (
-          best.length &&
-          best[0][0] === world.player.x &&
-          best[0][1] === world.player.y
-        )
-          best.shift();
-        world.player.path = best;
-        cancelAnimationFrame(animId);
-
-        const proj = world.projects.find((p) => p.id === enemyTarget.id);
-
-        function step() {
-          if (!world.player.path || world.player.path.length === 0) {
-            if (proj) {
-              showProjectInDock(proj); // update left dock
-              selectProjectById?.(proj.id, false); // highlight in bottom bar (no navigation emit)
-            }
-            onDraw();
-            return;
-          }
-
-          const [tx, ty] = world.player.path[0];
-          if (world.player.x === tx && world.player.y === ty) {
-            world.player.path.shift();
-            requestAnimationFrame(step);
-            return;
-          }
-          world.player.x = tx;
-          world.player.y = ty;
-          onDraw();
-          animId = requestAnimationFrame(step);
-        }
-        step();
-      }
+    // Interactions: talk to NPC or use interactable if clicked directly
+    const npc = world.npcs.find((n) => n.x === col && n.y === row);
+    if (npc) {
+      window.dispatchEvent(
+        new CustomEvent("grid:talk-npc", { detail: { id: npc.id } })
+      );
+      return;
+    }
+    const inter = world.interactables.find((i) => i.x === col && i.y === row);
+    if (inter) {
+      window.dispatchEvent(
+        new CustomEvent("grid:use-object", { detail: { id: inter.id } })
+      );
       return;
     }
 
-    // Not an enemy: allow moving to empty tiles
-    // On arrival, handle hero/category toggles
-    pathfindTo([gx, gy], () => {
+    // empty tile → move; handle hero/category on arrival
+    const temp = buildTempGridWithSpawns(world);
+    const path = bfs(temp, [world.player.x, world.player.y], [col, row]);
+    moveAlong(path ?? [], () => {
       if (isHeroTile(world, world.player.x, world.player.y)) {
-        showHeroInDock();
+        window.dispatchEvent(new CustomEvent("grid:open-hero"));
         return;
       }
       const cat = isCategoryTile(world, world.player.x, world.player.y);
       if (cat) {
-        const isActive = world.activeCategoryIds.has(cat.id);
-
-        if (isActive) {
-          if (cat.rerollOnStep) {
-            spawnCategory(world, cat.id); // re-roll positions
-          } else {
-            despawnCategory(world, cat.id); // toggle off
-          }
-        } else {
-          spawnCategory(world, cat.id); // toggle on; persists with others
-        }
-
-        // 🔁 keep the bottom bar thumbnails in sync
-        updateSpawnedGallery?.(world.spawned);
+        window.dispatchEvent(
+          new CustomEvent("grid:open-category", {
+            detail: { categoryId: cat.id },
+          })
+        );
       }
     });
-  });
+  };
 
-  // ===== Camera pan/zoom (same as before) =====
-  let isPanning = false;
-  let lastX = 0,
+  canvas.addEventListener("mousedown", (e) =>
+    clickAt(e.clientX, e.clientY, e.button)
+  );
+  canvas.addEventListener(
+    "touchstart",
+    (e) => {
+      const t = e.changedTouches[0];
+      if (t) clickAt(t.clientX, t.clientY, 0);
+    },
+    { passive: true }
+  );
+
+  // ===== Pan / Zoom =====
+  let isPanning = false,
+    lastX = 0,
     lastY = 0;
   canvas.addEventListener("contextmenu", (e) => e.preventDefault());
   canvas.addEventListener("mousedown", (e) => {
@@ -218,137 +150,39 @@ export function bindControls(
   });
   window.addEventListener("mousemove", (e) => {
     if (!isPanning) return;
-    camera.x += e.clientX - lastX;
-    camera.y += e.clientY - lastY;
+    const dx = e.clientX - lastX;
+    const dy = e.clientY - lastY;
+    camera.x -= dx / camera.scale;
+    camera.y -= dy / camera.scale;
     lastX = e.clientX;
     lastY = e.clientY;
     onDraw();
   });
+
   canvas.addEventListener(
     "wheel",
     (e) => {
       e.preventDefault();
       const r = canvas.getBoundingClientRect();
-      const mouseX = e.clientX - r.left;
-      const mouseY = e.clientY - r.top;
+      const mx = e.clientX - r.left;
+      const my = e.clientY - r.top;
       const old = camera.scale;
-      const direction = e.deltaY > 0 ? -1 : 1;
-      let next = Math.max(
-        SCALE_MIN,
-        Math.min(SCALE_MAX, old * (1 + direction * 0.1))
-      );
+      const factor = Math.pow(1.0015, -e.deltaY);
+      const next = Math.max(SCALE_MIN, Math.min(SCALE_MAX, old * factor));
       if (next === old) return;
 
-      const centerX = canvas.width / 2;
-      const originX = centerX + camera.x;
-      const originY = 120 + camera.y;
+      // NOTE: use CSS rect width/height, not canvas.width
+      const cx = r.width / 2;
+      const cy = r.height / 2;
 
-      const worldX = (mouseX - originX) / old;
-      const worldY = (mouseY - originY) / old;
+      const worldX = (mx - cx) / old + camera.x;
+      const worldY = (my - cy) / old + camera.y;
 
-      const newOriginX = mouseX - worldX * next;
-      const newOriginY = mouseY - worldY * next;
-
-      camera.x = newOriginX - centerX;
-      camera.y = newOriginY - 120;
       camera.scale = next;
+      camera.x = worldX - (mx - cx) / next;
+      camera.y = worldY - (my - cy) / next;
       onDraw();
     },
     { passive: false }
   );
-}
-
-// === Programmatic navigation from UI: move to a spawned project, pan camera, and show dock ===
-export function goToProjectById(
-  world: World,
-  camera: Camera,
-  projectId: string,
-  onDraw: () => void
-) {
-  const pos = world.spawned[projectId];
-  const proj = world.projects.find((p) => p.id === projectId);
-  if (!pos || !proj) return;
-
-  // choose best adjacent walkable goal next to the project spawn
-  const adj: [number, number][] = [];
-  const { x, y } = pos;
-  if (y > 0 && world.grid[y - 1][x] === 0) adj.push([x, y - 1]);
-  if (y < world.grid.length - 1 && world.grid[y + 1][x] === 0)
-    adj.push([x, y + 1]);
-  if (x > 0 && world.grid[y][x - 1] === 0) adj.push([x - 1, y]);
-  if (x < world.grid[0].length - 1 && world.grid[y][x + 1] === 0)
-    adj.push([x + 1, y]);
-
-  // pathfind on a temp grid that includes spawned blockers
-  const temp = buildTempGridWithSpawns(world);
-  let best: [number, number][] | null = null;
-  for (const g of adj) {
-    const p = bfs(temp, [world.player.x, world.player.y], g);
-    if (p && (!best || p.length < best.length)) best = p;
-  }
-  if (!best) return;
-  if (
-    best.length &&
-    best[0][0] === world.player.x &&
-    best[0][1] === world.player.y
-  )
-    best.shift();
-  world.player.path = best;
-
-  // pan camera so the project is nicely in view (keeps dock visible)
-  panCameraToTile(camera, pos.x, pos.y, onDraw);
-
-  // animate the player, then update dock on arrival
-  function step() {
-    const proj = world.projects.find((p) => p.id === projectId);
-    if (!pos || !proj) return;
-    if (!world.player.path || world.player.path.length === 0) {
-      showProjectInDock(proj);
-      onDraw();
-      return;
-    }
-    const [tx, ty] = world.player.path[0];
-    if (world.player.x === tx && world.player.y === ty) {
-      world.player.path.shift();
-      requestAnimationFrame(step);
-      return;
-    }
-    world.player.x = tx;
-    world.player.y = ty;
-    onDraw();
-    requestAnimationFrame(step);
-  }
-  step();
-}
-
-function panCameraToTile(
-  camera: Camera,
-  gx: number,
-  gy: number,
-  onDraw: () => void
-) {
-  const canvas = document.getElementById("game") as HTMLCanvasElement;
-  const [sx, sy] = toScreen(gx, gy, canvas.width, camera);
-  // aim slightly left/top so the left dock doesn't cover the target
-  const targetScreenX = canvas.width * 0.45;
-  const targetScreenY = canvas.height * 0.45;
-  const dx = targetScreenX - sx;
-  const dy = targetScreenY - sy;
-
-  const startX = camera.x,
-    startY = camera.y;
-  const endX = startX + dx,
-    endY = startY + dy;
-  const t0 = performance.now(),
-    dur = 260;
-
-  function anim(t: number) {
-    const k = Math.min(1, (t - t0) / dur);
-    const ease = k < 0.5 ? 2 * k * k : 1 - Math.pow(-2 * k + 2, 2) / 2; // easeInOutQuad
-    camera.x = startX + (endX - startX) * ease;
-    camera.y = startY + (endY - startY) * ease;
-    onDraw();
-    if (k < 1) requestAnimationFrame(anim);
-  }
-  requestAnimationFrame(anim);
 }

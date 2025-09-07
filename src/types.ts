@@ -1,70 +1,34 @@
 export type Grid = number[][];
-
-export interface Stat {
-  label: string;
-  value: string;
-}
-export interface Ability {
-  label: string;
-  detail?: string;
-}
-
-export interface Project {
-  id: string;
-  name: string;
-  desc: string;
-  url: string;
-  x: number; // grid coords
-  y: number;
-  role?: string; // e.g., "Toolsmith", "Netcode"
-  tags?: string[]; // e.g., ["RAG","Azure","Kafka"]
-  company?: string;
-  location?: string;
-  date?: string;
-}
-
 export interface Player {
   x: number;
   y: number;
   path: [number, number][];
 }
 
-export interface Config {
-  cols: number;
-  rows: number;
-  tileW: number;
-  tileH: number;
-  camOffsetX: number;
-  camOffsetY: number;
-}
-
-export interface WorldContent {
-  obstacles: [number, number][];
-  playerStart: [number, number];
-  heroTile: [number, number];
-  categories: Category[];
-  projects: Project[];
-}
-
-export interface Camera {
-  x: number; // pixel offset from centered origin (screen space)
-  y: number; // pixel offset from baseline origin (screen space)
-  scale: number; // zoom factor (1 = 100%)
+export interface Project {
+  id: string;
+  slug: string; // for /:slug routing
+  name: string;
+  summary?: string; // 1-2 lines for card
+  desc?: string; // longer body
+  role?: string;
+  company?: string;
+  location?: string;
+  date?: string;
+  url?: string;
+  tags?: string[];
+  heroImage?: string;
 }
 
 export interface Category {
   id: string;
   name: string;
-  x: number;
-  y: number;
   projectIds: string[];
+  x: number;
+  y: number; // anchor on grid
   spawnRadius?: number;
   minSpacing?: number;
   rerollOnStep?: boolean;
-}
-
-export interface SpawnedMap {
-  [projectId: string]: { x: number; y: number };
 }
 
 export interface World {
@@ -73,6 +37,51 @@ export interface World {
   projects: Project[];
   categories: Category[];
   heroTile: [number, number];
-  activeCategoryId: string | null;
-  spawned: SpawnedMap; // dynamic enemy positions when a category is active
+  npcs: NPC[];
+  interactables: Interactable[];
+}
+
+export interface Camera {
+  x: number;
+  y: number;
+  scale: number;
+}
+
+export type WorldContent = Partial<
+  Pick<World, "grid" | "projects" | "categories" | "heroTile">
+>;
+
+export interface AboutContent {
+  title: string;
+  photoUrl: string;
+  html?: string; // optional preformatted HTML
+  paragraphs?: string[]; // or plain paragraphs
+}
+
+export interface NPC {
+  id: string;
+  name: string;
+  x: number;
+  y: number;
+  lines: string[];
+  icon?: string;
+}
+
+export interface Interactable {
+  id: string;
+  name: string;
+  x: number;
+  y: number;
+  kind: "sign" | "bench" | "door" | "object";
+  text?: string;
+  icon?: string;
+}
+
+export interface PinLayoutEntry {
+  id: string; // project id
+  x: number; // px from left
+  y: number; // px from top
+  rot?: number; // degrees
+  w?: number; // optional width in px
+  h?: number; // optional height in px
 }

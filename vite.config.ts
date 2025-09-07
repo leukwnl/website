@@ -1,4 +1,5 @@
 import { defineConfig } from "vite";
 export default defineConfig({
-  server: { open: true }
+  publicDir: "assets", // serve /assets/** at site root
+  server: { open: true },
 });

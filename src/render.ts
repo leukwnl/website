@@ -1,207 +1,125 @@
-import { toScreen } from "./math";
-import type { World } from "./world";
-import type { Project, Camera } from "./types";
-
-export interface Renderer {
-  canvas: HTMLCanvasElement;
-  ctx: CanvasRenderingContext2D;
-  resize: () => void;
-  draw: (hoverEnemy: { id: string; x: number; y: number } | null) => void;
-}
+// src/render.ts
+import type { World, Camera } from "./types";
+import { tileCenter, TILE_W, TILE_H } from "./math";
+import { drawInteractableOverlays } from "./renderOverlay";
+import { getTileImage } from "./assets";
 
 export function createRenderer(
   canvas: HTMLCanvasElement,
   world: World,
   camera: Camera
-): Renderer {
-  const ctx = canvas.getContext("2d")!;
+) {
+  const ctx = canvas.getContext("2d", { alpha: false })!;
 
   function resize() {
-    canvas.width = window.innerWidth;
-    canvas.height = window.innerHeight;
-    draw(null);
+    const dpr = Math.max(1, window.devicePixelRatio || 1);
+    const rect = canvas.getBoundingClientRect();
+
+    // backbuffer in device px
+    canvas.width = Math.floor(rect.width * dpr);
+    canvas.height = Math.floor(rect.height * dpr);
+
+    // reset transform & scale so drawing units = CSS px
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
   }
 
-  function diamondPath(scale: number) {
-    const halfW = 32 * scale;
-    const halfH = 16 * scale;
-    const fullH = 32 * scale;
+  const diamondFill = (cx: number, cy: number, scale: number, fill: string) => {
     ctx.beginPath();
-    ctx.moveTo(0, 0);
-    ctx.lineTo(halfW, halfH);
-    ctx.lineTo(0, fullH);
-    ctx.lineTo(-halfW, halfH);
+    ctx.moveTo(cx, cy - (TILE_H / 2) * scale);
+    ctx.lineTo(cx + (TILE_W / 2) * scale, cy);
+    ctx.lineTo(cx, cy + (TILE_H / 2) * scale);
+    ctx.lineTo(cx - (TILE_W / 2) * scale, cy);
     ctx.closePath();
-    return { halfW, halfH, fullH };
-  }
-
-  function drawTile(
-    x: number,
-    y: number,
-    fill: string,
-    lineAlpha = 0.18,
-    lw = 1
-  ) {
-    const [sx, sy] = toScreen(x, y, canvas.width, camera);
-    ctx.save();
-    ctx.translate(sx, sy);
-    diamondPath(camera.scale);
     ctx.fillStyle = fill;
     ctx.fill();
-    ctx.globalAlpha = lineAlpha;
-    ctx.strokeStyle = "#ffffff";
-    ctx.lineWidth = Math.max(lw, camera.scale);
-    ctx.stroke();
-    ctx.globalAlpha = 1;
-    ctx.restore();
-  }
+  };
 
-  function drawCategoryMarker(x: number, y: number, label: string) {
-    const [sx, sy] = toScreen(x, y, canvas.width, camera);
-    ctx.save();
-    ctx.translate(sx, sy);
-    const { fullH } = diamondPath(camera.scale);
-    ctx.fillStyle = "rgba(56,189,248,0.25)";
-    ctx.fill();
-    ctx.lineWidth = Math.max(1.5, camera.scale);
-    ctx.strokeStyle = "rgba(56,189,248,0.8)";
-    ctx.stroke();
-
-    const fontSize = Math.max(11, Math.min(14, 12 * camera.scale));
-    ctx.font = `${fontSize}px system-ui, sans-serif`;
-    ctx.fillStyle = "rgba(168, 232, 255, 0.95)";
-    ctx.textAlign = "center";
-    ctx.fillText(label, 0, -8 * camera.scale);
-    ctx.restore();
-  }
-
-  function drawHeroMarker(x: number, y: number) {
-    const [sx, sy] = toScreen(x, y, canvas.width, camera);
-    ctx.save();
-    ctx.translate(sx, sy);
-    const { fullH } = diamondPath(camera.scale);
-    ctx.fillStyle = "rgba(236,72,153,0.22)";
-    ctx.fill();
-    ctx.lineWidth = Math.max(1.5, camera.scale);
-    ctx.strokeStyle = "rgba(236,72,153,0.85)";
-    ctx.stroke();
-
+  const diamondStroke = (
+    cx: number,
+    cy: number,
+    scale: number,
+    stroke: string
+  ) => {
     ctx.beginPath();
-    ctx.arc(0, fullH / 2 - 6 * camera.scale, 9 * camera.scale, 0, Math.PI * 2);
-    ctx.fillStyle = "rgba(255,255,255,0.9)";
-    ctx.fill();
+    ctx.moveTo(cx, cy - (TILE_H / 2) * scale);
+    ctx.lineTo(cx + (TILE_W / 2) * scale, cy);
+    ctx.lineTo(cx, cy + (TILE_H / 2) * scale);
+    ctx.lineTo(cx - (TILE_W / 2) * scale, cy);
+    ctx.closePath();
+    ctx.strokeStyle = stroke;
+    ctx.lineWidth = Math.max(1, 1 * scale);
+    ctx.stroke();
+  };
 
-    const fontSize = Math.max(11, Math.min(14, 12 * camera.scale));
-    ctx.font = `${fontSize}px system-ui, sans-serif`;
-    ctx.fillStyle = "rgba(255, 200, 230, 0.95)";
-    ctx.textAlign = "center";
-    ctx.fillText("You", 0, -8 * camera.scale);
-    ctx.restore();
-  }
+  function draw(state: {
+    hoverEnemy: { id: string; x: number; y: number } | null;
+    hoverTile: [number, number] | null;
+  }) {
+    // Use CSS dimensions here
+    const rect = canvas.getBoundingClientRect();
 
-  function draw(hoverEnemy: { id: string; x: number; y: number } | null) {
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    ctx.fillStyle = "#f2eddf";
+    ctx.fillRect(0, 0, rect.width, rect.height);
 
-    // base tiles
-    for (let y = 0; y < world.grid.length; y++) {
-      for (let x = 0; x < world.grid[0].length; x++) {
-        const walkable = world.grid[y][x] === 0;
-        const c = walkable ? "#0f315d" : "#0a2547";
-        drawTile(x, y, c);
+    const rows = world.grid.length;
+    const cols = world.grid[0].length;
+
+    for (let s = 0; s < rows + cols - 1; s++) {
+      for (let row = 0; row < rows; row++) {
+        const col = s - row;
+        if (col < 0 || col >= cols) continue;
+
+        const wc = tileCenter(col, row);
+        const sx = (wc.x - camera.x) * camera.scale + rect.width / 2;
+        const sy = (wc.y - camera.y) * camera.scale + rect.height / 2;
+
+        // draw tile image if available; otherwise fallback diamond
+        const tileVal = world.grid[row][col];
+        const img = getTileImage(tileVal);
+        if (img) {
+          const w = TILE_W * camera.scale;
+          const h = TILE_H * camera.scale;
+          // draw centered like iso diamond
+          ctx.drawImage(img, sx - w / 2, sy - h / 2, w, h);
+        } else {
+          diamondFill(sx, sy, camera.scale, "#f9f6ee");
+          diamondStroke(sx, sy, camera.scale, "rgba(0,0,0,0.12)");
+        }
+
+        // hover highlight
+        if (
+          state.hoverTile &&
+          state.hoverTile[0] === col &&
+          state.hoverTile[1] === row
+        ) {
+          ctx.save();
+          ctx.globalCompositeOperation = "source-over";
+          diamondStroke(sx, sy, camera.scale, "#f0b429");
+          ctx.restore();
+        }
+
+        // removed spawned markers
+
+        // player
+        if (world.player.x === col && world.player.y === row) {
+          ctx.beginPath();
+          ctx.arc(sx, sy - 6 * camera.scale, 6 * camera.scale, 0, Math.PI * 2);
+          ctx.fillStyle = "#5db1ff";
+          ctx.fill();
+        }
       }
     }
 
-    // hero tile & category tiles
-    drawHeroMarker(world.heroTile[0], world.heroTile[1]);
-    for (const c of world.categories) {
-      drawCategoryMarker(c.x, c.y, c.name);
-    }
-
-    // hovered enemy adjacents
-    if (hoverEnemy) {
-      for (const [ax, ay] of adjacentWalkable(
-        world,
-        hoverEnemy.x,
-        hoverEnemy.y
-      )) {
-        drawTile(ax, ay, "rgba(110,168,254,0.3)", 0.8);
-      }
-    }
-
-    // spawned enemies
-    for (const pid in world.spawned) {
-      const pos = world.spawned[pid];
-      const [sx, sy] = toScreen(pos.x, pos.y, canvas.width, camera);
-      ctx.save();
-      ctx.translate(sx, sy);
-      diamondPath(camera.scale);
-      ctx.fillStyle = "#1a2f55";
-      ctx.fill();
-
-      ctx.beginPath();
-      ctx.arc(0, (32 * camera.scale) / 2, 10 * camera.scale, 0, Math.PI * 2);
-      ctx.fillStyle =
-        getComputedStyle(document.documentElement).getPropertyValue(
-          "--enemy"
-        ) || "#ef476f";
-      ctx.fill();
-
-      const proj = world.projects.find((p) => p.id === pid)!;
-      const fontSize = Math.max(10, Math.min(14, 12 * camera.scale));
-      ctx.font = `${fontSize}px system-ui, sans-serif`;
-      ctx.fillStyle = "rgba(255,255,255,0.9)";
-      ctx.textAlign = "center";
-      ctx.fillText(proj.name, 0, -8 * camera.scale);
-      ctx.restore();
-    }
-
-    // player marker
-    {
-      const [psx, psy] = toScreen(
-        world.player.x,
-        world.player.y,
-        canvas.width,
-        camera
-      );
-      ctx.save();
-      ctx.translate(psx, psy);
-      diamondPath(camera.scale);
-      ctx.strokeStyle = "rgba(255,255,255,0.5)";
-      ctx.lineWidth = Math.max(1, camera.scale);
-      ctx.stroke();
-
-      ctx.beginPath();
-      ctx.arc(
-        0,
-        (32 * camera.scale) / 2 - 6 * camera.scale,
-        9 * camera.scale,
-        0,
-        Math.PI * 2
-      );
-      ctx.fillStyle =
-        getComputedStyle(document.documentElement).getPropertyValue(
-          "--player"
-        ) || "#ffd166";
-      ctx.fill();
-      ctx.restore();
-    }
+    // overlays + labels (uses CSS px inside)
+    drawInteractableOverlays(
+      ctx,
+      canvas,
+      world,
+      camera,
+      state.hoverEnemy,
+      true
+    );
   }
 
-  function adjacentWalkable(
-    world: World,
-    x: number,
-    y: number
-  ): [number, number][] {
-    const out: [number, number][] = [];
-    if (y > 0 && world.grid[y - 1][x] === 0) out.push([x, y - 1]);
-    if (y < world.grid.length - 1 && world.grid[y + 1][x] === 0)
-      out.push([x, y + 1]);
-    if (x > 0 && world.grid[y][x - 1] === 0) out.push([x - 1, y]);
-    if (x < world.grid[0].length - 1 && world.grid[y][x + 1] === 0)
-      out.push([x + 1, y]);
-    return out;
-  }
-
-  window.addEventListener("resize", resize);
-  return { canvas, ctx, resize, draw };
+  return { resize, draw };
 }

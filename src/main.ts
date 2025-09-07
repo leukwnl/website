@@ -1,12 +1,14 @@
 import { createWorld } from "./world";
 import { createRenderer } from "./render";
-import { bindControls, goToProjectById } from "./controls";
+import { bindControls } from "./controls";
 import { INITIAL_CAMERA } from "./config";
 import type { Camera } from "./types";
-import { initUI, setAllProjects, updateSpawnedGallery } from "./ui";
+import { initBottomPanel } from "./bottomPanel";
+import { initHoverHud } from "./hoverHud";
+import { initAssets, whenAssetsReady } from "./assets";
+import type { AssetManifest } from "./assets";
 
 const canvas = document.getElementById("game") as HTMLCanvasElement;
-const hud = document.getElementById("hud") as HTMLDivElement;
 
 const world = createWorld();
 const camera: Camera = {
@@ -15,33 +17,56 @@ const camera: Camera = {
   scale: INITIAL_CAMERA.scale,
 };
 
-initUI(hud, canvas, camera);
-
 const renderer = createRenderer(canvas, world, camera);
-
-setAllProjects(world.projects);
-// listen to UI selection changes (wheel/click on bottom bar)
-window.addEventListener("ui:select-project", (e: any) => {
-  const id = e.detail?.projectId as string;
-  if (!id) return;
-  goToProjectById(world, camera, id, draw);
-});
-
-let hoverEnemy = null as any;
+const panel = initBottomPanel(world);
+const hoverHud = initHoverHud(canvas, world, camera);
+let hoverEnemy: { id: string; x: number; y: number } | null = null;
+let hoverTile: [number, number] | null = null;
 
 function draw() {
-  renderer.draw(hoverEnemy);
+  renderer.draw({ hoverEnemy, hoverTile });
 }
-
 renderer.resize();
-draw();
+
+// Initialize asset manifest (edit paths under /public/assets)
+const manifest: AssetManifest = {
+  tiles: {
+    "0": "/assets/tiles/ground.png",
+    "1": "/assets/tiles/block.png",
+  },
+  player: "/assets/icons/player.png",
+  categories: {
+    projects: "/assets/icons/cat-projects.png",
+    games: "/assets/icons/cat-games.png",
+    experience: "/assets/icons/cat-experience.png",
+  },
+  thumbs: {
+    "trigger-happy": "/example.png",
+  },
+};
+initAssets(manifest);
+whenAssetsReady().then(draw);
 
 bindControls(
   canvas,
   world,
   camera,
-  (p) => {
-    hoverEnemy = p;
+  (tile, enemy) => {
+    hoverTile = tile;
+    hoverEnemy = enemy;
+    hoverHud.update(tile);
   },
   draw
 );
+
+// Canvas → Bottom panel events
+window.addEventListener("grid:open-category" as any, (e: any) => {
+  const catId = e.detail?.categoryId as string;
+  if (catId) panel.openCategory(catId);
+});
+window.addEventListener("grid:open-hero" as any, () => {
+  panel.openAbout();
+});
+window.addEventListener("grid:open-project" as any, () => {
+  panel.close();
+});

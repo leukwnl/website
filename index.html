@@ -1,79 +1,117 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <meta charset="utf-8" />
+    <meta charset="UTF-8" />
     <meta
       name="viewport"
       content="width=device-width, initial-scale=1, viewport-fit=cover"
     />
-    <title>Isometric TRPG — Portfolio</title>
-    <link rel="icon" href="/favicon.svg" />
+    <title>Luke Leh — Grid Journal</title>
+
+    <!-- Tailwind (CDN for quick drop-in, matches your old HTML) -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- App styles (small custom bits; see styles.css) -->
     <link rel="stylesheet" href="/src/styles.css" />
+
+    <style>
+      html {
+        scroll-behavior: smooth;
+      } /* as in your old page */
+    </style>
   </head>
-  <body>
-    <div class="wrap">
-      <!-- Full-viewport canvas -->
-      <canvas id="game" aria-label="Isometric tactical board"></canvas>
+  <body class="bg-white text-gray-800 antialiased font-sans">
+    <!-- Top: full-viewport isometric canvas -->
+    <header class="relative w-full h-[100svh] overflow-hidden">
+      <canvas id="game" class="absolute inset-0 w-full h-full"></canvas>
 
-      <!-- Floating UI/HUD layer -->
-      <div id="hud" class="hud" aria-live="polite">
-        <!-- Left Project Dock (singleton, collapsible) -->
-        <div
-          id="dock"
-          class="dock"
-          role="complementary"
-          aria-label="Project details"
-          aria-expanded="true"
-        >
-          <div class="dock-head">
-            <div class="dock-title" id="dock-title">Details</div>
-            <button
-              id="dock-toggle"
-              class="dock-toggle"
-              type="button"
-              aria-label="Collapse panel"
-              aria-expanded="true"
-            >
-              ▸
-            </button>
-          </div>
-          <div id="dock-body" class="dock-body"><!-- injected by ui.ts --></div>
-        </div>
-
-        <!-- Bottom Project Dock Bar -->
-        <div id="bbar" class="bbar" aria-label="Project selector">
-          <div class="lead">
-            <div class="bimg">
-              <img
-                id="bbar-img"
-                src="https://picsum.photos/seed/placeholder/220/132"
-                alt=""
-              />
-            </div>
-
-            <!-- Simplified info slab (no scrollbar) -->
-            <div id="bbar-info" class="binfo">
-              <div id="bbar-title" class="btitle">—</div>
-              <div id="bbar-company" class="bmeta">Company —</div>
-              <div id="bbar-location" class="bmeta">Location —</div>
-              <div id="bbar-date" class="bmeta">Date —</div>
-            </div>
-          </div>
-
-          <!-- Gallery of OTHER spawned projects (current is excluded in ui.ts) -->
-          <div
-            id="bbar-gallery"
-            class="gallery"
-            role="listbox"
-            aria-label="Spawned projects"
-          ></div>
-        </div>
+      <!-- subtle hint; auto-hidden on narrow screens if you prefer -->
+      <div
+        class="pointer-events-none absolute left-3 bottom-3 text-[12px] md:text-xs text-gray-700/80 bg-white/70 backdrop-blur-sm px-2 py-1 rounded"
+      >
+        right-drag to pan · scroll/pinch to zoom · click/tap tiles
       </div>
-    </div>
+    </header>
 
-    <!-- Status chip -->
-    <div class="coords" id="coords" role="status">x:– y:–</div>
+    <!-- Bottom: Journal / Notes panel (styled like your old sections) -->
+    <section id="info" aria-live="polite" aria-label="Journal">
+      <div class="max-w-3xl mx-auto my-12 mb-16 p-6 space-y-10">
+        <!-- Title block (About/Projects/Games/Experience will swap here) -->
+        <header class="space-y-2 section-fade">
+          <h1 id="info-title" class="text-3xl font-normal tracking-tight">
+            Welcome
+          </h1>
+          <p id="info-sub" class="text-sm font-light text-gray-600">
+            Step on a category to spawn items. Click an item to learn more.
+          </p>
+        </header>
 
+        <!-- Tabs (chips) -->
+        <nav
+          id="info-tabs"
+          class="flex gap-2 overflow-auto section-fade"
+          role="tablist"
+          aria-label="Sections"
+        >
+          <!-- injected by infoPanel.ts -->
+        </nav>
+
+        <!-- Content body (list or detail) -->
+        <article id="info-body" class="space-y-8 section-fade">
+          <section class="space-y-8">
+            <div
+              class="grid grid-cols-1 md:grid-cols-3 gap-x-8 gap-y-4 items-start"
+            >
+              <div>
+                <p
+                  class="text-sm font-light uppercase text-gray-700 tracking-wide"
+                >
+                  Start
+                </p>
+              </div>
+              <div class="md:col-span-2">
+                <p class="text-sm font-light leading-relaxed">
+                  Use the schematic above. When you select a tile, details
+                  appear here with the same typography and spacing as your
+                  previous site.
+                </p>
+              </div>
+            </div>
+          </section>
+        </article>
+
+        <!-- footer actions -->
+        <footer class="section-fade">
+          <a
+            href="#"
+            id="back-to-map"
+            class="text-blue-600 hover:underline text-sm font-normal"
+            >↥ Back to map</a
+          >
+        </footer>
+      </div>
+    </section>
+
+    <!-- Fade-in on scroll (your previous behavior) -->
+    <script>
+      const observer = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((entry) => {
+            if (entry.isIntersecting) entry.target.classList.add("visible");
+          });
+        },
+        { threshold: 0.1, rootMargin: "0px 0px -50px 0px" }
+      );
+
+      document.addEventListener("DOMContentLoaded", () => {
+        document
+          .querySelectorAll(".section-fade")
+          .forEach((section) => observer.observe(section));
+        document.querySelector("header")?.classList.add("visible");
+      });
+    </script>
+
+    <!-- App code -->
     <script type="module" src="/src/main.ts"></script>
   </body>
 </html>

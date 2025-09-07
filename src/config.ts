@@ -1,19 +1,10 @@
-import type { Config } from "./types";
+// src/config.ts
+export const PAN_BUTTON = 2; // RMB pans the camera
+export const SCALE_MIN = 0.3; // min zoom
+export const SCALE_MAX = 3.0; // max zoom
 
-export const CONFIG: Config = {
-  cols: 12,
-  rows: 12,
-  tileW: 64,
-  tileH: 32,
-  camOffsetX: 0,
-  camOffsetY: -80
-  
+export const INITIAL_CAMERA = {
+  x: 0,
+  y: 0,
+  scale: 1,
 };
-
-// Animation speed (px-per-tile snap in this minimal build)
-export const STEP_SPEED = 6;
-export const SCALE_MIN = 0.5;
-export const SCALE_MAX = 2.5;
-export const SCALE_STEP = 0.1;          // per wheel notch (we’ll normalize)
-export const PAN_BUTTON = 2;            // right mouse button
-export const INITIAL_CAMERA = { x: 0, y: -80, scale: 1 } as const;
