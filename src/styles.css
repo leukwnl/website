@@ -1,0 +1,6 @@
+/* Minimal app CSS */
+
+#game {
+  touch-action: none;
+  display: block;
+}

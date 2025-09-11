@@ -1,0 +1,483 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Portfolio - Luke Leh</title>
+
+    <!-- UI + Mono (close stand-ins) -->
+    <link
+      href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600&family=IBM+Plex+Mono:wght@400;600&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="/assets/sidebar.css" />
+
+    <style>
+      :root {
+        --font-ui: "Space Grotesk", system-ui, -apple-system, "Segoe UI", Roboto,
+          Helvetica, Arial, sans-serif;
+        --font-mono: "IBM Plex Mono", ui-monospace, SFMono-Regular, Menlo,
+          Consolas, monospace;
+
+        --page-bg: #fefdf8;
+        --card-bg: #fefdf8;
+        --ink: #111;
+        --muted: #505050;
+        --rule: #c8c8c8;
+
+        --radius: 4px;
+        --wrap: 1200px;
+        --gap: 28px;
+        --pad-x: 22px;
+
+        --chip-bg: #ffffff;
+        --chip-border: #bdbdbd;
+        --chip-active: #111;
+        --chip-active-text: #fff;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+      html,
+      body {
+        height: 100%;
+      }
+      body {
+        margin: 0;
+        background: var(--page-bg);
+        color: var(--ink);
+        font-family: var(--font-ui);
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+      }
+
+      .wrap {
+        max-width: var(--wrap);
+        margin: 32px auto 72px;
+        padding: 0 var(--pad-x);
+      }
+
+      /* Page title + nav */
+      .page-title {
+        margin: 0 0 10px 0;
+        font-size: 34px;
+        line-height: 1.15;
+        letter-spacing: 0.2px;
+      }
+      .kicker {
+        font-family: var(--font-ui);
+        font-size: 28px;
+        letter-spacing: 0.18em;
+        text-transform: none;
+        text-align: center;
+        color: #2c2c2c;
+        margin: 0 0 8px 0;
+      }
+
+      .filter-bar {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 24px;
+        margin: 12px 0 20px;
+      }
+      .filter-btn {
+        font-family: var(--font-ui);
+        font-size: 24px;
+        letter-spacing: 0.08em;
+        text-transform: none;
+        border: none;
+        border-radius: 0;
+        background: transparent;
+        color: var(--ink);
+        padding: 4px 2px;
+        cursor: pointer;
+        transition: transform 0.04s ease;
+      }
+      .filter-btn[aria-pressed="true"] {
+        background: transparent;
+        color: var(--ink);
+        border-color: transparent;
+      }
+      .filter-btn:active {
+        transform: translateY(1px);
+      }
+      .filter-btn:hover {
+        text-decoration: underline;
+        text-decoration-thickness: 2px;
+        text-underline-offset: 3px;
+      }
+      .filter-btn:focus-visible {
+        outline: 2px solid #000;
+        outline-offset: 2px;
+      }
+
+      /* Dynamic Masonry using CSS columns */
+      .gallery {
+        column-gap: var(--gap);
+      }
+      /* mobile: 1 column */
+      .gallery {
+        column-count: 1;
+      }
+      /* ≥760px: 2 columns */
+      @media (min-width: 760px) {
+        .gallery {
+          column-count: 2;
+        }
+      }
+      /* Cards need to avoid breaking across columns */
+      .gallery > .card {
+        break-inside: avoid;
+        margin: 0 0 var(--gap);
+        opacity: 0;
+        transform: translateY(12px);
+        transition: opacity 320ms ease, transform 320ms ease;
+      }
+      .gallery > .card.is-visible {
+        opacity: 1;
+        transform: translateY(0);
+      }
+
+      /* Card (Cape-style) */
+      .card {
+        display: flex;
+        flex-direction: column;
+        height: 100%;
+        cursor: pointer;
+        background: #fff;
+        border: 1px solid var(--rule);
+        border-radius: var(--radius);
+        overflow: hidden;
+        position: relative;
+        will-change: transform;
+        transition: transform 0.2s ease, box-shadow 0.2s ease;
+      }
+      .thumb {
+        position: relative;
+        width: 100%;
+        aspect-ratio: 16/9;
+        background: #e7e7e7;
+        overflow: hidden;
+      }
+      .thumb > img {
+        position: absolute;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        display: block;
+        transition: transform 0.35s ease, filter 0.35s ease;
+      }
+      .card:hover .thumb > img {
+        transform: scale(1.03);
+      }
+
+      .divider {
+        border-top: 1px solid var(--rule);
+      }
+
+      .body {
+        padding: 22px 24px 24px;
+        display: flex;
+        flex-direction: column;
+        gap: 14px;
+        height: 100%;
+        background: #fff;
+      }
+      .subtitle {
+        font-size: 24px;
+        line-height: 1.35;
+        font-weight: 500;
+        letter-spacing: 0.002em;
+        margin: 0;
+      }
+      .desc {
+        margin: -10px 0 -6px;
+        color: var(--muted);
+        font-size: 16px;
+        line-height: 1.65;
+        flex: 1;
+      }
+
+      .btn {
+        font-family: var(--font-ui);
+        font-weight: 600;
+        font-size: 12px;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        text-decoration: none;
+        color: var(--ink);
+        background: #fff;
+        border: 1px solid var(--ink);
+        border-radius: 4px;
+        display: inline-block;
+        padding: 10px 14px;
+        width: max-content;
+        transition: background 0.15s ease, color 0.15s ease;
+      }
+      .btn:hover {
+        text-decoration: underline;
+      }
+      .btn:focus-visible {
+        outline: 2px solid #000;
+        outline-offset: 2px;
+      }
+
+      /* Hide utility for filtering (keeps layout smooth with CSS grid) */
+      .is-hidden {
+        display: none !important;
+      }
+
+      /* Subtle hover lift */
+      .card:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+        z-index: 5;
+      }
+
+      /* Loading state */
+      .loading-state {
+        text-align: center;
+        padding: 40px;
+        color: var(--muted);
+        grid-column: 1 / -1;
+      }
+
+      /* Button group styling */
+      .button-group {
+        display: flex;
+        gap: 8px;
+        flex-wrap: wrap;
+      }
+
+      /* Sketchbook accents */
+      .card--shadow-1 {
+        box-shadow: 0 1px 2px rgba(0, 0, 0, 0.06), 0 0 0 1px rgba(0, 0, 0, 0.04);
+      }
+      .card--shadow-2 {
+        box-shadow: 0 3px 8px rgba(0, 0, 0, 0.08), 0 0 0 1px rgba(0, 0, 0, 0.04);
+      }
+      .card--shadow-3 {
+        box-shadow: 0 8px 16px rgba(0, 0, 0, 0.08),
+          0 1px 0 rgba(0, 0, 0, 0.04) inset;
+      }
+
+      .card.tape-left::before,
+      .card.tape-right::before {
+        content: "";
+        position: absolute;
+        width: 64px;
+        height: 18px;
+        background: linear-gradient(
+          to bottom,
+          rgba(255, 248, 180, 0.85),
+          rgba(255, 248, 180, 0.7)
+        );
+        box-shadow: 0 1px 0 rgba(0, 0, 0, 0.12) inset,
+          0 1px 2px rgba(0, 0, 0, 0.08);
+        border-radius: 2px;
+        top: 10px;
+        opacity: 0.95;
+        pointer-events: none;
+      }
+      .card.tape-left::before {
+        left: 16px;
+        transform: rotate(-6deg);
+      }
+      .card.tape-right::before {
+        right: 16px;
+        transform: rotate(6deg);
+      }
+    </style>
+    <style>
+      :root { --sidebar-w: min(66vw, 1100px, 96vw); }
+      /* Hamburger + Sidebar */
+      .hamburger {
+        position: fixed;
+        top: 16px;
+        right: 16px;
+        z-index: 1001;
+        width: 42px;
+        height: 36px;
+        padding: 8px;
+        background: transparent;
+        color: var(--ink);
+        border: none;
+        border-radius: 6px;
+        display: grid;
+        gap: 6px;
+        align-content: center;
+        cursor: pointer;
+        transition: all 0.2s ease;
+      }
+      .hamburger span {
+        display: block;
+        height: 2px;
+        background: var(--ink);
+      }
+      .hamburger:hover {
+        background: rgba(0, 0, 0, 0.04);
+      }
+      .hamburger:focus-visible {
+        outline: 2px solid var(--ink);
+        outline-offset: 2px;
+      }
+
+      #sidebar-overlay {
+        position: fixed;
+        inset: 0;
+        background: transparent;
+        z-index: 1000;
+        opacity: 0;
+        pointer-events: none;
+        transition: opacity 0.2s ease;
+      }
+      #sidebar-overlay.show {
+        opacity: 1;
+        pointer-events: auto;
+      }
+      
+      /* Dim content when sidebar is open, but keep background seamless */
+      body.sidebar-open .wrap {
+        position: relative;
+      }
+      body.sidebar-open .wrap::before {
+        content: '';
+        position: absolute;
+        inset: 0;
+        background: rgba(255, 255, 255, 0.6);
+        z-index: 10;
+        pointer-events: none;
+      }
+
+      #sidebar {
+        position: fixed;
+        top: 0;
+        left: auto;
+        right: 0;
+        bottom: 0;
+        width: var(--sidebar-w);
+        height: 100%;
+        background: var(--page-bg);
+        padding: 108px 60px 60px;
+        transform: translateX(100%);
+        transition: transform 600ms cubic-bezier(0.56, -0.44, 0.44, 1.485);
+        z-index: 1002;
+        display: block;
+        overflow-y: auto;
+        overflow-x: hidden;
+        border-left: 1px solid var(--rule);
+      }
+      #sidebar.is-open {
+        transform: translateX(0);
+      }
+      /* Push page left when sidebar is open */
+      .wrap { transition: transform 600ms cubic-bezier(0.56, -0.44, 0.44, 1.485); will-change: transform; }
+      body.sidebar-open .wrap { transform: translateX(calc(-1 * var(--sidebar-w))); }
+      .sidebar-header { display:none; }
+      .sidebar-section { padding: 18px 20px 22px; }
+      .sidebar-section h3 { margin: 0 0 10px; font-size: 16px; }
+      .sidebar-section p, .sidebar-section li { color: var(--muted); line-height: 1.7; }
+      .sidebar-section ul { margin: 10px 0 0; padding-left: 18px; }
+
+      /* About layout: avatar left, text wraps right then continues below */
+      .about-block { display: flow-root; }
+      .about-avatar {
+        float: left;
+        width: 200px;
+        height: 200px;
+        border-radius: 8px;
+        background: #e9e9e9;
+        margin: 2px 18px 12px 0;
+        object-fit: cover;
+      }
+      .about-meta { margin: 0; }
+      .about-meta a { color: inherit; }
+      @media (max-width: 540px) { .about-avatar { width: 120px; height: 120px; } }
+    </style>
+    <style>
+      /* Sidebar behavior overrides: width, right slide, scroll lock, hamburger morph */
+      :root { --sidebar-w: min(66vw, 1100px, 96vw); }
+      #sidebar { left: auto; right: 0; width: var(--sidebar-w); border-left: 0; transform: translateX(100%); }
+      .wrap { transition: transform 600ms cubic-bezier(0.56, -0.44, 0.44, 1.485); will-change: transform; }
+      body.sidebar-open .wrap { transform: translateX(calc(-1 * var(--sidebar-w))); }
+      .close-sidebar { display: none; }
+      .hamburger { z-index: 1200; }
+      .hamburger span { transition: transform 220ms ease, opacity 160ms ease; transform-origin: center; }
+      .hamburger.is-open span:nth-child(1) { transform: translateY(8px) rotate(45deg); }
+      .hamburger.is-open span:nth-child(2) { opacity: 0; }
+      .hamburger.is-open span:nth-child(3) { transform: translateY(-8px) rotate(-45deg); }
+    </style>
+  </head>
+  <body>
+    <button
+      class="hamburger"
+      id="hamburger"
+      aria-label="Open menu"
+      aria-controls="sidebar"
+      aria-expanded="false"
+    >
+      <span></span>
+      <span></span>
+      <span></span>
+    </button>
+    <aside id="sidebar" class="" aria-hidden="true">
+      <div class="sidebar-header">
+        <h2 class="sidebar-title">Menu</h2>
+        <button class="close-sidebar" id="close-sidebar" aria-label="Close menu">×</button>
+      </div>
+      <section class="sidebar-section">
+        <div class="about-block">
+          <img class="about-avatar" src="/content/headshot.png" alt="Luke headshot placeholder" />
+          <p class="about-meta">
+            I’m Luke. I design and build interactive experiences — games,
+            performant web apps, and creative tools. I like shipping polished,
+            readable code and delightful UI.
+          </p>
+        </div>
+      </section>
+      <section class="sidebar-section">
+        <h3>Experience</h3>
+        <ul>
+          <li>Trigger Happy — mobile multiplayer prototype</li>
+          <li>Interactive TRPG portfolio site (TypeScript)</li>
+          <li>RAG platform work — production-grade pipelines</li>
+        </ul>
+      </section>
+      <section class="sidebar-section">
+        <h3>Contact</h3>
+        <p>
+          Email: <a href="mailto:hello@lukeleh.com">hello@lukeleh.com</a>
+        </p>
+      </section>
+    </aside>
+    <div id="sidebar-overlay" hidden></div>
+    <main class="wrap" id="page">
+      <p class="kicker">portfolio</p>
+
+      <!-- Filter Nav -->
+      <nav class="filter-bar" aria-label="Portfolio filters">
+        <button class="filter-btn" data-filter="all" aria-pressed="true">
+          all
+        </button>
+        <button class="filter-btn" data-filter="games">games</button>
+        <button class="filter-btn" data-filter="engineering">engineering</button>
+        <button class="filter-btn" data-filter="arts">arts</button>
+      </nav>
+
+      <!-- Gallery -->
+      <section class="gallery" id="portfolio-grid">
+        <!-- Portfolio items will be dynamically populated from portfolio-data.json -->
+        <!-- Loading state -->
+        <div class="loading-state">
+          <p>Loading portfolio...</p>
+        </div>
+      </section>
+    </main>
+
+    <script src="/assets/components/sidebar.js"></script>
+    <script src="js/portfolio-renderer.js"></script>
+  </body>
+</html>
