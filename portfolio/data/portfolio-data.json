@@ -142,7 +142,7 @@
             "title": "Grub Bug",
             "description": "A chaotic action-driving game built with Unity. Showcased at the Syracuse Maker Faire 2025, second game made with Cornell DGA.",
             "thumbnail": {
-                "src": "/assets/thumbs/grub-bug.PNG",
+                "src": "/assets/thumbs/grub-bug.png",
                 "alt": "Grubbing and Buggin'"
             },
             "categories": [
