@@ -49,6 +49,4 @@ whenAssetsReady().then(draw);
   - `CATEGORIES`: categories and their project IDs and grid anchors
   - `ABOUT`: About page data (title, `photoUrl`, and content as `html` or `paragraphs`)
 
-Update these objects to change your site content in one place.
-
 # website
