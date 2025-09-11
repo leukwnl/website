@@ -1,0 +1,193 @@
+{
+    "categories": {
+        "all": "all",
+        "games": "games",
+        "engineering": "engineering",
+        "arts": "arts"
+    },
+    "items": [
+        {
+            "id": "trigger-happy",
+            "title": "Trigger Happy",
+            "description": "A Real-time 6v6 card shooter built on a custom engine for iOS and Android. Some of my best work.",
+            "thumbnail": {
+                "src": "/assets/thumbs/trigger-happy.png",
+                "alt": "Trigger My Happy"
+            },
+            "categories": [
+                "games",
+                "engineering",
+                "arts"
+            ],
+            "buttons": [
+                {
+                    "type": "read_more",
+                    "text": "Read More ↗",
+                    "url": "trigger-happy.html"
+                },
+                {
+                    "type": "link",
+                    "text": "Game Page ↗",
+                    "url": "https://gdiac.cs.cornell.edu/gdiac/showcase/gallery/triggerhappy/"
+                },
+                {
+                    "type": "link",
+                    "text": "Download ↗",
+                    "url": "#"
+                }
+            ],
+            "priority": 1,
+            "featured": true
+        },
+        {
+            "id": "knead-for-speed",
+            "title": "Knead for Speed",
+            "description": "A quirky top-down Stealth-Puzzler built with Java/LibGDX. The first game I made throughout my career.",
+            "thumbnail": {
+                "src": "/assets/thumbs/knead-for-speed.png",
+                "alt": "Cookie Bois on the Run"
+            },
+            "categories": [
+                "games",
+                "engineering"
+            ],
+            "buttons": [
+                {
+                    "type": "read_more",
+                    "text": "Read More ↗",
+                    "url": "#"
+                }
+            ],
+            "priority": 2,
+            "featured": true
+        },
+        {
+            "id": "loop-de-coop",
+            "title": "Loop De Coop",
+            "description": "An Pokemon Ranger inspired game built with Unity. Made for the GMTK Game Jam 2025.",
+            "thumbnail": {
+                "src": "/assets/thumbs/loop.png",
+                "alt": "Lint Eastwood"
+            },
+            "categories": [
+                "games"
+            ],
+            "buttons": [
+                {
+                    "type": "read_more",
+                    "text": "Read More ↗",
+                    "url": "#"
+                },
+                {
+                    "type": "link",
+                    "text": "Play Game ↗",
+                    "url": "https://nishicarps.itch.io/loop-de-coop"
+                }
+            ],
+            "priority": 3
+        },
+        {
+            "id": "ambrosia",
+            "title": "Ambrosia",
+            "description": "A bullet-hell game built with Godot. Made for Godot Wild Jam 84 with the theme of 'Critters'.",
+            "thumbnail": {
+                "src": "/assets/thumbs/ambrosia.png",
+                "alt": "NECTAR"
+            },
+            "categories": [
+                "games"
+            ],
+            "buttons": [
+                {
+                    "type": "read_more",
+                    "text": "Read More ↗",
+                    "url": "#"
+                },
+                {
+                    "type": "link",
+                    "text": "Play Game ↗",
+                    "url": "https://teamsmirk.itch.io/ambrosia"
+                }
+            ],
+            "priority": 4
+        },
+        {
+            "id": "trpg-portfolio",
+            "title": "Interactive TRPG Portfolio Website",
+            "description": "Isometric grid, camera pan/zoom, interactables, and a document dock — built in TypeScript.",
+            "thumbnail": {
+                "src": "https://images.unsplash.com/photo-1518770660439-4636190af475?q=80&w=1600&auto=format&fit=crop",
+                "alt": "This Website"
+            },
+            "categories": [
+                "games",
+                "engineering"
+            ],
+            "buttons": [
+                {
+                    "type": "link",
+                    "text": "View Site ↗",
+                    "url": "/trpg.html"
+                },
+                {
+                    "type": "github",
+                    "text": "GitHub ↗",
+                    "url": "https://github.com/username/trpg-portfolio"
+                }
+            ],
+            "priority": 8
+        },
+        {
+            "id": "grub-bug",
+            "title": "Grub Bug",
+            "description": "A chaotic action-driving game built with Unity. Showcased at the Syracuse Maker Faire 2025, second game made with Cornell DGA.",
+            "thumbnail": {
+                "src": "/assets/thumbs/grub-bug.png",
+                "alt": "Grubbing and Buggin'"
+            },
+            "categories": [
+                "games",
+                "engineering"
+            ],
+            "buttons": [
+                {
+                    "type": "read_more",
+                    "text": "Read More ↗",
+                    "url": "#"
+                },
+                {
+                    "type": "link",
+                    "text": "Play Game ↗",
+                    "url": "https://dgacornell.itch.io/grubbug"
+                }
+            ],
+            "priority": 6
+        },
+        {
+            "id": "tillys",
+            "title": "Tilly's Critter Command",
+            "description": "A cozy 2.5D Real-Time Strategy game built with Unity. Showcased at PAX East 2025, first game made with Cornell DGA.",
+            "thumbnail": {
+                "src": "/assets/thumbs/tcc.png",
+                "alt": "Critting and Commanding"
+            },
+            "categories": [
+                "games",
+                "engineering"
+            ],
+            "buttons": [
+                {
+                    "type": "read_more",
+                    "text": "Read More ↗",
+                    "url": "#"
+                },
+                {
+                    "type": "link",
+                    "text": "Play Game ↗",
+                    "url": "https://dgacornell.itch.io/tillys-critter-command"
+                }
+            ],
+            "priority": 7
+        }
+    ]
+}

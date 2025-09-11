@@ -6,112 +6,24 @@
       name="viewport"
       content="width=device-width, initial-scale=1, viewport-fit=cover"
     />
-    <title>Luke Leh — Grid Journal</title>
-
-    <!-- Tailwind (CDN for quick drop-in, matches your old HTML) -->
-    <script src="https://cdn.tailwindcss.com"></script>
-
-    <!-- App styles (small custom bits; see styles.css) -->
-    <link rel="stylesheet" href="/src/styles.css" />
-
+    <title>lukeleh.com → Portfolio</title>
+    <meta http-equiv="refresh" content="0; url=/portfolio/" />
+    <link rel="canonical" href="/portfolio/" />
+    <script>
+      // JS redirect as a fallback if meta refresh is blocked
+      (function(){
+        var target = "/portfolio/";
+        try { window.location.replace(target); } catch (_) { window.location.href = target; }
+      })();
+    </script>
     <style>
-      html {
-        scroll-behavior: smooth;
-      } /* as in your old page */
+      html, body { height: 100%; }
+      body { margin: 0; display: grid; place-items: center; font-family: system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif; }
+      a { color: #0b5; text-decoration: none; }
+      a:hover { text-decoration: underline; }
     </style>
   </head>
-  <body class="bg-white text-gray-800 antialiased font-sans">
-    <!-- Top: full-viewport isometric canvas -->
-    <header class="relative w-full h-[100svh] overflow-hidden">
-      <canvas id="game" class="absolute inset-0 w-full h-full"></canvas>
-
-      <!-- subtle hint; auto-hidden on narrow screens if you prefer -->
-      <div
-        class="pointer-events-none absolute left-3 bottom-3 text-[12px] md:text-xs text-gray-700/80 bg-white/70 backdrop-blur-sm px-2 py-1 rounded"
-      >
-        right-drag to pan · scroll/pinch to zoom · click/tap tiles
-      </div>
-    </header>
-
-    <!-- Bottom: Journal / Notes panel (styled like your old sections) -->
-    <section id="info" aria-live="polite" aria-label="Journal">
-      <div class="max-w-3xl mx-auto my-12 mb-16 p-6 space-y-10">
-        <!-- Title block (About/Projects/Games/Experience will swap here) -->
-        <header class="space-y-2 section-fade">
-          <h1 id="info-title" class="text-3xl font-normal tracking-tight">
-            Welcome
-          </h1>
-          <p id="info-sub" class="text-sm font-light text-gray-600">
-            Step on a category to spawn items. Click an item to learn more.
-          </p>
-        </header>
-
-        <!-- Tabs (chips) -->
-        <nav
-          id="info-tabs"
-          class="flex gap-2 overflow-auto section-fade"
-          role="tablist"
-          aria-label="Sections"
-        >
-          <!-- injected by infoPanel.ts -->
-        </nav>
-
-        <!-- Content body (list or detail) -->
-        <article id="info-body" class="space-y-8 section-fade">
-          <section class="space-y-8">
-            <div
-              class="grid grid-cols-1 md:grid-cols-3 gap-x-8 gap-y-4 items-start"
-            >
-              <div>
-                <p
-                  class="text-sm font-light uppercase text-gray-700 tracking-wide"
-                >
-                  Start
-                </p>
-              </div>
-              <div class="md:col-span-2">
-                <p class="text-sm font-light leading-relaxed">
-                  Use the schematic above. When you select a tile, details
-                  appear here with the same typography and spacing as your
-                  previous site.
-                </p>
-              </div>
-            </div>
-          </section>
-        </article>
-
-        <!-- footer actions -->
-        <footer class="section-fade">
-          <a
-            href="#"
-            id="back-to-map"
-            class="text-blue-600 hover:underline text-sm font-normal"
-            >↥ Back to map</a
-          >
-        </footer>
-      </div>
-    </section>
-
-    <!-- Fade-in on scroll (your previous behavior) -->
-    <script>
-      const observer = new IntersectionObserver(
-        (entries) => {
-          entries.forEach((entry) => {
-            if (entry.isIntersecting) entry.target.classList.add("visible");
-          });
-        },
-        { threshold: 0.1, rootMargin: "0px 0px -50px 0px" }
-      );
-
-      document.addEventListener("DOMContentLoaded", () => {
-        document
-          .querySelectorAll(".section-fade")
-          .forEach((section) => observer.observe(section));
-        document.querySelector("header")?.classList.add("visible");
-      });
-    </script>
-
-    <!-- App code -->
-    <script type="module" src="/src/main.ts"></script>
+  <body>
+    <p>Redirecting to <a href="/portfolio/">/portfolio/</a>… If you are not redirected, click the link.</p>
   </body>
 </html>

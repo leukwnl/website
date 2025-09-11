@@ -2,7 +2,7 @@
 import { toGrid } from "./math";
 import { bfs } from "./pathfinding";
 import type { World, Camera } from "./types";
-import { buildTempGridWithSpawns, isHeroTile, isCategoryTile } from "./world";
+import { buildTempGrid } from "./world";
 
 const PAN_BUTTON = 2;
 const SCALE_MIN = 0.3;
@@ -12,17 +12,12 @@ export function bindControls(
   canvas: HTMLCanvasElement,
   world: World,
   camera: Camera,
-  onHover: (
-    tile: [number, number] | null,
-    enemy: { id: string; x: number; y: number } | null
-  ) => void,
+  onHover: (tile: [number, number] | null) => void,
   onDraw: () => void
 ) {
   let animId = 0;
 
-  function enemyAtGrid(_x: number, _y: number) {
-    return null;
-  }
+  function enemyAtGrid(_x: number, _y: number) { return null; }
 
   function moveAlong(path: [number, number][], onArrive?: () => void) {
     if (!path || !path.length) {
@@ -63,11 +58,11 @@ export function bindControls(
       r.height,
       camera
     );
-    onHover([col, row], enemyAtGrid(col, row));
+    onHover([col, row]);
     onDraw();
   });
   canvas.addEventListener("mouseleave", () => {
-    onHover(null, null);
+    onHover(null);
     onDraw();
   });
 
@@ -83,42 +78,10 @@ export function bindControls(
       camera
     );
 
-    const enemy = enemyAtGrid(col, row);
-    if (enemy) return;
-
-    // Interactions: talk to NPC or use interactable if clicked directly
-    const npc = world.npcs.find((n) => n.x === col && n.y === row);
-    if (npc) {
-      window.dispatchEvent(
-        new CustomEvent("grid:talk-npc", { detail: { id: npc.id } })
-      );
-      return;
-    }
-    const inter = world.interactables.find((i) => i.x === col && i.y === row);
-    if (inter) {
-      window.dispatchEvent(
-        new CustomEvent("grid:use-object", { detail: { id: inter.id } })
-      );
-      return;
-    }
-
-    // empty tile → move; handle hero/category on arrival
-    const temp = buildTempGridWithSpawns(world);
+    // empty tile → move
+    const temp = buildTempGrid(world);
     const path = bfs(temp, [world.player.x, world.player.y], [col, row]);
-    moveAlong(path ?? [], () => {
-      if (isHeroTile(world, world.player.x, world.player.y)) {
-        window.dispatchEvent(new CustomEvent("grid:open-hero"));
-        return;
-      }
-      const cat = isCategoryTile(world, world.player.x, world.player.y);
-      if (cat) {
-        window.dispatchEvent(
-          new CustomEvent("grid:open-category", {
-            detail: { categoryId: cat.id },
-          })
-        );
-      }
-    });
+    moveAlong(path ?? [], () => {});
   };
 
   canvas.addEventListener("mousedown", (e) =>

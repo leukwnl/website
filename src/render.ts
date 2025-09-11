@@ -1,8 +1,6 @@
 // src/render.ts
 import type { World, Camera } from "./types";
 import { tileCenter, TILE_W, TILE_H } from "./math";
-import { drawInteractableOverlays } from "./renderOverlay";
-import { getTileImage } from "./assets";
 
 export function createRenderer(
   canvas: HTMLCanvasElement,
@@ -51,10 +49,7 @@ export function createRenderer(
     ctx.stroke();
   };
 
-  function draw(state: {
-    hoverEnemy: { id: string; x: number; y: number } | null;
-    hoverTile: [number, number] | null;
-  }) {
+  function draw(state: { hoverTile: [number, number] | null }) {
     // Use CSS dimensions here
     const rect = canvas.getBoundingClientRect();
 
@@ -73,18 +68,8 @@ export function createRenderer(
         const sx = (wc.x - camera.x) * camera.scale + rect.width / 2;
         const sy = (wc.y - camera.y) * camera.scale + rect.height / 2;
 
-        // draw tile image if available; otherwise fallback diamond
-        const tileVal = world.grid[row][col];
-        const img = getTileImage(tileVal);
-        if (img) {
-          const w = TILE_W * camera.scale;
-          const h = TILE_H * camera.scale;
-          // draw centered like iso diamond
-          ctx.drawImage(img, sx - w / 2, sy - h / 2, w, h);
-        } else {
-          diamondFill(sx, sy, camera.scale, "#f9f6ee");
-          diamondStroke(sx, sy, camera.scale, "rgba(0,0,0,0.12)");
-        }
+        diamondFill(sx, sy, camera.scale, "#f9f6ee");
+        diamondStroke(sx, sy, camera.scale, "rgba(0,0,0,0.12)");
 
         // hover highlight
         if (
@@ -98,8 +83,6 @@ export function createRenderer(
           ctx.restore();
         }
 
-        // removed spawned markers
-
         // player
         if (world.player.x === col && world.player.y === row) {
           ctx.beginPath();
@@ -109,16 +92,6 @@ export function createRenderer(
         }
       }
     }
-
-    // overlays + labels (uses CSS px inside)
-    drawInteractableOverlays(
-      ctx,
-      canvas,
-      world,
-      camera,
-      state.hoverEnemy,
-      true
-    );
   }
 
   return { resize, draw };
