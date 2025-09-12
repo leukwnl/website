@@ -411,7 +411,7 @@
 
       /* About layout: avatar left, text wraps right then continues below */
       .bio { display: flow-root; }
-      .bio-image { float: left; width: clamp(96px, 34vw, 160px); height: auto; border-radius: 8px; background: #e9e9e9; margin: 2px 14px 10px 0; object-fit: cover; }
+      .bio-image { float: left; width: clamp(96px, 34vw, 160px); height: auto; border-radius: 0; background: #e9e9e9; margin: 2px 14px 10px 0; object-fit: cover; }
       @media (max-width: 540px) {
         :root { --sidebar-w: 100vw; }
         #sidebar { padding: 74px 20px 22px; }
@@ -434,36 +434,7 @@
       <span></span>
     </button>
     <aside id="sidebar" class="" aria-hidden="true">
-      <div class="sidebar-content">
-        <div class="sidebar-header">
-          <h2 class="sidebar-title">Menu</h2>
-          <button class="close-sidebar" id="close-sidebar" aria-label="Close menu">×</button>
-        </div>
-        <section class="sidebar-section">
-          <div class="bio">
-            <img class="bio-image" src="/content/headshot.png" alt="Luke headshot placeholder" />
-            <p>
-              I’m Luke. I design and build interactive experiences — games,
-              performant web apps, and creative tools. I like shipping polished,
-              readable code and delightful UI.
-            </p>
-          </div>
-        </section>
-        <section class="sidebar-section">
-          <h3>Experience</h3>
-          <ul>
-            <li>Trigger Happy — mobile multiplayer prototype</li>
-            <li>Interactive TRPG portfolio site (TypeScript)</li>
-            <li>RAG platform work — production-grade pipelines</li>
-          </ul>
-        </section>
-        <section class="sidebar-section">
-          <h3>Contact</h3>
-          <p>
-            Email: <a href="mailto:hello@lukeleh.com">hello@lukeleh.com</a>
-          </p>
-        </section>
-      </div>
+      <div data-sidebar-partial></div>
     </aside>
     <div id="sidebar-overlay" hidden></div>
     <main class="wrap" id="page">
