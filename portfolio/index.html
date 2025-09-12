@@ -1,468 +1,598 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Portfolio - Luke Leh</title>
 
-    <!-- UI + Mono (close stand-ins) -->
-    <link
-      href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600&family=IBM+Plex+Mono:wght@400;600&display=swap"
-      rel="stylesheet"
-    />
-    <link rel="stylesheet" href="/public/assets/css/sidebar.css" />
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Portfolio - Luke Leh</title>
 
-    <style>
-      :root {
-        --font-ui: "Space Grotesk", system-ui, -apple-system, "Segoe UI", Roboto,
-          Helvetica, Arial, sans-serif;
-        --font-mono: "IBM Plex Mono", ui-monospace, SFMono-Regular, Menlo,
-          Consolas, monospace;
+  <!-- UI + Mono (close stand-ins) -->
+  <link
+    href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600&family=IBM+Plex+Mono:wght@400;600&display=swap"
+    rel="stylesheet" />
+  <link rel="stylesheet" href="/public/assets/css/sidebar.css" />
 
-        --page-bg: #fefdf8;
-        --card-bg: #fefdf8;
-        --ink: #111;
-        --muted: #505050;
-        --rule: #c8c8c8;
+  <style>
+    :root {
+      --font-ui: "Space Grotesk", system-ui, -apple-system, "Segoe UI", Roboto,
+        Helvetica, Arial, sans-serif;
+      --font-mono: "IBM Plex Mono", ui-monospace, SFMono-Regular, Menlo,
+        Consolas, monospace;
 
-        --radius: 4px;
-        --wrap: 1200px;
-        --gap: 28px;
-        --pad-x: 22px;
+      --page-bg: #fefdf8;
+      --card-bg: #fefdf8;
+      --ink: #111;
+      --muted: #505050;
+      --rule: #c8c8c8;
 
-        --chip-bg: #ffffff;
-        --chip-border: #bdbdbd;
-        --chip-active: #111;
-        --chip-active-text: #fff;
-      }
+      --radius: 4px;
+      --wrap: 1200px;
+      --gap: 28px;
+      --pad-x: 22px;
 
-      * {
-        box-sizing: border-box;
-      }
-      html,
-      body {
-        height: 100%;
-      }
-      body {
-        margin: 0;
-        background: var(--page-bg);
-        color: var(--ink);
-        font-family: var(--font-ui);
-        -webkit-font-smoothing: antialiased;
-        -moz-osx-font-smoothing: grayscale;
-      }
+      --chip-bg: #ffffff;
+      --chip-border: #bdbdbd;
+      --chip-active: #111;
+      --chip-active-text: #fff;
+    }
 
-      .wrap {
-        max-width: var(--wrap);
-        margin: 32px auto 72px;
-        padding: 0 var(--pad-x);
-      }
+    * {
+      box-sizing: border-box;
+    }
 
-      /* Page title + nav */
-      .page-title {
-        margin: 0 0 10px 0;
-        font-size: 34px;
-        line-height: 1.15;
-        letter-spacing: 0.2px;
-      }
-      .kicker {
-        font-family: var(--font-ui);
-        font-size: 28px;
-        letter-spacing: 0.18em;
-        text-transform: none;
-        text-align: center;
-        color: #2c2c2c;
-        margin: 0 0 8px 0;
-      }
+    html,
+    body {
+      height: 100%;
+    }
 
-      .filter-bar {
-        display: flex;
-        flex-wrap: wrap;
-        justify-content: center;
-        gap: 24px;
-        margin: 12px 0 20px;
-      }
-      .filter-btn {
-        font-family: var(--font-ui);
-        font-size: 24px;
-        letter-spacing: 0.08em;
-        text-transform: none;
-        border: none;
-        border-radius: 0;
-        background: transparent;
-        color: var(--ink);
-        padding: 4px 2px;
-        cursor: pointer;
-        transition: transform 0.04s ease;
-      }
-      .filter-btn[aria-pressed="true"] {
-        background: transparent;
-        color: var(--ink);
-        border-color: transparent;
-      }
-      .filter-btn:active {
-        transform: translateY(1px);
-      }
-      .filter-btn:hover {
-        text-decoration: underline;
-        text-decoration-thickness: 2px;
-        text-underline-offset: 3px;
-      }
-      .filter-btn:focus-visible {
-        outline: 2px solid #000;
-        outline-offset: 2px;
-      }
+    body {
+      margin: 0;
+      background: var(--page-bg);
+      color: var(--ink);
+      font-family: var(--font-ui);
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
 
-      /* Dynamic Masonry using CSS columns */
+    .wrap {
+      max-width: var(--wrap);
+      margin: 32px auto 72px;
+      padding: 0 var(--pad-x);
+    }
+
+    /* Page title + nav */
+    .page-title {
+      margin: 0 0 10px 0;
+      font-size: 34px;
+      line-height: 1.15;
+      letter-spacing: 0.2px;
+    }
+
+    .kicker {
+      font-family: var(--font-ui);
+      font-size: 28px;
+      letter-spacing: 0.18em;
+      text-transform: none;
+      text-align: center;
+      color: #2c2c2c;
+      margin: 0 0 8px 0;
+    }
+
+    .filter-bar {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 24px;
+      margin: 12px 0 20px;
+    }
+
+    .filter-btn {
+      font-family: var(--font-ui);
+      font-size: 24px;
+      letter-spacing: 0.08em;
+      text-transform: none;
+      border: none;
+      border-radius: 0;
+      background: transparent;
+      color: var(--ink);
+      padding: 4px 2px;
+      cursor: pointer;
+      transition: transform 0.04s ease;
+    }
+
+    .filter-btn[aria-pressed="true"] {
+      background: transparent;
+      color: var(--ink);
+      border-color: transparent;
+    }
+
+    .filter-btn:active {
+      transform: translateY(1px);
+    }
+
+    .filter-btn:hover {
+      text-decoration: underline;
+      text-decoration-thickness: 2px;
+      text-underline-offset: 3px;
+    }
+
+    .filter-btn:focus-visible {
+      outline: 2px solid #000;
+      outline-offset: 2px;
+    }
+
+    /* Dynamic Masonry using CSS columns */
+    .gallery {
+      column-gap: var(--gap);
+    }
+
+    /* mobile: 1 column */
+    .gallery {
+      column-count: 1;
+    }
+
+    /* ≥760px: 2 columns */
+    @media (min-width: 760px) {
       .gallery {
-        column-gap: var(--gap);
+        column-count: 2;
       }
-      /* mobile: 1 column */
-      .gallery {
-        column-count: 1;
-      }
-      /* ≥760px: 2 columns */
-      @media (min-width: 760px) {
-        .gallery {
-          column-count: 2;
-        }
-      }
-      /* Cards need to avoid breaking across columns */
-      .gallery > .card {
-        break-inside: avoid;
-        margin: 0 0 var(--gap);
-        opacity: 0;
-        transform: translateY(12px);
-        transition: opacity 320ms ease, transform 320ms ease;
-      }
-      .gallery > .card.is-visible {
-        opacity: 1;
-        transform: translateY(0);
-      }
+    }
 
-      /* Card (Cape-style) */
-      .card {
-        display: flex;
-        flex-direction: column;
-        height: 100%;
-        cursor: pointer;
-        background: #fff;
-        border: 1px solid var(--rule);
-        border-radius: var(--radius);
-        overflow: hidden;
-        position: relative;
-        will-change: transform;
-        transition: transform 0.2s ease, box-shadow 0.2s ease;
-      }
-      .thumb {
-        position: relative;
-        width: 100%;
-        aspect-ratio: 16/9;
-        background: #e7e7e7;
-        overflow: hidden;
-      }
-      .thumb > img {
-        position: absolute;
-        inset: 0;
-        width: 100%;
-        height: 100%;
-        object-fit: cover;
-        display: block;
-        transition: transform 0.35s ease, filter 0.35s ease;
-      }
-      .card:hover .thumb > img {
-        transform: scale(1.03);
-      }
+    /* Cards need to avoid breaking across columns */
+    .gallery>.card {
+      break-inside: avoid;
+      margin: 0 0 var(--gap);
+      opacity: 0;
+      transform: translateY(12px);
+      transition: opacity 320ms ease, transform 320ms ease;
+    }
 
-      .divider {
-        border-top: 1px solid var(--rule);
-      }
+    .gallery>.card.is-visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
 
-      .body {
-        padding: 22px 24px 24px;
-        display: flex;
-        flex-direction: column;
-        gap: 14px;
-        height: 100%;
-        background: #fff;
-      }
-      .subtitle {
-        font-size: 24px;
-        line-height: 1.35;
-        font-weight: 500;
-        letter-spacing: 0.002em;
-        margin: 0;
-      }
-      .desc {
-        margin: -10px 0 -6px;
-        color: var(--muted);
-        font-size: 16px;
-        line-height: 1.65;
-        flex: 1;
-      }
+    /* Card (Cape-style) */
+    .card {
+      display: flex;
+      flex-direction: column;
+      height: 100%;
+      cursor: pointer;
+      background: #fff;
+      border: 1px solid var(--rule);
+      border-radius: var(--radius);
+      overflow: hidden;
+      position: relative;
+      will-change: transform;
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
 
-      .btn {
-        font-family: var(--font-ui);
-        font-weight: 600;
-        font-size: 12px;
-        letter-spacing: 0.08em;
-        text-transform: uppercase;
-        text-decoration: none;
-        color: var(--ink);
-        background: #fff;
-        border: 1px solid var(--ink);
-        border-radius: 4px;
-        display: inline-block;
-        padding: 10px 14px;
-        width: max-content;
-        transition: background 0.15s ease, color 0.15s ease;
-      }
-      .btn:hover {
-        text-decoration: underline;
-      }
-      .btn:focus-visible {
-        outline: 2px solid #000;
-        outline-offset: 2px;
-      }
+    .thumb {
+      position: relative;
+      width: 100%;
+      aspect-ratio: 16/9;
+      background: #e7e7e7;
+      overflow: hidden;
+    }
 
-      /* Hide utility for filtering (keeps layout smooth with CSS grid) */
-      .is-hidden {
-        display: none !important;
-      }
+    .thumb>img {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+      transition: transform 0.35s ease, filter 0.35s ease;
+    }
 
-      /* Subtle hover lift */
-      .card:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
-        z-index: 5;
-      }
+    .card:hover .thumb>img {
+      transform: scale(1.03);
+    }
 
-      /* Loading state */
-      .loading-state {
-        text-align: center;
-        padding: 40px;
-        color: var(--muted);
-        grid-column: 1 / -1;
-      }
+    .divider {
+      border-top: 1px solid var(--rule);
+    }
 
-      /* Button group styling */
-      .button-group {
-        display: flex;
-        gap: 8px;
-        flex-wrap: wrap;
-      }
+    .body {
+      padding: 22px 24px 24px;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      height: 100%;
+      background: #fff;
+    }
 
-      /* Sketchbook accents */
-      .card--shadow-1 {
-        box-shadow: 0 1px 2px rgba(0, 0, 0, 0.06), 0 0 0 1px rgba(0, 0, 0, 0.04);
-      }
-      .card--shadow-2 {
-        box-shadow: 0 3px 8px rgba(0, 0, 0, 0.08), 0 0 0 1px rgba(0, 0, 0, 0.04);
-      }
-      .card--shadow-3 {
-        box-shadow: 0 8px 16px rgba(0, 0, 0, 0.08),
-          0 1px 0 rgba(0, 0, 0, 0.04) inset;
-      }
+    .subtitle {
+      font-size: 24px;
+      line-height: 1.35;
+      font-weight: 500;
+      letter-spacing: 0.002em;
+      margin: 0;
+    }
 
-      .card.tape-left::before,
-      .card.tape-right::before {
-        content: "";
-        position: absolute;
-        width: 64px;
-        height: 18px;
-        background: linear-gradient(
-          to bottom,
+    .desc {
+      margin: -10px 0 -6px;
+      color: var(--muted);
+      font-size: 16px;
+      line-height: 1.65;
+      flex: 1;
+    }
+
+    .btn {
+      font-family: var(--font-ui);
+      font-weight: 600;
+      font-size: 12px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      text-decoration: none;
+      color: var(--ink);
+      background: #fff;
+      border: 1px solid var(--ink);
+      border-radius: 4px;
+      display: inline-block;
+      padding: 10px 14px;
+      width: max-content;
+      transition: background 0.15s ease, color 0.15s ease;
+    }
+
+    .btn:hover {
+      text-decoration: underline;
+    }
+
+    .btn:focus-visible {
+      outline: 2px solid #000;
+      outline-offset: 2px;
+    }
+
+    /* Hide utility for filtering (keeps layout smooth with CSS grid) */
+    .is-hidden {
+      display: none !important;
+    }
+
+    /* Subtle hover lift */
+    .card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+      z-index: 5;
+    }
+
+    /* Loading state */
+    .loading-state {
+      text-align: center;
+      padding: 40px;
+      color: var(--muted);
+      grid-column: 1 / -1;
+    }
+
+    /* Button group styling */
+    .button-group {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    /* Sketchbook accents */
+    .card--shadow-1 {
+      box-shadow: 0 1px 2px rgba(0, 0, 0, 0.06), 0 0 0 1px rgba(0, 0, 0, 0.04);
+    }
+
+    .card--shadow-2 {
+      box-shadow: 0 3px 8px rgba(0, 0, 0, 0.08), 0 0 0 1px rgba(0, 0, 0, 0.04);
+    }
+
+    .card--shadow-3 {
+      box-shadow: 0 8px 16px rgba(0, 0, 0, 0.08),
+        0 1px 0 rgba(0, 0, 0, 0.04) inset;
+    }
+
+    .card.tape-left::before,
+    .card.tape-right::before {
+      content: "";
+      position: absolute;
+      width: 64px;
+      height: 18px;
+      background: linear-gradient(to bottom,
           rgba(255, 248, 180, 0.85),
-          rgba(255, 248, 180, 0.7)
-        );
-        box-shadow: 0 1px 0 rgba(0, 0, 0, 0.12) inset,
-          0 1px 2px rgba(0, 0, 0, 0.08);
-        border-radius: 2px;
-        top: 10px;
-        opacity: 0.95;
-        pointer-events: none;
-      }
-      .card.tape-left::before {
-        left: 16px;
-        transform: rotate(-6deg);
-      }
-      .card.tape-right::before {
-        right: 16px;
-        transform: rotate(6deg);
-      }
-    </style>
-    <style>
-      :root { --sidebar-w: clamp(320px, 85vw, 560px); }
-      /* Hamburger + Sidebar */
-      .hamburger {
-        position: fixed;
-        top: 16px;
-        right: 16px;
-        z-index: 1001;
-        width: 42px;
-        height: 36px;
-        padding: 8px;
-        background: transparent;
-        color: var(--ink);
-        border: none;
-        border-radius: 6px;
-        display: grid;
-        gap: 6px;
-        align-content: center;
-        cursor: pointer;
-        transition: all 0.2s ease;
-      }
-      .hamburger span {
-        display: block;
-        height: 2px;
-        background: var(--ink);
-      }
-      .hamburger:hover {
-        background: rgba(0, 0, 0, 0.04);
-      }
-      .hamburger:focus-visible {
-        outline: 2px solid var(--ink);
-        outline-offset: 2px;
-      }
+          rgba(255, 248, 180, 0.7));
+      box-shadow: 0 1px 0 rgba(0, 0, 0, 0.12) inset,
+        0 1px 2px rgba(0, 0, 0, 0.08);
+      border-radius: 2px;
+      top: 10px;
+      opacity: 0.95;
+      pointer-events: none;
+    }
 
-      #sidebar-overlay {
-        position: fixed;
-        inset: 0;
-        background: transparent;
-        z-index: 1000;
-        opacity: 0;
-        pointer-events: none;
-        transition: opacity 0.2s ease;
-      }
-      #sidebar-overlay.show {
-        opacity: 1;
-        pointer-events: auto;
-      }
-      
-      /* Dim content when sidebar is open, but keep background seamless */
-      body.sidebar-open .wrap {
-        position: relative;
-      }
-      body.sidebar-open .wrap::before {
-        content: '';
-        position: absolute;
-        inset: 0;
-        background: rgba(255, 255, 255, 0.6);
-        z-index: 10;
-        pointer-events: none;
+    .card.tape-left::before {
+      left: 16px;
+      transform: rotate(-6deg);
+    }
+
+    .card.tape-right::before {
+      right: 16px;
+      transform: rotate(6deg);
+    }
+  </style>
+  <style>
+    :root {
+      --sidebar-w: clamp(320px, 85vw, 560px);
+    }
+
+    /* Hamburger + Sidebar */
+    .hamburger {
+      position: fixed;
+      top: 16px;
+      right: 16px;
+      z-index: 1001;
+      width: 42px;
+      height: 36px;
+      padding: 8px;
+      background: transparent;
+      color: var(--ink);
+      border: none;
+      border-radius: 6px;
+      display: grid;
+      gap: 6px;
+      align-content: center;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .hamburger span {
+      display: block;
+      height: 2px;
+      background: var(--ink);
+    }
+
+    .hamburger:hover {
+      background: rgba(0, 0, 0, 0.04);
+    }
+
+    .hamburger:focus-visible {
+      outline: 2px solid var(--ink);
+      outline-offset: 2px;
+    }
+
+    #sidebar-overlay {
+      position: fixed;
+      inset: 0;
+      background: transparent;
+      z-index: 1000;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.2s ease;
+    }
+
+    #sidebar-overlay.show {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    /* Dim content when sidebar is open, but keep background seamless */
+    body.sidebar-open .wrap {
+      position: relative;
+    }
+
+    body.sidebar-open .wrap::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: rgba(255, 255, 255, 0.6);
+      z-index: 10;
+      pointer-events: none;
+    }
+
+    #sidebar {
+      position: fixed;
+      top: 0;
+      left: auto;
+      right: 0;
+      bottom: 0;
+      width: var(--sidebar-w);
+      height: 100%;
+      background: var(--page-bg);
+      padding: 108px 60px 60px;
+      transform: translateX(100%);
+      transition: transform 600ms cubic-bezier(0.56, -0.44, 0.44, 1.485);
+      z-index: 1002;
+      display: block;
+      overflow-y: auto;
+      overflow-x: hidden;
+      border-left: 0;
+    }
+
+    @media (min-width: 1024px) {
+      :root {
+        --sidebar-w: 50vw;
       }
 
       #sidebar {
-        position: fixed;
-        top: 0;
-        left: auto;
-        right: 0;
-        bottom: 0;
-        width: var(--sidebar-w);
-        height: 100%;
-        background: var(--page-bg);
-        padding: 108px 60px 60px;
-        transform: translateX(100%);
-        transition: transform 600ms cubic-bezier(0.56, -0.44, 0.44, 1.485);
-        z-index: 1002;
-        display: block;
-        overflow-y: auto;
-        overflow-x: hidden;
-        border-left: 0;
+        padding: 108px 90px 60px 40px;
       }
-      @media (min-width: 1024px) {
-        :root { --sidebar-w: 50vw; }
-        #sidebar { padding: 108px 90px 60px 40px; }
-      }
-      #sidebar.is-open {
-        transform: translateX(0);
-      }
-      /* Push page left when sidebar is open */
-      .wrap { transition: transform 600ms cubic-bezier(0.56, -0.44, 0.44, 1.485); will-change: transform; }
-      body.sidebar-open .wrap { transform: translateX(calc(-1 * var(--sidebar-w))); }
-      .sidebar-header { display:none; }
-      .sidebar-section { padding: 18px 20px 22px; }
-      .sidebar-section h3 { margin: 0 0 10px; font-size: clamp(13.5px, 3.4vw, 15.5px); }
-      .sidebar-section p, .sidebar-section li { color: var(--muted); line-height: 1.6; font-size: clamp(13px, 3.5vw, 15px); }
-      .sidebar-section ul { margin: 10px 0 0; padding-left: 18px; }
+    }
 
-      /* About layout: avatar left, text wraps right then continues below */
-      .about-block { display: flow-root; }
-      .about-avatar {
-        float: left;
-        width: clamp(96px, 34vw, 160px);
-        height: clamp(96px, 34vw, 160px);
-        border-radius: 8px;
-        background: #e9e9e9;
-        margin: 2px 14px 10px 0;
-        object-fit: cover;
+    #sidebar.is-open {
+      transform: translateX(0);
+    }
+
+    /* Push page left when sidebar is open */
+    .wrap {
+      transition: transform 600ms cubic-bezier(0.56, -0.44, 0.44, 1.485);
+      will-change: transform;
+    }
+
+    body.sidebar-open .wrap {
+      transform: translateX(calc(-1 * var(--sidebar-w)));
+    }
+
+    .sidebar-header {
+      display: none;
+    }
+
+    .sidebar-section {
+      padding: 18px 20px 22px;
+    }
+
+    .sidebar-section h3 {
+      margin: 0 0 10px;
+      font-size: clamp(13.5px, 3.4vw, 15.5px);
+    }
+
+    .sidebar-section p,
+    .sidebar-section li {
+      color: var(--muted);
+      line-height: 1.6;
+      font-size: clamp(13px, 3.5vw, 15px);
+    }
+
+    .sidebar-section ul {
+      margin: 10px 0 0;
+      padding-left: 18px;
+    }
+
+    /* About layout: avatar left, text wraps right then continues below */
+    .about-block {
+      display: flow-root;
+    }
+
+    .about-avatar {
+      float: left;
+      width: clamp(96px, 34vw, 160px);
+      height: clamp(96px, 34vw, 160px);
+      border-radius: 8px;
+      background: #e9e9e9;
+      margin: 2px 14px 10px 0;
+      object-fit: cover;
+    }
+
+    .about-meta {
+      margin: 0;
+    }
+
+    .about-meta a {
+      color: inherit;
+    }
+
+    @media (max-width: 540px) {
+      :root {
+        --sidebar-w: 100vw;
       }
-      .about-meta { margin: 0; }
-      .about-meta a { color: inherit; }
-      @media (max-width: 540px) {
-        :root { --sidebar-w: 100vw; }
-        #sidebar { padding: 74px 20px 22px; }
-        .sidebar-section ul { padding-left: 16px; }
-        .sidebar-section h3 { font-size: 14px; }
-        .sidebar-section p, .sidebar-section li { font-size: 13.2px; line-height: 1.55; }
+
+      #sidebar {
+        padding: 74px 20px 22px;
       }
-    </style>
-    <style>
-      /* Sidebar behavior overrides: width, right slide, scroll lock, hamburger morph */
-      :root { --sidebar-w: clamp(320px, 85vw, 560px); }
-      @media (min-width: 1024px) { :root { --sidebar-w: 50vw; } }
-      @media (max-width: 540px) { :root { --sidebar-w: 100vw; } }
-      #sidebar { left: auto; right: 0; width: var(--sidebar-w); border-left: 0; transform: translateX(100%); }
-      .wrap { transition: transform 600ms cubic-bezier(0.56, -0.44, 0.44, 1.485); will-change: transform; }
-      body.sidebar-open .wrap { transform: translateX(calc(-1 * var(--sidebar-w))); }
-      .close-sidebar { display: none; }
-      .hamburger { z-index: 1200; }
-      .hamburger span { transition: transform 220ms ease, opacity 160ms ease; transform-origin: center; }
-      .hamburger.is-open span:nth-child(1) { transform: translateY(8px) rotate(45deg); }
-      .hamburger.is-open span:nth-child(2) { opacity: 0; }
-      .hamburger.is-open span:nth-child(3) { transform: translateY(-8px) rotate(-45deg); }
-    </style>
-  </head>
-  <body>
-    <button
-      class="hamburger"
-      id="hamburger"
-      aria-label="Open menu"
-      aria-controls="sidebar"
-      aria-expanded="false"
-    >
-      <span></span>
-      <span></span>
-      <span></span>
-    </button>
-    <aside id="sidebar" class="" aria-hidden="true">
-      <div data-sidebar-partial></div>
-    </aside>
-    <div id="sidebar-overlay" hidden></div>
-    <main class="wrap" id="page">
-      <p class="kicker">portfolio</p>
 
-      <!-- Filter Nav -->
-      <nav class="filter-bar" aria-label="Portfolio filters">
-        <button class="filter-btn" data-filter="all" aria-pressed="true">
-          all
-        </button>
-        <button class="filter-btn" data-filter="games">games</button>
-        <button class="filter-btn" data-filter="engineering">engineering</button>
-        <button class="filter-btn" data-filter="arts">arts</button>
-      </nav>
+      .sidebar-section ul {
+        padding-left: 16px;
+      }
 
-      <!-- Gallery -->
-      <section class="gallery" id="portfolio-grid">
-        <!-- Portfolio items will be dynamically populated from portfolio-data.json -->
-        <!-- Loading state -->
-        <div class="loading-state">
-          <p>Loading portfolio...</p>
-        </div>
-      </section>
-    </main>
+      .sidebar-section h3 {
+        font-size: 14px;
+      }
 
-    <script src="/public/assets/js/sidebar.js"></script>
-    <script src="js/portfolio-renderer.js"></script>
-  </body>
+      .sidebar-section p,
+      .sidebar-section li {
+        font-size: 13.2px;
+        line-height: 1.55;
+      }
+    }
+  </style>
+  <style>
+    /* Sidebar behavior overrides: width, right slide, scroll lock, hamburger morph */
+    :root {
+      --sidebar-w: clamp(320px, 85vw, 560px);
+    }
+
+    @media (min-width: 1024px) {
+      :root {
+        --sidebar-w: 50vw;
+      }
+    }
+
+    @media (max-width: 540px) {
+      :root {
+        --sidebar-w: 100vw;
+      }
+    }
+
+    #sidebar {
+      left: auto;
+      right: 0;
+      width: var(--sidebar-w);
+      border-left: 0;
+      transform: translateX(100%);
+    }
+
+    .wrap {
+      transition: transform 600ms cubic-bezier(0.56, -0.44, 0.44, 1.485);
+      will-change: transform;
+    }
+
+    body.sidebar-open .wrap {
+      transform: translateX(calc(-1 * var(--sidebar-w)));
+    }
+
+    .close-sidebar {
+      display: none;
+    }
+
+    .hamburger {
+      z-index: 1200;
+    }
+
+    .hamburger span {
+      transition: transform 220ms ease, opacity 160ms ease;
+      transform-origin: center;
+    }
+
+    .hamburger.is-open span:nth-child(1) {
+      transform: translateY(8px) rotate(45deg);
+    }
+
+    .hamburger.is-open span:nth-child(2) {
+      opacity: 0;
+    }
+
+    .hamburger.is-open span:nth-child(3) {
+      transform: translateY(-8px) rotate(-45deg);
+    }
+  </style>
+</head>
+
+<body>
+  <button class="hamburger" id="hamburger" aria-label="Open menu" aria-controls="sidebar" aria-expanded="false">
+    <span></span>
+    <span></span>
+    <span></span>
+  </button>
+  <aside id="sidebar" class="" aria-hidden="true">
+    <div data-sidebar-partial></div>
+  </aside>
+  <div id="sidebar-overlay" hidden></div>
+  <main class="wrap" id="page">
+    <p class="kicker">portfolio</p>
+
+    <!-- Filter Nav -->
+    <nav class="filter-bar" aria-label="Portfolio filters">
+      <button class="filter-btn" data-filter="all" aria-pressed="true">
+        all
+      </button>
+      <button class="filter-btn" data-filter="games">games</button>
+      <button class="filter-btn" data-filter="engineering">engineering</button>
+      <button class="filter-btn" data-filter="arts">arts</button>
+    </nav>
+
+    <!-- Gallery -->
+    <section class="gallery" id="portfolio-grid">
+      <!-- Portfolio items will be dynamically populated from portfolio-data.json -->
+      <!-- Loading state -->
+      <div class="loading-state">
+        <p>Loading portfolio...</p>
+      </div>
+    </section>
+  </main>
+
+  <script src="/public/assets/js/sidebar.js"></script>
+  <script src="js/portfolio-renderer.js"></script>
+</body>
+
 </html>
