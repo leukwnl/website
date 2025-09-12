@@ -378,8 +378,8 @@
       body.sidebar-open .wrap { transform: translateX(calc(-1 * var(--sidebar-w))); }
       .sidebar-header { display:none; }
       .sidebar-section { padding: 18px 20px 22px; }
-      .sidebar-section h3 { margin: 0 0 10px; font-size: clamp(14px, 3.8vw, 16px); }
-      .sidebar-section p, .sidebar-section li { color: var(--muted); line-height: 1.65; font-size: clamp(14px, 3.9vw, 15.5px); }
+      .sidebar-section h3 { margin: 0 0 10px; font-size: clamp(13.5px, 3.4vw, 15.5px); }
+      .sidebar-section p, .sidebar-section li { color: var(--muted); line-height: 1.6; font-size: clamp(13px, 3.5vw, 15px); }
       .sidebar-section ul { margin: 10px 0 0; padding-left: 18px; }
 
       /* About layout: avatar left, text wraps right then continues below */
@@ -399,6 +399,8 @@
         :root { --sidebar-w: min(92vw, 560px); }
         #sidebar { padding: 74px 18px 22px; }
         .sidebar-section ul { padding-left: 16px; }
+        .sidebar-section h3 { font-size: 14px; }
+        .sidebar-section p, .sidebar-section li { font-size: 13.2px; line-height: 1.55; }
       }
     </style>
     <style>
@@ -428,34 +430,36 @@
       <span></span>
     </button>
     <aside id="sidebar" class="" aria-hidden="true">
-      <div class="sidebar-header">
-        <h2 class="sidebar-title">Menu</h2>
-        <button class="close-sidebar" id="close-sidebar" aria-label="Close menu">×</button>
-      </div>
-      <section class="sidebar-section">
-        <div class="about-block">
-          <img class="about-avatar" src="/content/headshot.png" alt="Luke headshot placeholder" />
-          <p class="about-meta">
-            I’m Luke. I design and build interactive experiences — games,
-            performant web apps, and creative tools. I like shipping polished,
-            readable code and delightful UI.
-          </p>
+      <div class="sidebar-content">
+        <div class="sidebar-header">
+          <h2 class="sidebar-title">Menu</h2>
+          <button class="close-sidebar" id="close-sidebar" aria-label="Close menu">×</button>
         </div>
-      </section>
-      <section class="sidebar-section">
-        <h3>Experience</h3>
-        <ul>
-          <li>Trigger Happy — mobile multiplayer prototype</li>
-          <li>Interactive TRPG portfolio site (TypeScript)</li>
-          <li>RAG platform work — production-grade pipelines</li>
-        </ul>
-      </section>
-      <section class="sidebar-section">
-        <h3>Contact</h3>
-        <p>
-          Email: <a href="mailto:hello@lukeleh.com">hello@lukeleh.com</a>
-        </p>
-      </section>
+        <section class="sidebar-section">
+          <div class="bio">
+            <img class="bio-image" src="/content/headshot.png" alt="Luke headshot placeholder" />
+            <p>
+              I’m Luke. I design and build interactive experiences — games,
+              performant web apps, and creative tools. I like shipping polished,
+              readable code and delightful UI.
+            </p>
+          </div>
+        </section>
+        <section class="sidebar-section">
+          <h3>Experience</h3>
+          <ul>
+            <li>Trigger Happy — mobile multiplayer prototype</li>
+            <li>Interactive TRPG portfolio site (TypeScript)</li>
+            <li>RAG platform work — production-grade pipelines</li>
+          </ul>
+        </section>
+        <section class="sidebar-section">
+          <h3>Contact</h3>
+          <p>
+            Email: <a href="mailto:hello@lukeleh.com">hello@lukeleh.com</a>
+          </p>
+        </section>
+      </div>
     </aside>
     <div id="sidebar-overlay" hidden></div>
     <main class="wrap" id="page">
