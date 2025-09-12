@@ -315,7 +315,7 @@
       }
     </style>
     <style>
-      :root { --sidebar-w: clamp(320px, 78vw, 560px); }
+      :root { --sidebar-w: clamp(320px, 85vw, 560px); }
       /* Hamburger + Sidebar */
       .hamburger {
         position: fixed;
@@ -384,7 +384,7 @@
         width: var(--sidebar-w);
         height: 100%;
         background: var(--page-bg);
-        padding: 88px 28px 28px;
+        padding: 88px 24px 28px;
         transform: translateX(100%);
         transition: transform 600ms cubic-bezier(0.56, -0.44, 0.44, 1.485);
         z-index: 1002;
@@ -409,8 +409,8 @@
       .bio { display: flow-root; }
       .bio-image { float: left; width: clamp(96px, 34vw, 160px); height: auto; border-radius: 8px; background: #e9e9e9; margin: 2px 14px 10px 0; object-fit: cover; }
       @media (max-width: 540px) {
-        :root { --sidebar-w: min(92vw, 560px); }
-        #sidebar { padding: 74px 18px 22px; }
+        :root { --sidebar-w: 100vw; }
+        #sidebar { padding: 74px 20px 22px; }
         .sidebar-section ul { padding-left: 16px; }
         .sidebar-section h3 { font-size: 14px; }
         .sidebar-section p, .sidebar-section li { font-size: 13.2px; line-height: 1.55; }
