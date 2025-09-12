@@ -410,6 +410,8 @@
     <style>
       /* Sidebar behavior overrides: width, right slide, scroll lock, hamburger morph */
       :root { --sidebar-w: clamp(320px, 85vw, 560px); }
+      @media (min-width: 1024px) { :root { --sidebar-w: 50vw; } }
+      @media (max-width: 540px) { :root { --sidebar-w: 100vw; } }
       #sidebar { left: auto; right: 0; width: var(--sidebar-w); border-left: 0; transform: translateX(100%); }
       .wrap { transition: transform 600ms cubic-bezier(0.56, -0.44, 0.44, 1.485); will-change: transform; }
       body.sidebar-open .wrap { transform: translateX(calc(-1 * var(--sidebar-w))); }
