@@ -11,7 +11,7 @@
             "title": "Trigger Happy",
             "description": "A Real-time 6v6 card shooter built on a custom engine for iOS and Android. Some of my best work.",
             "thumbnail": {
-                "src": "/assets/thumbs/trigger-happy.png",
+                "src": "/public/images/thumbs/trigger-happy.png",
                 "alt": "Trigger My Happy"
             },
             "categories": [
@@ -44,7 +44,7 @@
             "title": "Knead for Speed",
             "description": "A quirky top-down Stealth-Puzzler built with Java/LibGDX. The first game I made throughout my career.",
             "thumbnail": {
-                "src": "/assets/thumbs/knead-for-speed.png",
+                "src": "/public/images/thumbs/knead-for-speed.png",
                 "alt": "Cookie Bois on the Run"
             },
             "categories": [
@@ -66,7 +66,7 @@
             "title": "Loop De Coop",
             "description": "An Pokemon Ranger inspired game built with Unity. Made for the GMTK Game Jam 2025.",
             "thumbnail": {
-                "src": "/assets/thumbs/loop.png",
+                "src": "/public/images/thumbs/loop.png",
                 "alt": "Lint Eastwood"
             },
             "categories": [
@@ -91,7 +91,7 @@
             "title": "Ambrosia",
             "description": "A bullet-hell game built with Godot. Made for Godot Wild Jam 84 with the theme of 'Critters'.",
             "thumbnail": {
-                "src": "/assets/thumbs/ambrosia.png",
+                "src": "/public/images/thumbs/ambrosia.png",
                 "alt": "NECTAR"
             },
             "categories": [
@@ -142,7 +142,7 @@
             "title": "Grub Bug",
             "description": "A chaotic action-driving game built with Unity. Showcased at the Syracuse Maker Faire 2025, second game made with Cornell DGA.",
             "thumbnail": {
-                "src": "/assets/thumbs/grub-bug.png",
+                "src": "/public/images/thumbs/grub-bug.png",
                 "alt": "Grubbing and Buggin'"
             },
             "categories": [
@@ -168,7 +168,7 @@
             "title": "Tilly's Critter Command",
             "description": "A cozy 2.5D Real-Time Strategy game built with Unity. Showcased at PAX East 2025, first game made with Cornell DGA.",
             "thumbnail": {
-                "src": "/assets/thumbs/tcc.png",
+                "src": "/public/images/thumbs/tcc.png",
                 "alt": "Critting and Commanding"
             },
             "categories": [
