@@ -65,7 +65,7 @@ html.no-scroll, body.no-scroll { overflow: hidden; }
 
 
 /* Example layout wrapper and bio styles from reference */
-#sidebar .sidebar-content { background: #fff; max-width: 600px; margin: 0 auto; z-index: 9999; }
+#sidebar .sidebar-content { background: var(--page-bg); max-width: 600px; margin: 0 auto; z-index: 9999; }
 .bio { display: flow-root; }
 .bio-image { float: left; width: clamp(96px, 34vw, 160px); height: auto; border-radius: 8px; background: #e9e9e9; margin: 2px 14px 10px 0; object-fit: cover; }
 .nav-menu { list-style: none; padding: 0; margin: 0 0 16px; display: flex; gap: 16px; flex-wrap: wrap; }
