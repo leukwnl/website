@@ -1,483 +1,566 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Trigger Happy — Case Study</title>
 
-    <link
-      href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600&family=IBM+Plex+Mono:wght@400;600&display=swap"
-      rel="stylesheet"
-    />
-    <link rel="stylesheet" href="/public/assets/css/sidebar.css" />
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Trigger Happy — Case Study</title>
 
-    <style>
-      :root {
-        --font-ui: "Space Grotesk", system-ui, -apple-system, "Segoe UI", Roboto,
-          Helvetica, Arial, sans-serif;
-        --font-mono: "IBM Plex Mono", ui-monospace, SFMono-Regular, Menlo,
-          Consolas, monospace;
+  <link
+    href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600&family=IBM+Plex+Mono:wght@400;600&display=swap"
+    rel="stylesheet" />
+  <link rel="stylesheet" href="/public/assets/css/sidebar.css" />
 
-        --page-bg: #fefdf8;
-        --ink: #111;
-        --muted: #505050;
-        --rule: #e8e5dd;
-        --wrap: 1100px;
-        --pad-x: 22px;
-      }
+  <style>
+    :root {
+      --font-ui: "Space Grotesk", system-ui, -apple-system, "Segoe UI", Roboto,
+        Helvetica, Arial, sans-serif;
+      --font-mono: "IBM Plex Mono", ui-monospace, SFMono-Regular, Menlo,
+        Consolas, monospace;
 
-      * {
-        box-sizing: border-box;
-      }
-      html,
-      body {
-        height: 100%;
-      }
-      body {
-        margin: 0;
-        background: var(--page-bg);
-        color: var(--ink);
-        font-family: var(--font-ui);
-        -webkit-font-smoothing: antialiased;
-        -moz-osx-font-smoothing: grayscale;
-      }
+      --page-bg: #fefdf8;
+      --ink: #111;
+      --muted: #505050;
+      --rule: #e8e5dd;
+      --wrap: 1100px;
+      --pad-x: 22px;
+    }
 
+    * {
+      box-sizing: border-box;
+    }
+
+    html,
+    body {
+      height: 100%;
+    }
+
+    body {
+      margin: 0;
+      background: var(--page-bg);
+      color: var(--ink);
+      font-family: var(--font-ui);
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+
+    .wrap {
+      max-width: var(--wrap);
+      margin: 24px auto 80px;
+      padding: 0 var(--pad-x);
+      display: flex;
+      gap: 40px;
+      align-items: flex-start;
+    }
+
+    .toc {
+      position: sticky;
+      top: 80px;
+      width: 200px;
+      flex-shrink: 0;
+      height: fit-content;
+    }
+
+    .toc-title {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--muted);
+      margin: 0 0 12px 0;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .toc-list {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+
+    .toc-item {
+      margin: 0;
+    }
+
+    .toc-link {
+      display: block;
+      padding: 6px 12px;
+      color: var(--muted);
+      text-decoration: none;
+      font-size: 14px;
+      line-height: 1.3;
+      border-radius: 4px;
+      transition: all 0.15s ease;
+      position: relative;
+    }
+
+    .toc-link:hover {
+      color: var(--ink);
+      background: rgba(0, 0, 0, 0.04);
+    }
+
+    .toc-link.active {
+      color: var(--ink);
+      background: rgba(0, 0, 0, 0.06);
+      font-weight: 500;
+    }
+
+    .main-content {
+      flex: 1;
+      max-width: 700px;
+      min-width: 0;
+    }
+
+    @media (max-width: 900px) {
       .wrap {
-        max-width: var(--wrap);
-        margin: 24px auto 80px;
-        padding: 0 var(--pad-x);
-        display: flex;
-        gap: 40px;
-        align-items: flex-start;
+        flex-direction: column;
+        gap: 20px;
       }
 
       .toc {
-        position: sticky;
-        top: 80px;
-        width: 200px;
-        flex-shrink: 0;
-        height: fit-content;
-      }
-
-      .toc-title {
-        font-size: 13px;
-        font-weight: 600;
-        color: var(--muted);
-        margin: 0 0 12px 0;
-        text-transform: uppercase;
-        letter-spacing: 0.05em;
+        position: static;
+        width: 100%;
+        order: -1;
+        background: transparent;
+        padding: 0;
+        border-radius: 0;
+        border: none;
       }
 
       .toc-list {
-        list-style: none;
-        margin: 0;
-        padding: 0;
-        display: flex;
-        flex-direction: column;
-        gap: 2px;
-      }
-
-      .toc-item {
-        margin: 0;
+        flex-direction: row;
+        flex-wrap: wrap;
+        gap: 8px;
       }
 
       .toc-link {
-        display: block;
-        padding: 6px 12px;
-        color: var(--muted);
-        text-decoration: none;
-        font-size: 14px;
-        line-height: 1.3;
-        border-radius: 4px;
-        transition: all 0.15s ease;
-        position: relative;
-      }
-
-      .toc-link:hover {
-        color: var(--ink);
-        background: rgba(0, 0, 0, 0.04);
-      }
-
-      .toc-link.active {
-        color: var(--ink);
-        background: rgba(0, 0, 0, 0.06);
-        font-weight: 500;
-      }
-
-      .main-content {
-        flex: 1;
-        max-width: 700px;
-        min-width: 0;
-      }
-
-      @media (max-width: 900px) {
-        .wrap {
-          flex-direction: column;
-          gap: 20px;
-        }
-        
-        .toc {
-          position: static;
-          width: 100%;
-          order: -1;
-          background: transparent;
-          padding: 0;
-          border-radius: 0;
-          border: none;
-        }
-        
-        .toc-list {
-          flex-direction: row;
-          flex-wrap: wrap;
-          gap: 8px;
-        }
-        
-        .toc-link {
-          padding: 4px 8px;
-          font-size: 13px;
-        }
-      }
-
-      .topbar {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        gap: 12px;
-        margin-bottom: 10px;
-      }
-      .back-link {
-        display: inline-flex;
-        align-items: center;
-        gap: 8px;
-        text-decoration: none;
-        color: var(--ink);
-        font-weight: 600;
-      }
-      .back-link:hover {
-        text-decoration: underline;
-      }
-
-      .kicker {
-        font-family: var(--font-ui);
-        font-size: 14px;
-        letter-spacing: 0.14em;
-        text-transform: uppercase;
-        color: #2c2c2c;
-        margin: 8px 0 14px;
-      }
-
-      .hero {
-        position: relative;
-        width: 100%;
-        aspect-ratio: 16/9;
-        background: #e7e7e7;
-        overflow: hidden;
-        border-radius: 0;
-      }
-      .hero img {
-        position: absolute;
-        inset: 0;
-        width: 100%;
-        height: 100%;
-        object-fit: cover;
-        transform: scale(1.02);
-      }
-
-      .page-title {
-        margin: 18px 0 6px;
-        font-size: clamp(28px, 5vw, 44px);
-        line-height: 1.1;
-        letter-spacing: 0.2px;
-      }
-      .meta {
-        margin: 0 0 18px 0;
-        color: var(--muted);
-        font-family: var(--font-mono);
+        padding: 4px 8px;
         font-size: 13px;
       }
+    }
 
-      .prose {
-        background: transparent;
-        padding: 0;
-      }
-      .prose h1,
-      .prose h2,
-      .prose h3,
-      .prose h4,
-      .prose h5,
-      .prose h6 {
-        line-height: 1.25;
-        margin: 1.2rem 0 0.6rem;
-      }
-      .prose p {
-        margin: 0 0 1.1rem;
-        line-height: 1.65;
-        color: #2b2b2b;
-      }
-      .prose h2 {
-        font-size: 22px;
-      }
-      .prose ul,
-      .prose ol {
-        padding-left: 1.2rem;
-        margin: 0 0 1rem;
-      }
-      .prose li {
-        margin: 0.3rem 0;
-      }
-      .prose blockquote {
-        border-left: 3px solid var(--rule);
-        margin: 0 0 1rem;
-        padding: 0.25rem 0 0.25rem 0.9rem;
-        color: #3a3a3a;
-        background: transparent;
-        font-style: italic;
-      }
-      .prose code {
-        font-family: var(--font-mono);
-        background: rgba(0, 0, 0, 0.04);
-        border: none;
-        padding: 0.1rem 0.3rem;
-        border-radius: 3px;
-        font-size: 0.95em;
-      }
-      .prose pre code {
-        display: block;
-        padding: 16px;
-        overflow-x: auto;
-        background: #0f1115;
-        color: #e8e8f0;
-        border: none;
-        border-radius: 4px;
-      }
-      .prose img {
-        max-width: 100%;
-        height: auto;
-        display: block;
-        margin: 10px 0;
-        border: 1px solid var(--rule);
-        border-radius: 4px;
-      }
-      .rule {
-        border-top: 1px solid var(--rule);
-        margin: 22px 0;
-      }
+    .topbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 10px;
+    }
 
+    .back-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      text-decoration: none;
+      color: var(--ink);
+      font-weight: 600;
+    }
+
+    .back-link:hover {
+      text-decoration: underline;
+    }
+
+    .kicker {
+      font-family: var(--font-ui);
+      font-size: 14px;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: #2c2c2c;
+      margin: 8px 0 14px;
+    }
+
+    .hero {
+      position: relative;
+      width: 100%;
+      aspect-ratio: 16/9;
+      background: #e7e7e7;
+      overflow: hidden;
+      border-radius: 0;
+    }
+
+    .hero img {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transform: scale(1.02);
+    }
+
+    .page-title {
+      margin: 18px 0 6px;
+      font-size: clamp(28px, 5vw, 44px);
+      line-height: 1.1;
+      letter-spacing: 0.2px;
+    }
+
+    .meta {
+      margin: 0 0 18px 0;
+      color: var(--muted);
+      font-family: var(--font-mono);
+      font-size: 13px;
+    }
+
+    .prose {
+      background: transparent;
+      padding: 0;
+    }
+
+    .prose h1,
+    .prose h2,
+    .prose h3,
+    .prose h4,
+    .prose h5,
+    .prose h6 {
+      line-height: 1.25;
+      margin: 1.2rem 0 0.6rem;
+    }
+
+    .prose p {
+      margin: 0 0 1.1rem;
+      line-height: 1.65;
+      color: #2b2b2b;
+    }
+
+    .prose h2 {
+      font-size: 22px;
+    }
+
+    .prose ul,
+    .prose ol {
+      padding-left: 1.2rem;
+      margin: 0 0 1rem;
+    }
+
+    .prose li {
+      margin: 0.3rem 0;
+    }
+
+    .prose blockquote {
+      border-left: 3px solid var(--rule);
+      margin: 0 0 1rem;
+      padding: 0.25rem 0 0.25rem 0.9rem;
+      color: #3a3a3a;
+      background: transparent;
+      font-style: italic;
+    }
+
+    .prose code {
+      font-family: var(--font-mono);
+      background: rgba(0, 0, 0, 0.04);
+      border: none;
+      padding: 0.1rem 0.3rem;
+      border-radius: 3px;
+      font-size: 0.95em;
+    }
+
+    .prose pre code {
+      display: block;
+      padding: 16px;
+      overflow-x: auto;
+      background: #0f1115;
+      color: #e8e8f0;
+      border: none;
+      border-radius: 4px;
+    }
+
+    .prose img {
+      max-width: 100%;
+      height: auto;
+      display: block;
+      margin: 10px 0;
+      border: 1px solid var(--rule);
+      border-radius: 4px;
+    }
+
+    .rule {
+      border-top: 1px solid var(--rule);
+      margin: 22px 0;
+    }
+
+    .info-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 14px;
+      margin: 14px 0 6px;
+    }
+
+    @media (min-width: 860px) {
       .info-grid {
-        display: grid;
-        grid-template-columns: 1fr;
-        gap: 14px;
-        margin: 14px 0 6px;
+        grid-template-columns: 1fr 1fr;
       }
-      @media (min-width: 860px) {
-        .info-grid {
-          grid-template-columns: 1fr 1fr;
-        }
-      }
-        .info-card {
-        background: transparent;
-        border: none;
-        border-radius: 0;
-        padding: 12px 0;
-      }
-      .info-card h3 {
-        margin: 0 0 6px;
-        font-size: 16px;
-      }
-      .info-card p {
-        margin: 0;
-        color: var(--muted);
-      }
+    }
 
-      .cta-bar {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 12px;
-        margin-top: 18px;
-      }
-      .btn {
-        font-family: var(--font-ui);
-        font-weight: 600;
-        font-size: 12px;
-        letter-spacing: 0.08em;
-        text-transform: uppercase;
-        text-decoration: none;
-        color: var(--ink);
-        background: #fff;
-        border: 1px solid var(--ink);
-        border-radius: 4px;
-        display: inline-block;
-        padding: 10px 14px;
-        width: max-content;
-      }
-      .btn:hover {
-        text-decoration: underline;
-      }
-    </style>
-    <style>
-      :root { --sidebar-w: clamp(320px, 85vw, 560px); }
-      /* Hamburger + Sidebar */
-      .hamburger {
-        position: fixed;
-        top: 16px;
-        right: 16px;
-        z-index: 1200;
-        width: 42px;
-        height: 36px;
-        padding: 8px;
-        background: transparent;
-        color: var(--ink);
-        border: none;
-        border-radius: 6px;
-        display: grid;
-        gap: 6px;
-        align-content: center;
-        cursor: pointer;
-        transition: all 0.2s ease;
-      }
-      .hamburger span {
-        display: block;
-        height: 2px;
-        background: var(--ink);
-      }
-      .hamburger:hover {
-        background: rgba(0, 0, 0, 0.04);
-      }
-      .hamburger:focus-visible {
-        outline: 2px solid var(--ink);
-        outline-offset: 2px;
-      }
+    .info-card {
+      background: transparent;
+      border: none;
+      border-radius: 0;
+      padding: 12px 0;
+    }
 
-      #sidebar-overlay {
-        position: fixed;
-        inset: 0;
-        background: transparent;
-        z-index: 1000;
-        opacity: 0;
-        pointer-events: none;
-        transition: opacity 0.2s ease;
-      }
-      #sidebar-overlay.show {
-        opacity: 1;
-        pointer-events: auto;
-      }
-      
-      /* Dim content when sidebar is open, but keep background seamless */
-      body.sidebar-open .wrap {
-        position: relative;
-      }
-      body.sidebar-open .wrap::before {
-        content: '';
-        position: absolute;
-        inset: 0;
-        background: rgba(255, 255, 255, 0.6);
-        z-index: 10;
-        pointer-events: none;
+    .info-card h3 {
+      margin: 0 0 6px;
+      font-size: 16px;
+    }
+
+    .info-card p {
+      margin: 0;
+      color: var(--muted);
+    }
+
+    .cta-bar {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-top: 18px;
+    }
+
+    .btn {
+      font-family: var(--font-ui);
+      font-weight: 600;
+      font-size: 12px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      text-decoration: none;
+      color: var(--ink);
+      background: #fff;
+      border: 1px solid var(--ink);
+      border-radius: 4px;
+      display: inline-block;
+      padding: 10px 14px;
+      width: max-content;
+    }
+
+    .btn:hover {
+      text-decoration: underline;
+    }
+  </style>
+  <style>
+    :root {
+      --sidebar-w: clamp(320px, 85vw, 560px);
+    }
+
+    /* Hamburger + Sidebar */
+    .hamburger {
+      position: fixed;
+      top: 16px;
+      right: 16px;
+      z-index: 1200;
+      width: 42px;
+      height: 36px;
+      padding: 8px;
+      background: transparent;
+      color: var(--ink);
+      border: none;
+      border-radius: 6px;
+      display: grid;
+      gap: 6px;
+      align-content: center;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .hamburger span {
+      display: block;
+      height: 2px;
+      background: var(--ink);
+    }
+
+    .hamburger:hover {
+      background: rgba(0, 0, 0, 0.04);
+    }
+
+    .hamburger:focus-visible {
+      outline: 2px solid var(--ink);
+      outline-offset: 2px;
+    }
+
+    #sidebar-overlay {
+      position: fixed;
+      inset: 0;
+      background: transparent;
+      z-index: 1000;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.2s ease;
+    }
+
+    #sidebar-overlay.show {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    /* Dim content when sidebar is open, but keep background seamless */
+    body.sidebar-open .wrap {
+      position: relative;
+    }
+
+    body.sidebar-open .wrap::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: rgba(255, 255, 255, 0.6);
+      z-index: 10;
+      pointer-events: none;
+    }
+
+    #sidebar {
+      position: fixed;
+      top: 0;
+      left: auto;
+      right: 0;
+      bottom: 0;
+      width: var(--sidebar-w);
+      height: 100%;
+      background: var(--page-bg);
+      padding: 108px 60px 60px;
+      transform: translateX(100%);
+      transition: transform 600ms cubic-bezier(0.56, -0.44, 0.44, 1.485);
+      z-index: 1002;
+      display: block;
+      overflow-y: auto;
+      overflow-x: hidden;
+      border-left: 0;
+    }
+
+    @media (min-width: 1024px) {
+      :root {
+        --sidebar-w: 50vw;
       }
 
       #sidebar {
-        position: fixed;
-        top: 0;
-        left: auto;
-        right: 0;
-        bottom: 0;
-        width: var(--sidebar-w);
-        height: 100%;
-        background: var(--page-bg);
-        padding: 108px 60px 60px;
-        transform: translateX(100%);
-        transition: transform 600ms cubic-bezier(0.56, -0.44, 0.44, 1.485);
-        z-index: 1002;
-        display: block;
-        overflow-y: auto;
-        overflow-x: hidden;
-        border-left: 0;
+        padding: 108px 90px 60px 40px;
       }
-      @media (min-width: 1024px) {
-        :root { --sidebar-w: 50vw; }
-        #sidebar { padding: 108px 90px 60px 40px; }
+    }
+
+    #sidebar.is-open {
+      transform: translateX(0);
+    }
+
+    /* Push page left when sidebar is open */
+    .wrap {
+      transition: transform 600ms cubic-bezier(0.56, -0.44, 0.44, 1.485);
+      will-change: transform;
+    }
+
+    body.sidebar-open .wrap {
+      transform: translateX(calc(-1 * var(--sidebar-w)));
+    }
+
+    .sidebar-header {
+      display: none;
+    }
+
+    .sidebar-section {
+      padding: 18px 20px 22px;
+    }
+
+    .sidebar-section h3 {
+      margin: 0 0 10px;
+      font-size: clamp(13.5px, 3.4vw, 15.5px);
+    }
+
+    .sidebar-section p,
+    .sidebar-section li {
+      color: var(--muted);
+      line-height: 1.6;
+      margin: 0 0 18px;
+      font-size: clamp(13px, 3.5vw, 15px);
+    }
+
+    .sidebar-section ul {
+      margin: 10px 0 0;
+      padding-left: 18px;
+    }
+
+    /* About layout: avatar left, text wraps right then continues below */
+    .bio {
+      display: flow-root;
+    }
+
+    .bio-image {
+      float: left;
+      width: clamp(96px, 34vw, 160px);
+      height: auto;
+      border-radius: 0;
+      background: #e9e9e9;
+      margin: 2px 14px 10px 0;
+      object-fit: cover;
+    }
+
+    @media (max-width: 540px) {
+      :root {
+        --sidebar-w: 100vw;
       }
-      #sidebar.is-open {
-        transform: translateX(0);
+
+      #sidebar {
+        padding: 74px 20px 22px;
       }
-      /* Push page left when sidebar is open */
-      .wrap { transition: transform 600ms cubic-bezier(0.56, -0.44, 0.44, 1.485); will-change: transform; }
-      body.sidebar-open .wrap { transform: translateX(calc(-1 * var(--sidebar-w))); }
-      .sidebar-header { display:none; }
-      .sidebar-section { padding: 18px 20px 22px; }
-      .sidebar-section h3 { margin: 0 0 10px; font-size: clamp(13.5px, 3.4vw, 15.5px); }
-      .sidebar-section p, .sidebar-section li { color: var(--muted); line-height: 1.6; margin: 0 0 18px; font-size: clamp(13px, 3.5vw, 15px); }
-      .sidebar-section ul { margin: 10px 0 0; padding-left: 18px; }
 
-      /* About layout: avatar left, text wraps right then continues below */
-      .bio { display: flow-root; }
-      .bio-image { float: left; width: clamp(96px, 34vw, 160px); height: auto; border-radius: 0; background: #e9e9e9; margin: 2px 14px 10px 0; object-fit: cover; }
-      @media (max-width: 540px) {
-        :root { --sidebar-w: 100vw; }
-        #sidebar { padding: 74px 20px 22px; }
-        .sidebar-section ul { padding-left: 16px; }
-        .sidebar-section h3 { font-size: 14px; }
-        .sidebar-section p, .sidebar-section li { font-size: 13.2px; line-height: 1.55; }
+      .sidebar-section ul {
+        padding-left: 16px;
       }
-    </style>
-  </head>
-  <body>
-    <button
-      class="hamburger"
-      id="hamburger"
-      aria-label="Open menu"
-      aria-controls="sidebar"
-      aria-expanded="false"
-    >
-      <span></span>
-      <span></span>
-      <span></span>
-    </button>
-    <aside id="sidebar" class="" aria-hidden="true">
-      <div data-sidebar-partial></div>
-    </aside>
-    <div id="sidebar-overlay" hidden></div>
-    <main class="wrap" id="page">
-      <nav class="toc" aria-label="Table of contents">
-        <h2 class="toc-title">Contents</h2>
-        <ul class="toc-list">
-          <li class="toc-item">
-            <a href="#overview" class="toc-link">Overview</a>
-          </li>
-          <li class="toc-item">
-            <a href="#goals" class="toc-link">Goals</a>
-          </li>
-          <li class="toc-item">
-            <a href="#highlights" class="toc-link">Highlights</a>
-          </li>
-          <li class="toc-item">
-            <a href="#technical-breakdown" class="toc-link">Technical Breakdown</a>
-          </li>
-          <li class="toc-item">
-            <a href="#next-steps" class="toc-link">What I'd Write Up Next</a>
-          </li>
-        </ul>
-      </nav>
 
-      <div class="main-content">
-        <div class="topbar">
-          <a class="back-link" href="index.html" aria-label="Back to portfolio"
-            >← Back</a
-          >
-        </div>
+      .sidebar-section h3 {
+        font-size: 14px;
+      }
 
-        <p class="kicker">case study</p>
-        <h1 class="page-title">Trigger Happy — Mobile Multiplayer</h1>
-        <p class="meta">Prototype • Mobile • Real‑time Multiplayer • 2024</p>
+      .sidebar-section p,
+      .sidebar-section li {
+        font-size: 13.2px;
+        line-height: 1.55;
+      }
+    }
+  </style>
+</head>
 
-        <div class="hero">
-          <img
-            src="/public/images/thumbs/trigger-happy.png"
-            alt="Trigger Happy hero"
-          />
-        </div>
+<body>
+  <button class="hamburger" id="hamburger" aria-label="Open menu" aria-controls="sidebar" aria-expanded="false">
+    <span></span>
+    <span></span>
+    <span></span>
+  </button>
+  <aside id="sidebar" class="" aria-hidden="true">
+    <div data-sidebar-partial></div>
+  </aside>
+  <div id="sidebar-overlay" hidden></div>
+  <main class="wrap" id="page">
+    <nav class="toc" aria-label="Table of contents">
+      <h2 class="toc-title">Contents</h2>
+      <ul class="toc-list">
+        <li class="toc-item">
+          <a href="#overview" class="toc-link">Overview</a>
+        </li>
+        <li class="toc-item">
+          <a href="#goals" class="toc-link">Goals</a>
+        </li>
+        <li class="toc-item">
+          <a href="#highlights" class="toc-link">Highlights</a>
+        </li>
+        <li class="toc-item">
+          <a href="#technical-breakdown" class="toc-link">Technical Breakdown</a>
+        </li>
+        <li class="toc-item">
+          <a href="#next-steps" class="toc-link">What I'd Write Up Next</a>
+        </li>
+      </ul>
+    </nav>
 
-        <section class="prose" id="md-container" aria-label="Case Study Content">
+    <div class="main-content">
+      <div class="topbar">
+        <a class="back-link" href="index.html" aria-label="Back to portfolio">← Back</a>
+      </div>
+
+      <p class="kicker">case study</p>
+      <h1 class="page-title">Trigger Happy</h1>
+      <p class="meta">Mobile • iOS • Android • Multiplayer • C++ • 2025</p>
+
+      <div class="hero">
+        <img src="/public/images/thumbs/trigger-happy.png" alt="Trigger Happy hero" />
+      </div>
+
+      <section class="prose" id="md-container" aria-label="Case Study Content">
         <h2 id="overview">Overview</h2>
         <p>
           Trigger Happy is a real-time card shooter designed for phones. The
@@ -552,241 +635,211 @@
           <a class="btn" href="#">Design Notes</a>
           <a class="btn" href="#">Prototype Build</a>
         </div>
-        </section>
-      </div>
+      </section>
+    </div>
+  </main>
 
-      <!-- Inline fallback markdown (used when fetch fails or offline file://) -->
-      <script type="text/markdown" id="md-fallback">
-        # Trigger Happy — Mobile Multiplayer
+  <script src="/public/assets/js/sidebar.js"></script>
 
-        ## Overview
+  <!-- Table of Contents Navigation -->
+  <script>
+    (function () {
+      let tocLinks = [];
+      let sections = [];
 
-        Trigger Happy is a real-time card shooter designed for phones. The project explores responsive touch controls, low-latency netcode, and a compact content pipeline suitable for small teams.
+      // Generate TOC from markdown content
+      function updateTOCFromContent() {
+        const container = document.getElementById('md-container');
+        const tocList = document.querySelector('.toc-list');
+        const headings = container.querySelectorAll('h2');
 
-        ## Goals
+        // Clear existing TOC
+        tocList.innerHTML = '';
 
-        - Deliver **under-100ms** feel on mid-range devices
-        - Predictive aiming with server authority to prevent abuse
-        - Haptics and readable VFX that scale with device performance
+        // Generate new TOC items
+        headings.forEach(heading => {
+          const id = heading.id;
+          const text = heading.textContent;
 
-        ## Highlights
+          if (id && text) {
+            const li = document.createElement('li');
+            li.className = 'toc-item';
 
-        1. **Client prediction + reconciliation** to keep inputs snappy while staying deterministic across clients
-        2. **Delta-compressed snapshots** for compact state sync tuned to player density and action frequency
-        3. **Designer tooling** for card balance, cooldowns, and spawn tables with hot-reload in development
+            const a = document.createElement('a');
+            a.href = `#${id}`;
+            a.className = 'toc-link';
+            a.textContent = text;
 
-        ## Technical Breakdown
+            li.appendChild(a);
+            tocList.appendChild(li);
+          }
+        });
 
-        Networking follows a tick-based model with server-side authority. Clients predict their own movement and fire events, then reconcile on authoritative state. Lag-compensation is applied to hit scan resolution.
+        // Update references
+        tocLinks = Array.from(document.querySelectorAll('.toc-link'));
+        sections = Array.from(headings);
 
-        - Tick rate: 30Hz server, 60Hz render loop on clients
-        - Entity interpolation buffers: 100–150ms adaptive
-        - Transport: WebSocket baseline with fallback
+        // Rebind event listeners
+        setupTOCNavigation();
+      }
 
-        > Use this page to draft the full case study: design iterations, usability notes, performance captures, packet diagrams, and postmortem learnings.
-      </script>
-    </main>
-
-    <script src="/public/assets/js/sidebar.js"></script>
-    
-    <!-- Table of Contents Navigation -->
-    <script>
-      (function() {
-        let tocLinks = [];
-        let sections = [];
-        
-        // Generate TOC from markdown content
-        function updateTOCFromContent() {
-          const container = document.getElementById('md-container');
-          const tocList = document.querySelector('.toc-list');
-          const headings = container.querySelectorAll('h2');
-          
-          // Clear existing TOC
-          tocList.innerHTML = '';
-          
-          // Generate new TOC items
-          headings.forEach(heading => {
-            const id = heading.id;
-            const text = heading.textContent;
-            
-            if (id && text) {
-              const li = document.createElement('li');
-              li.className = 'toc-item';
-              
-              const a = document.createElement('a');
-              a.href = `#${id}`;
-              a.className = 'toc-link';
-              a.textContent = text;
-              
-              li.appendChild(a);
-              tocList.appendChild(li);
-            }
-          });
-          
-          // Update references
-          tocLinks = Array.from(document.querySelectorAll('.toc-link'));
-          sections = Array.from(headings);
-          
-          // Rebind event listeners
-          setupTOCNavigation();
-        }
-
-        // Setup navigation functionality
-        function setupTOCNavigation() {
-          // Smooth scrolling for TOC links
-          tocLinks.forEach(link => {
-            link.addEventListener('click', (e) => {
-              e.preventDefault();
-              const targetId = link.getAttribute('href');
-              const targetSection = document.querySelector(targetId);
-              
-              if (targetSection) {
-                const headerOffset = 80; // Account for sticky positioning
-                const elementPosition = targetSection.getBoundingClientRect().top;
-                const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
-
-                window.scrollTo({
-                  top: offsetPosition,
-                  behavior: 'smooth'
-                });
-              }
-            });
-          });
-        }
-
-        // Highlight active section on scroll
-        function updateActiveSection() {
-          if (sections.length === 0) return;
-          
-          const scrollY = window.pageYOffset;
-          const windowHeight = window.innerHeight;
-          
-          let activeSection = null;
-          let closestDistance = Infinity;
-          
-          sections.forEach(section => {
-            const rect = section.getBoundingClientRect();
-            
-            // Consider a section active if it's in the top portion of viewport
-            const threshold = windowHeight * 0.3;
-            const distance = Math.abs(rect.top - threshold);
-            
-            if (rect.top <= threshold && rect.bottom > 0 && distance < closestDistance) {
-              closestDistance = distance;
-              activeSection = section;
-            }
-          });
-
-          // Update active states
-          tocLinks.forEach(link => {
+      // Setup navigation functionality
+      function setupTOCNavigation() {
+        // Smooth scrolling for TOC links
+        tocLinks.forEach(link => {
+          link.addEventListener('click', (e) => {
+            e.preventDefault();
             const targetId = link.getAttribute('href');
-            const isActive = activeSection && targetId === `#${activeSection.id}`;
-            link.classList.toggle('active', isActive);
+            const targetSection = document.querySelector(targetId);
+
+            if (targetSection) {
+              const headerOffset = 80; // Account for sticky positioning
+              const elementPosition = targetSection.getBoundingClientRect().top;
+              const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
+
+              window.scrollTo({
+                top: offsetPosition,
+                behavior: 'smooth'
+              });
+            }
           });
-        }
+        });
+      }
 
-        // Throttled scroll listener
-        let ticking = false;
-        function onScroll() {
-          if (!ticking) {
-            requestAnimationFrame(() => {
-              updateActiveSection();
-              ticking = false;
-            });
-            ticking = true;
+      // Highlight active section on scroll
+      function updateActiveSection() {
+        if (sections.length === 0) return;
+
+        const scrollY = window.pageYOffset;
+        const windowHeight = window.innerHeight;
+
+        let activeSection = null;
+        let closestDistance = Infinity;
+
+        sections.forEach(section => {
+          const rect = section.getBoundingClientRect();
+
+          // Consider a section active if it's in the top portion of viewport
+          const threshold = windowHeight * 0.3;
+          const distance = Math.abs(rect.top - threshold);
+
+          if (rect.top <= threshold && rect.bottom > 0 && distance < closestDistance) {
+            closestDistance = distance;
+            activeSection = section;
           }
-        }
+        });
 
-        window.addEventListener('scroll', onScroll);
-        
-        // Make updateTOCFromContent available globally for the markdown renderer
-        window.updateTOCFromContent = updateTOCFromContent;
-        
-        // Initial setup with static content (fallback)
-        updateTOCFromContent();
-      })();
-    </script>
-    
-    <!-- Markdown renderer (CDN) -->
-    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
-    <script>
-      (function () {
-        const params = new URLSearchParams(location.search);
-        const mdPath = params.get("md") || "content/trigger-happy.md";
-        const container = document.getElementById("md-container");
-        const fallbackEl = document.getElementById("md-fallback");
+        // Update active states
+        tocLinks.forEach(link => {
+          const targetId = link.getAttribute('href');
+          const isActive = activeSection && targetId === `#${activeSection.id}`;
+          link.classList.toggle('active', isActive);
+        });
+      }
 
-        function dedent(text) {
-          const lines = (text || "").replace(/\r\n?/g, "\n").split("\n");
-          while (lines.length && /^\s*$/.test(lines[0])) lines.shift();
-          while (lines.length && /^\s*$/.test(lines[lines.length - 1]))
-            lines.pop();
-          let min = Infinity;
-          for (const l of lines) {
-            if (!l.trim()) continue;
-            const m = l.match(/^ +/);
-            const n = m ? m[0].length : 0;
-            min = Math.min(min, n);
-          }
-          if (!isFinite(min) || min === 0) return lines.join("\n");
-          return lines
-            .map((l) => (l.startsWith(" ".repeat(min)) ? l.slice(min) : l))
-            .join("\n");
-        }
-
-        function naive(md) {
-          // Tiny fallback if CDN is blocked: very limited MD -> HTML
-          let html = md
-            .replace(/^###\s+(.*)$/gm, "<h3>$1</h3>")
-            .replace(/^##\s+(.*)$/gm, "<h2>$1</h2>")
-            .replace(/^#\s+(.*)$/gm, "<h1>$1</h1>")
-            .replace(/^>\s?(.*)$/gm, "<blockquote>$1</blockquote>")
-            .replace(/\*\*(.*?)\*\*/g, "<strong>$1</strong>")
-            .replace(/`([^`]+)`/g, "<code>$1</code>");
-          // paragraphs (very naive; split by blank lines)
-          html = html
-            .split(/\n\s*\n/)
-            .map((blk) =>
-              /<h\d|<ul|<ol|<pre|<blockquote/.test(blk)
-                ? blk
-                : `<p>${blk.replace(/\n/g, "<br>")}</p>`
-            )
-            .join("\n");
-          return html;
-        }
-
-        function render(md) {
-          let html;
-          if (window.marked && typeof marked.parse === "function") {
-            html = marked.parse(md);
-          } else {
-            html = naive(md);
-          }
-          
-          // Add IDs to headings for navigation
-          html = html.replace(/<h2[^>]*>(.*?)<\/h2>/gi, (match, content) => {
-            const id = content.toLowerCase()
-              .replace(/[^\w\s-]/g, '') // Remove special chars
-              .replace(/\s+/g, '-') // Replace spaces with hyphens
-              .trim();
-            return `<h2 id="${id}">${content}</h2>`;
+      // Throttled scroll listener
+      let ticking = false;
+      function onScroll() {
+        if (!ticking) {
+          requestAnimationFrame(() => {
+            updateActiveSection();
+            ticking = false;
           });
-          
-          container.innerHTML = html;
-          
-          // Update TOC after content is rendered
-          updateTOCFromContent();
+          ticking = true;
         }
+      }
 
-        fetch(mdPath, { cache: "no-cache" })
-          .then((r) =>
-            r.ok ? r.text() : Promise.reject(new Error("fetch failed"))
+      window.addEventListener('scroll', onScroll);
+
+      // Make updateTOCFromContent available globally for the markdown renderer
+      window.updateTOCFromContent = updateTOCFromContent;
+
+      // Initial setup with static content (fallback)
+      updateTOCFromContent();
+    })();
+  </script>
+
+  <!-- Markdown renderer (CDN) -->
+  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+  <script>
+    (function () {
+      const params = new URLSearchParams(location.search);
+      const mdPath = params.get("md") || "content/trigger-happy.md";
+      const container = document.getElementById("md-container");
+      const fallbackEl = document.getElementById("md-fallback");
+
+      function dedent(text) {
+        const lines = (text || "").replace(/\r\n?/g, "\n").split("\n");
+        while (lines.length && /^\s*$/.test(lines[0])) lines.shift();
+        while (lines.length && /^\s*$/.test(lines[lines.length - 1]))
+          lines.pop();
+        let min = Infinity;
+        for (const l of lines) {
+          if (!l.trim()) continue;
+          const m = l.match(/^ +/);
+          const n = m ? m[0].length : 0;
+          min = Math.min(min, n);
+        }
+        if (!isFinite(min) || min === 0) return lines.join("\n");
+        return lines
+          .map((l) => (l.startsWith(" ".repeat(min)) ? l.slice(min) : l))
+          .join("\n");
+      }
+
+      function naive(md) {
+        // Tiny fallback if CDN is blocked: very limited MD -> HTML
+        let html = md
+          .replace(/^###\s+(.*)$/gm, "<h3>$1</h3>")
+          .replace(/^##\s+(.*)$/gm, "<h2>$1</h2>")
+          .replace(/^#\s+(.*)$/gm, "<h1>$1</h1>")
+          .replace(/^>\s?(.*)$/gm, "<blockquote>$1</blockquote>")
+          .replace(/\*\*(.*?)\*\*/g, "<strong>$1</strong>")
+          .replace(/`([^`]+)`/g, "<code>$1</code>");
+        // paragraphs (very naive; split by blank lines)
+        html = html
+          .split(/\n\s*\n/)
+          .map((blk) =>
+            /<h\d|<ul|<ol|<pre|<blockquote/.test(blk)
+              ? blk
+              : `<p>${blk.replace(/\n/g, "<br>")}</p>`
           )
-          .then(render)
-          .catch(() => {
-            if (fallbackEl) render(dedent(fallbackEl.textContent || ""));
-          });
-      })();
-    </script>
-  </body>
+          .join("\n");
+        return html;
+      }
+
+      function render(md) {
+        let html;
+        if (window.marked && typeof marked.parse === "function") {
+          html = marked.parse(md);
+        } else {
+          html = naive(md);
+        }
+
+        // Add IDs to headings for navigation
+        html = html.replace(/<h2[^>]*>(.*?)<\/h2>/gi, (match, content) => {
+          const id = content.toLowerCase()
+            .replace(/[^\w\s-]/g, '') // Remove special chars
+            .replace(/\s+/g, '-') // Replace spaces with hyphens
+            .trim();
+          return `<h2 id="${id}">${content}</h2>`;
+        });
+
+        container.innerHTML = html;
+
+        // Update TOC after content is rendered
+        updateTOCFromContent();
+      }
+
+      fetch(mdPath, { cache: "no-cache" })
+        .then((r) =>
+          r.ok ? r.text() : Promise.reject(new Error("fetch failed"))
+        )
+        .then(render)
+        .catch(() => {
+          if (fallbackEl) render(dedent(fallbackEl.textContent || ""));
+        });
+    })();
+  </script>
+</body>
+
 </html>

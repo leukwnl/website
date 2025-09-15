@@ -9,7 +9,7 @@
         {
             "id": "trigger-happy",
             "title": "Trigger Happy",
-            "description": "A Real-time 6v6 card shooter built on a custom engine for iOS and Android. Some of my best work.",
+            "description": "A real-time 6-player card shooter built on a custom engine for iOS and Android. Some of my best work.",
             "thumbnail": {
                 "src": "/public/images/thumbs/trigger-happy.png",
                 "alt": "Trigger My Happy"
@@ -58,7 +58,7 @@
                     "url": "#"
                 }
             ],
-            "priority": 2,
+            "priority": 4,
             "featured": true
         },
         {
@@ -109,33 +109,7 @@
                     "url": "https://teamsmirk.itch.io/ambrosia"
                 }
             ],
-            "priority": 4
-        },
-        {
-            "id": "trpg-portfolio",
-            "title": "Interactive TRPG Portfolio Website",
-            "description": "Isometric grid, camera pan/zoom, interactables, and a document dock — built in TypeScript.",
-            "thumbnail": {
-                "src": "https://images.unsplash.com/photo-1518770660439-4636190af475?q=80&w=1600&auto=format&fit=crop",
-                "alt": "This Website"
-            },
-            "categories": [
-                "games",
-                "engineering"
-            ],
-            "buttons": [
-                {
-                    "type": "link",
-                    "text": "View Site ↗",
-                    "url": "/trpg.html"
-                },
-                {
-                    "type": "github",
-                    "text": "GitHub ↗",
-                    "url": "https://github.com/username/trpg-portfolio"
-                }
-            ],
-            "priority": 8
+            "priority": 2
         },
         {
             "id": "grub-bug",
@@ -161,7 +135,7 @@
                     "url": "https://dgacornell.itch.io/grubbug"
                 }
             ],
-            "priority": 6
+            "priority": 5
         },
         {
             "id": "tillys",
@@ -187,7 +161,7 @@
                     "url": "https://dgacornell.itch.io/tillys-critter-command"
                 }
             ],
-            "priority": 7
+            "priority": 6
         }
     ]
 }
