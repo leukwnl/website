@@ -1,7 +1,7 @@
 # Case Study
 
 
->This case study is split up into 3 sections, diving deep into game design, UX design and engineering respectively. I recommend reading the whole thing, but the **Contents** on the right lets you jump wherever you like!
+>This case study is split up into 3 sections, diving deep into game design, UX design and engineering respectively. I recommend reading the whole thing, but the **Contents** on the left lets you jump to wherever you like!
 
 
 ## Overview
