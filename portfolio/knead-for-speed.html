@@ -1,0 +1,694 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Knead for Speed — Case Study</title>
+
+    <link
+        href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600&family=IBM+Plex+Mono:wght@400;600&display=swap"
+        rel="stylesheet" />
+    <link rel="stylesheet" href="/public/assets/css/sidebar.css" />
+
+    <style>
+        :root {
+            --font-ui: "Space Grotesk", system-ui, -apple-system, "Segoe UI", Roboto,
+                Helvetica, Arial, sans-serif;
+            --font-mono: "IBM Plex Mono", ui-monospace, SFMono-Regular, Menlo,
+                Consolas, monospace;
+
+            --page-bg: #fefdf8;
+            --ink: #111;
+            --muted: #505050;
+            --rule: #e8e5dd;
+            --wrap: 1100px;
+            --pad-x: 22px;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        html,
+        body {
+            height: 100%;
+        }
+
+        body {
+            margin: 0;
+            background: var(--page-bg);
+            color: var(--ink);
+            font-family: var(--font-ui);
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        .wrap {
+            max-width: var(--wrap);
+            margin: 24px auto 80px;
+            padding: 0 var(--pad-x);
+            display: flex;
+            gap: 40px;
+            align-items: flex-start;
+            transition: transform 600ms cubic-bezier(0.56, -0.44, 0.44, 1.485);
+            will-change: transform;
+        }
+
+        .toc {
+            position: sticky;
+            top: 80px;
+            width: 200px;
+            flex-shrink: 0;
+            height: fit-content;
+        }
+
+        .toc-title {
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--muted);
+            margin: 0 0 12px 0;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .toc-list {
+            list-style: none;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+        }
+
+        .toc-link {
+            display: block;
+            padding: 6px 12px;
+            color: var(--muted);
+            text-decoration: none;
+            font-size: 14px;
+            line-height: 1.3;
+            border-radius: 4px;
+            transition: all 0.15s ease;
+            position: relative;
+        }
+
+        .toc-link:hover {
+            color: var(--ink);
+            background: rgba(0, 0, 0, 0.04);
+        }
+
+        .toc-link.active {
+            color: var(--ink);
+            background: rgba(0, 0, 0, 0.06);
+            font-weight: 500;
+        }
+
+        .main-content {
+            flex: 1;
+            max-width: 700px;
+            min-width: 0;
+        }
+
+        @media (max-width: 900px) {
+            .wrap {
+                flex-direction: column;
+                gap: 20px;
+            }
+
+            .toc {
+                position: static;
+                width: 100%;
+                order: -1;
+                background: transparent;
+                padding: 0;
+                border-radius: 0;
+                border: none;
+            }
+
+            .toc-list {
+                flex-direction: row;
+                flex-wrap: wrap;
+                gap: 8px;
+            }
+
+            .toc-link {
+                padding: 4px 8px;
+                font-size: 13px;
+            }
+        }
+
+        .topbar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+            margin-bottom: 10px;
+        }
+
+        .back-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            text-decoration: none;
+            color: var(--ink);
+            font-weight: 600;
+        }
+
+        .back-link:hover {
+            text-decoration: underline;
+        }
+
+        .kicker {
+            font-family: var(--font-ui);
+            font-size: 14px;
+            letter-spacing: 0.14em;
+            text-transform: uppercase;
+            color: #2c2c2c;
+            margin: 8px 0 14px;
+        }
+
+        .hero {
+            position: relative;
+            width: 100%;
+            aspect-ratio: 16/9;
+            background: #e7e7e7;
+            overflow: hidden;
+            border-radius: 0;
+        }
+
+        .hero img {
+            position: absolute;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transform: scale(1.02);
+        }
+
+        .page-title {
+            margin: 18px 0 6px;
+            font-size: clamp(28px, 5vw, 44px);
+            line-height: 1.1;
+            letter-spacing: 0.2px;
+        }
+
+        .meta {
+            margin: 0 0 18px 0;
+            color: var(--muted);
+            font-family: var(--font-mono);
+            font-size: 13px;
+        }
+
+        .prose {
+            background: transparent;
+            padding: 0;
+        }
+
+        .prose figure {
+            margin: 16px 0 18px;
+        }
+
+        .prose figure>img {
+            display: block;
+            margin: 0 auto;
+        }
+
+        .prose figcaption {
+            margin-top: 6px;
+            text-align: center;
+            color: var(--muted);
+            font-size: 14px;
+        }
+
+        .prose h1,
+        .prose h2,
+        .prose h3,
+        .prose h4,
+        .prose h5,
+        .prose h6 {
+            line-height: 1.25;
+            margin: 1.2rem 0 0.6rem;
+        }
+
+        .prose p {
+            margin: 0 0 1.1rem;
+            line-height: 1.65;
+            color: #2b2b2b;
+        }
+
+        .prose h2 {
+            font-size: 22px;
+        }
+
+        .prose ul,
+        .prose ol {
+            padding-left: 1.2rem;
+            margin: 0 0 1rem;
+        }
+
+        .prose li {
+            margin: 0.3rem 0;
+        }
+
+        .prose blockquote {
+            border-left: 3px solid var(--rule);
+            margin: 0 0 1rem;
+            padding: 0.25rem 0 0.25rem 0.9rem;
+            color: #3a3a3a;
+            background: transparent;
+            font-style: italic;
+        }
+
+        .prose code {
+            font-family: var(--font-mono);
+            background: rgba(0, 0, 0, 0.04);
+            border: none;
+            padding: 0.1rem 0.3rem;
+            border-radius: 3px;
+            font-size: 0.95em;
+        }
+
+        .prose pre code {
+            display: block;
+            padding: 16px;
+            overflow-x: auto;
+            background: #0f1115;
+            color: #e8e8f0;
+            border: none;
+            border-radius: 4px;
+        }
+
+        .prose img {
+            max-width: 100%;
+            height: auto;
+            display: block;
+            margin: 10px 0;
+            border: 1px solid var(--rule);
+            border-radius: 4px;
+        }
+
+        .rule {
+            border-top: 1px solid var(--rule);
+            margin: 22px 0;
+        }
+
+        .info-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 14px;
+            margin: 14px 0 6px;
+        }
+
+        @media (min-width: 860px) {
+            .info-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+
+        .info-card {
+            background: transparent;
+            border: none;
+            border-radius: 0;
+            padding: 12px 0;
+        }
+
+        .info-card h3 {
+            margin: 0 0 6px;
+            font-size: 16px;
+        }
+
+        .info-card p {
+            margin: 0;
+            color: var(--muted);
+        }
+
+        .cta-bar {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin-top: 18px;
+        }
+
+        .btn {
+            font-family: var(--font-ui);
+            font-weight: 600;
+            font-size: 12px;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            text-decoration: none;
+            color: var(--ink);
+            background: #fff;
+            border: 1px solid var(--ink);
+            border-radius: 4px;
+            display: inline-block;
+            padding: 10px 14px;
+            width: max-content;
+        }
+
+        .btn:hover {
+            text-decoration: underline;
+        }
+    </style>
+    <style>
+        :root {
+            --sidebar-w: clamp(320px, 85vw, 560px);
+        }
+
+        .hamburger {
+            position: fixed;
+            top: 16px;
+            right: 16px;
+            z-index: 1200;
+            width: 42px;
+            height: 36px;
+            padding: 8px;
+            background: transparent;
+            color: var(--ink);
+            border: none;
+            border-radius: 6px;
+            display: grid;
+            gap: 6px;
+            align-content: center;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .hamburger span {
+            display: block;
+            height: 2px;
+            background: var(--ink);
+        }
+
+        .hamburger:hover {
+            background: rgba(0, 0, 0, 0.04);
+        }
+
+        .hamburger:focus-visible {
+            outline: 2px solid var(--ink);
+            outline-offset: 2px;
+        }
+
+        #sidebar-overlay {
+            position: fixed;
+            inset: 0;
+            background: transparent;
+            z-index: 1000;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.2s ease;
+        }
+
+        #sidebar-overlay.show {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        body.sidebar-open .wrap {
+            position: relative;
+        }
+
+        body.sidebar-open .wrap::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: rgba(255, 255, 255, 0.6);
+            z-index: 10;
+            pointer-events: none;
+        }
+
+        #sidebar {
+            position: fixed;
+            top: 0;
+            left: auto;
+            right: 0;
+            bottom: 0;
+            width: var(--sidebar-w);
+            height: 100%;
+            background: var(--page-bg);
+            padding: 108px 60px 60px;
+            transform: translateX(100%);
+            transition: transform 600ms cubic-bezier(0.56, -0.44, 0.44, 1.485);
+            z-index: 1002;
+            display: block;
+            overflow-y: auto;
+            overflow-x: hidden;
+            border-left: 0;
+        }
+
+        @media (min-width: 1024px) {
+            :root {
+                --sidebar-w: 50vw;
+            }
+
+            #sidebar {
+                padding: 108px 90px 60px 40px;
+            }
+        }
+
+        #sidebar.is-open {
+            transform: translateX(0);
+        }
+
+        body.sidebar-open .wrap {
+            transform: translateX(calc(-1 * var(--sidebar-w)));
+        }
+
+        .sidebar-header {
+            display: none;
+        }
+
+        .sidebar-section {
+            padding: 18px 20px 22px;
+        }
+
+        .sidebar-section h3 {
+            margin: 0 0 10px;
+            font-size: clamp(13.5px, 3.4vw, 15.5px);
+        }
+
+        .sidebar-section p,
+        .sidebar-section li {
+            color: var(--muted);
+            line-height: 1.6;
+            margin: 0 0 18px;
+            font-size: clamp(13px, 3.5vw, 15px);
+        }
+
+        .sidebar-section ul {
+            margin: 10px 0 0;
+            padding-left: 18px;
+        }
+
+        .bio {
+            display: flow-root;
+        }
+
+        .bio-image {
+            float: left;
+            width: clamp(96px, 34vw, 160px);
+            height: auto;
+            border-radius: 0;
+            background: #e9e9e9;
+            margin: 2px 14px 10px 0;
+            object-fit: cover;
+        }
+
+        @media (max-width: 540px) {
+            :root {
+                --sidebar-w: 100vw;
+            }
+
+            #sidebar {
+                padding: 74px 20px 22px;
+            }
+
+            .sidebar-section ul {
+                padding-left: 16px;
+            }
+
+            .sidebar-section h3 {
+                font-size: 14px;
+            }
+
+            .sidebar-section p,
+            .sidebar-section li {
+                font-size: 13.2px;
+                line-height: 1.55;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <button class="hamburger" id="hamburger" aria-label="Open menu" aria-controls="sidebar" aria-expanded="false">
+        <span></span>
+        <span></span>
+        <span></span>
+    </button>
+    <aside id="sidebar" class="" aria-hidden="true">
+        <div data-sidebar-partial></div>
+    </aside>
+    <div id="sidebar-overlay" hidden></div>
+    <main class="wrap" id="page">
+        <nav class="toc" aria-label="Table of contents">
+            <h2 class="toc-title">Contents</h2>
+            <ul class="toc-list"></ul>
+        </nav>
+
+        <div class="main-content">
+            <div class="topbar">
+                <a class="back-link" href="index.html" aria-label="Back to portfolio">← Back</a>
+            </div>
+
+            <p class="kicker">game</p>
+            <h1 class="page-title">Knead for Speed</h1>
+            <p class="meta">Desktop • Java • LibGDX • 20XX</p>
+
+            <div class="hero">
+                <img src="/public/images/thumbs/knead-for-speed.png" alt="Knead for Speed hero" />
+            </div>
+
+            <section class="prose" id="md-container" aria-label="Case Study Content">
+                <h2 id="overview">Overview</h2>
+                <p>This page will render content from a Markdown file. Replace the placeholder sections in the markdown.
+                </p>
+                <div class="rule"></div>
+                <h2 id="goals">Goals</h2>
+                <ul>
+                    <li>Ship a tight stealth-puzzle loop.</li>
+                    <li>Build simple authoring tools for level iteration.</li>
+                </ul>
+            </section>
+        </div>
+    </main>
+
+    <script src="/public/assets/js/sidebar.js"></script>
+
+    <!-- TOC + active section highlight -->
+    <script>
+        (function () {
+            let tocLinks = [];
+            let sections = [];
+
+            function updateTOCFromContent() {
+                const container = document.getElementById('md-container');
+                const tocList = document.querySelector('.toc-list');
+                const headings = container.querySelectorAll('h2');
+                tocList.innerHTML = '';
+                headings.forEach(heading => {
+                    const id = heading.id;
+                    const text = heading.textContent;
+                    if (id && text) {
+                        const li = document.createElement('li');
+                        li.className = 'toc-item';
+                        const a = document.createElement('a');
+                        a.href = `#${id}`;
+                        a.className = 'toc-link';
+                        a.textContent = text;
+                        li.appendChild(a);
+                        tocList.appendChild(li);
+                    }
+                });
+                tocLinks = Array.from(document.querySelectorAll('.toc-link'));
+                sections = Array.from(headings);
+                setupTOCNavigation();
+            }
+
+            function setupTOCNavigation() {
+                tocLinks.forEach(link => {
+                    link.addEventListener('click', (e) => {
+                        e.preventDefault();
+                        const targetId = link.getAttribute('href');
+                        const targetSection = document.querySelector(targetId);
+                        if (targetSection) {
+                            const headerOffset = 80;
+                            const elementPosition = targetSection.getBoundingClientRect().top;
+                            const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
+                            window.scrollTo({ top: offsetPosition, behavior: 'smooth' });
+                        }
+                    });
+                });
+            }
+
+            function updateActiveSection() {
+                if (sections.length === 0) return;
+                const windowHeight = window.innerHeight;
+                let activeSection = null;
+                let closestDistance = Infinity;
+                sections.forEach(section => {
+                    const rect = section.getBoundingClientRect();
+                    const threshold = windowHeight * 0.3;
+                    const distance = Math.abs(rect.top - threshold);
+                    if (rect.top <= threshold && rect.bottom > 0 && distance < closestDistance) {
+                        closestDistance = distance;
+                        activeSection = section;
+                    }
+                });
+                tocLinks.forEach(link => {
+                    const targetId = link.getAttribute('href');
+                    const isActive = activeSection && targetId === `#${activeSection.id}`;
+                    link.classList.toggle('active', isActive);
+                });
+            }
+
+            let ticking = false;
+            function onScroll() {
+                if (!ticking) {
+                    requestAnimationFrame(() => { updateActiveSection(); ticking = false; });
+                    ticking = true;
+                }
+            }
+            window.addEventListener('scroll', onScroll);
+            window.updateTOCFromContent = updateTOCFromContent;
+            updateTOCFromContent();
+        })();
+    </script>
+
+    <!-- Markdown renderer (CDN) -->
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <script>
+        (function () {
+            const params = new URLSearchParams(location.search);
+            const mdPath = params.get("md") || "content/knead-for-speed.md";
+            const container = document.getElementById("md-container");
+
+            function naive(md) {
+                let html = md
+                    .replace(/^###\s+(.*)$/gm, "<h3>$1</h3>")
+                    .replace(/^##\s+(.*)$/gm, "<h2>$1</h2>")
+                    .replace(/^#\s+(.*)$/gm, "<h1>$1</h1>")
+                    .replace(/^>\s?(.*)$/gm, "<blockquote>$1</blockquote>")
+                    .replace(/\*\*(.*?)\*\*/g, "<strong>$1</strong>")
+                    .replace(/`([^`]+)`/g, "<code>$1</code>");
+                html = html
+                    .split(/\n\s*\n/)
+                    .map((blk) => /<h\d|<ul|<ol|<pre|<blockquote/.test(blk) ? blk : `<p>${blk.replace(/\n/g, "<br>")}</p>`)
+                    .join("\n");
+                return html;
+            }
+
+            function render(md) {
+                let html;
+                if (window.marked && typeof marked.parse === "function") {
+                    html = marked.parse(md);
+                } else {
+                    html = naive(md);
+                }
+                html = html.replace(/<h2[^>]*>(.*?)<\/h2>/gi, (match, content) => {
+                    const id = content.toLowerCase().replace(/[^\w\s-]/g, '').replace(/\s+/g, '-').trim();
+                    return `<h2 id="${id}">${content}</h2>`;
+                });
+                container.innerHTML = html;
+                updateTOCFromContent();
+            }
+
+            fetch(mdPath, { cache: "no-cache" })
+                .then((r) => r.ok ? r.text() : Promise.reject(new Error("fetch failed")))
+                .then(render)
+                .catch(() => { /* leave fallback static content */ });
+        })();
+    </script>
+</body>
+
+</html>

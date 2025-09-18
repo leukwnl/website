@@ -22,7 +22,7 @@
             "buttons": [
                 {
                     "type": "read_more",
-                    "text": "Read More ↗",
+                    "text": "Case Study ↗",
                     "url": "trigger-happy.html"
                 },
                 {
@@ -54,8 +54,8 @@
             "buttons": [
                 {
                     "type": "read_more",
-                    "text": "Read More ↗",
-                    "url": "#"
+                    "text": "Details ↗",
+                    "url": "knead-for-speed.html"
                 }
             ],
             "priority": 4,
@@ -73,11 +73,6 @@
                 "games"
             ],
             "buttons": [
-                {
-                    "type": "read_more",
-                    "text": "Read More ↗",
-                    "url": "#"
-                },
                 {
                     "type": "link",
                     "text": "Play Game ↗",
@@ -98,11 +93,6 @@
                 "games"
             ],
             "buttons": [
-                {
-                    "type": "read_more",
-                    "text": "Read More ↗",
-                    "url": "#"
-                },
                 {
                     "type": "link",
                     "text": "Play Game ↗",
@@ -125,11 +115,6 @@
             ],
             "buttons": [
                 {
-                    "type": "read_more",
-                    "text": "Read More ↗",
-                    "url": "#"
-                },
-                {
                     "type": "link",
                     "text": "Play Game ↗",
                     "url": "https://dgacornell.itch.io/grubbug"
@@ -150,11 +135,6 @@
                 "engineering"
             ],
             "buttons": [
-                {
-                    "type": "read_more",
-                    "text": "Read More ↗",
-                    "url": "#"
-                },
                 {
                     "type": "link",
                     "text": "Play Game ↗",
